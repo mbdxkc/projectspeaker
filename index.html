@@ -10,6 +10,15 @@
     gtag('js', new Date());
     gtag('config', 'G-20SJCHR8YG');
     gtag('config', 'AW-18498605429');
+    // Key event: any click on a link to the petition sends petition_click,
+    // with "location" from the link's data-cta (header, hero, hero-count,
+    // act) so reports show which link converts. Marked as a key event in
+    // GA4 (Admin, Key events). gtag sends events by sendBeacon, so the hit
+    // survives the page leaving for change.org.
+    document.addEventListener('click', function (e) {
+      var a = e.target.closest && e.target.closest('a[href*="change.org/p/"]');
+      if (a) gtag('event', 'petition_click', { location: a.getAttribute('data-cta') || 'other' });
+    });
   </script>
   <!--
   ============================================================================
@@ -22,7 +31,7 @@
               (Nicole Whitted). Split off kansasdeservesbetter.com/speaker/ on
               Nov. 7, 2026.
   @author     mediaBrilliance digitalxtudio
-  @version    1.0.0
+  @version    1.1.0
   @updated    2026-11-07
   @requires   style.min.css, rotor.min.js and rep.min.js (built from style.css,
               rotor.js and rep.js by tools/build.sh, which also stamps each ?v=
@@ -132,7 +141,7 @@
       <a class="mark" href="#top">America Deserves <span>a Speaker</span></a>
       <nav class="nav" aria-label="Pages">
         <!-- On narrow phones " the petition" is hidden visually but still read aloud (style.css) -->
-        <a href="https://www.change.org/p/house-democrats-choose-a-new-speaker">Sign<span class="nav-long"> the petition</span></a>
+        <a href="https://www.change.org/p/house-democrats-choose-a-new-speaker" data-cta="header">Sign<span class="nav-long"> the petition</span></a>
       </nav>
     </div>
   </header>
@@ -184,10 +193,10 @@
         <p class="thesis">America deserves a speaker who had to <span>win the job.</span></p>
         <!-- The button and its live count are one unit: side by side on wide screens, stacked on phones -->
         <div class="cta-row">
-          <a class="cta" href="https://www.change.org/p/house-democrats-choose-a-new-speaker">Sign the petition</a>
+          <a class="cta" href="https://www.change.org/p/house-democrats-choose-a-new-speaker" data-cta="hero">Sign the petition</a>
           <!-- Live count: tools/petition.py replaces the text between the markers when the count changes -->
           <p class="src cite"><!-- petition:start -->1,033,963 signatures toward 1.5 million as of 4:39 p.m. Central, Nov. 7, 2026.<!-- petition:end --> Petition by Nicole Whitted on
-          <a href="https://www.change.org/p/house-democrats-choose-a-new-speaker">change.org</a>.</p>
+          <a href="https://www.change.org/p/house-democrats-choose-a-new-speaker" data-cta="hero-count">change.org</a>.</p>
         </div>
       </div>
     </section>
@@ -326,7 +335,7 @@
           and the number to call</a>.</li>
           <li><strong>Share this page.</strong> Every claim on it links to its source.</li>
         </ol>
-        <a class="cta" href="https://www.change.org/p/house-democrats-choose-a-new-speaker">Sign the petition</a>
+        <a class="cta" href="https://www.change.org/p/house-democrats-choose-a-new-speaker" data-cta="act">Sign the petition</a>
       </div>
     </section>
   </main>

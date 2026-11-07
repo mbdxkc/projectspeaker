@@ -43,3 +43,11 @@ New GA4 property Project Speaker, `G-20SJCHR8YG`, replaces Kansas Deserves Bette
 
 - **GA4's setup wizard defaults to reusing a tag it finds on the site.** Here that was KDB's, and accepting it would have made Project Speaker a second destination of KDB's tag, mixing both sites' traffic. Pick Install manually and take the `G-` ID from the stream details
 - **"Install manually" can show a Tag Manager container snippet (`gtm.js?id=GTM-…`) with no `config` line**, which sends nothing to GA4 on its own. The Measurement ID on the stream details page is the value a gtag.js site needs
+
+## 2026-11-07 (evening) — petition_click key event
+
+Every link to the petition (header, hero button, the hero's change.org text link, the "Demand a real vote" button) now sends `petition_click` with `location` from its `data-cta`. One delegated listener in the Google tag block, so no new script file and no build step. Tested in headless Firefox with GA's hosts mapped to nowhere and navigation held: each link pushed exactly one event with its own location, and a record link pushed none.
+
+### Mistakes → Rules
+
+- **Test an analytics event against `dataLayer`, not against GA.** The push is the page's whole job; reading it in a harness with GA's hosts blocked proves the event without sending test hits to the new property
