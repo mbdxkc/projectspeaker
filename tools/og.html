@@ -5,8 +5,9 @@
   Capitol gold kicker, ivory type, in an editorial layout: a modest headline
   and three figures from the record, not a slogan. The image stays
   square-cornered: Facebook, X and iMessage round previews themselves. Every figure restates an item in the page's
-  record (items 1 and 2, and the 16-ballot line in "Ask for a choice"), so a
-  change to any of them means a re-render.
+  record (items 1 and 2, and the 20-ballot line in "Demand a real vote"), so a
+  change to any of them means a re-render and a ?v= bump on og:image,
+  twitter:image and the JSON-LD image URLs (v=2 since Nov. 7: 16 ballots became 20).
 
   Render from the repo root (Chrome headless, 1200x630):
     "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome" --headless=new \
@@ -35,6 +36,6 @@ h1{font:700 112px/1 "Oswald",sans-serif;text-transform:uppercase;letter-spacing:
 <div class="facts">
   <p><b>$421,396</b><span>earmarked through AIPAC&rsquo;s PAC to Jeffries&rsquo; committees since 2025</span></p>
   <p><b>103 to 98</b><span>House Democrats for and against cutting Israel&rsquo;s military aid. He voted no.</span></p>
-  <p><b>16 ballots</b><span>for speaker since 2023. No Democrat has voted for anyone else.</span></p>
+  <p><b>20 ballots</b><span>for speaker since 2023. No Democrat has voted for anyone else.</span></p>
 </div>
 </body></html>

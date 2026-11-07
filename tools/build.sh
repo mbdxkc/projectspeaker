@@ -1,20 +1,26 @@
 #!/usr/bin/env bash
 # ============================================================================
 #   projectspeaker.org
-#   Build: minify the stylesheet and both scripts, stamp their URLs
+#   Build: inline the minified stylesheet, minify both scripts, stamp them
 # ============================================================================
 #   @file       tools/build.sh
 #   @author     mediaBrilliance digitalxtudio
 #   @updated    2026-11-07
 # ============================================================================
 #
-#   index.html loads style.min.css, rotor.min.js and rep.min.js. An edit to
-#   style.css, rotor.js or rep.js ships as a no-op until this runs: the site
-#   looks unchanged and nothing errors.
+#   index.html carries the minified stylesheet inline, in <style id="css">,
+#   and loads rotor.min.js and rep.min.js. An edit to style.css, rotor.js or
+#   rep.js ships as a no-op until this runs: the site looks unchanged and
+#   nothing errors.
 #
-#   Each built file's URL carries the first 8 hex of its SHA-256 as ?v=.
-#   GitHub Pages lets a browser reuse a file for 10 minutes, so an unstamped
-#   file can pair new HTML with an old stylesheet or script.
+#   Why inline: the page is one screen of HTML that almost every visitor
+#   loads once, so a separate stylesheet bought no cache reuse and cost one
+#   render-blocking request (Lighthouse's only render-blocking item). Inline,
+#   the first paint needs nothing but the HTML. About 2.5 KB gzipped.
+#
+#   Each script URL carries the first 8 hex of its SHA-256 as ?v=. GitHub
+#   Pages lets a browser reuse a file for 10 minutes, so an unstamped script
+#   can pair new HTML with an old script.
 #
 #   USAGE
 #     tools/build.sh           build and report
@@ -55,6 +61,37 @@ build() {
   fi
 }
 
+# inline_css: minify style.css into $tmp and write it between <style id="css">
+# and </style> in index.html. Python does the swap because minified CSS is
+# full of characters sed would treat as syntax.
+inline_css() {
+  cleancss -O1 -o "$tmp/style.min.css" style.css
+  local rc=0
+  python3 - "$tmp/style.min.css" "$CHECK" <<'PY' || rc=$?
+import re, sys
+css = open(sys.argv[1]).read().strip()
+check = sys.argv[2] == "1"
+page = open("index.html").read()
+# Exactly one opening tag, on its own line. A comment that quotes the tag
+# once matched first and the swap deleted everything from that comment to the
+# real </style>: the viewport, title and every meta tag (Nov. 7, 2026).
+if page.count('<style id="css">') != 1:
+    sys.exit('error: index.html must contain <style id="css"> exactly once')
+m = re.search(r'^  <style id="css">(.*?)</style>$', page, re.S | re.M)
+if not m:
+    sys.exit('error: <style id="css"> must open a line in index.html')
+if m.group(1) == css:
+    print("ok     index.html (inline CSS)")
+elif check:
+    print("stale  index.html (inline CSS)")
+    sys.exit(3)
+else:
+    open("index.html", "w").write(page[:m.start(1)] + css + page[m.end(1):])
+    print(f"inline index.html <- style.css ({len(css)} bytes)")
+PY
+  if (( rc == 3 )); then stale=1; elif (( rc )); then exit "$rc"; fi
+}
+
 # stamp <file>: point index.html at <file>?v=<hash of the built file>
 stamp() {
   local file="$1" re hash
@@ -71,7 +108,7 @@ stamp() {
   fi
 }
 
-build style.css style.min.css; stamp style.min.css
+inline_css
 build rotor.js rotor.min.js;   stamp rotor.min.js
 build rep.js rep.min.js;       stamp rep.min.js
 

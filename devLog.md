@@ -51,3 +51,26 @@ Every link to the petition (header, hero button, the hero's change.org text link
 ### Mistakes → Rules
 
 - **Test an analytics event against `dataLayer`, not against GA.** The push is the page's whole job; reading it in a harness with GA's hosts blocked proves the event without sending test hits to the new property
+
+## 2026-11-07 (night) — Accuracy, SEO, performance and accessibility pass
+
+**Accuracy.**
+- **"16 speaker ballots since 2023" was an undercount; it is 20.** It counted January 2023 (15) and January 2025 (1) and missed the four ballots of October 2023 after Kevin McCarthy's removal (clerk roll calls 521, 523, 525, 527). Every Democrat voting on all four chose Jeffries (212, 212, 210, 209; the rest not voting), so the claim gets stronger, not weaker. Fixed in the hero, "Demand a real vote", the meta and og descriptions, both image alts, the JSON-LD and the share card, which was re-rendered and bumped to `og.png?v=2`. The sources line now links the October roll calls
+- **"Jan. 3: the full House elects the speaker" stated a schedule nobody has announced.** The 20th Amendment makes Jan. 3 the default "unless they shall by law appoint a different day"; the line now says so, with the amendment and CRS RL30857 ("elect a Speaker by roll call vote upon first convening") as sources
+- Item 5's AOL link began 308-redirecting; it now cites The Hill's original, the publisher. The Hill blocks fetchers, so the two quotes were matched on the AOL copy, which names that URL
+- Rechecked against FEC (schedule B, AIPAC PAC C00797670, 2025-26): $421,395.99 to the three Jeffries committees, Feb. 27, 2025 to Sept. 23, 2026, unchanged; the $149,300 is two transfers on May 20, 2026 earmarked by one donor, so "one donor, one day" holds. All 26 outbound links resolve (congress.gov returns 403 to fetchers only)
+
+**SEO.** Title "America Deserves a Speaker: Hakeem Jeffries' Record" (51 characters) on the page, og and twitter; description rewritten at 150 characters around the name and the vote. The kicker now leads with "Hakeem Jeffries" and the record's heading reads "Hakeem Jeffries' record". New `#faq`, "The speaker vote, explained": six searched questions (when, how many votes, can a Democrat break ranks, must the speaker be a member, why it matters, what the petition asks), each answered only from a cited source. One JSON-LD graph adds WebPage, a Person node for Jeffries tied to Wikidata Q5640425, Wikipedia and Bioguide, and a FAQPage whose text matches the visible answers exactly (checked by script: six of six). `article:published_time` and `article:modified_time` added.
+
+**Performance.** The stylesheet is now inlined by `tools/build.sh` into `<style id="css">`, and `style.min.css` is gone: it was Lighthouse's only render-blocking request, and on a one-page site no visitor reused it from cache. HTML is 42 KB raw, about 11 KB gzipped. Baseline live mobile scored 98 once (Speed Index 3.9 s) and 100 twice; the slow run had every file loaded by 0.7 s and painted at 2.5 s, a headless stall rather than the page. Local after the pass: 100 in all four categories, mobile and desktop, on repeat runs.
+
+**Accessibility and code.** Lighthouse accessibility 100 before and after; the FAQ uses real h3 headings under its own h2, so the outline stays h1, then h2 for each section. Tested in Firefox at 320 to 1920: no horizontal scroll, inline CSS and Oswald applied, every petition link (now five, with `data-cta="faq"`) sends one `petition_click` with its own location, and the rotor swaps on schedule. `rotor.js` assumed a six-item record ("item 0" + n would print "010" at item 10); it now pads to two digits, and the stale 1-6 comments in it and the page say N.
+
+### Mistakes → Rules
+
+- **Count the events, not the elections, before writing "N ballots since."** A mid-term speaker vacancy produces ballots that a count built from opening days never sees. The clerk's XML for the whole span, filtered on "Election of the Speaker", is the count
+- **An undercount is still an error, even when it helps the other side.** "16" made the claim weaker than the record and would have handed a critic a free correction on a page whose case is that every number is checked
+- **A build that rewrites a delimited block must refuse when the delimiter appears more than once.** The new inline-CSS step matched `<style id="css">` inside the header comment that described it and deleted everything from there to the real `</style>`: the viewport, title, canonical and every meta tag. Caught before commit because the next check parsed `<title>`. The build now demands exactly one occurrence at the start of a line, and the comment describes the element without quoting the tag
+- **Verify the head after any build step that writes into index.html.** Title, viewport, canonical and JSON-LD parse is a five-line check, and it is the one that caught the deletion
+- **A date given by a constitutional default is not a schedule.** Write "Jan. 3, unless Congress sets another day by law" until a date is announced
+- **One slow Lighthouse run is a sample, not a regression.** Read the network table first: when every request finished long before first paint, the stall is in the harness. Judge on three runs

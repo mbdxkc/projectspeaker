@@ -4,12 +4,13 @@
   ============================================================================
   @file       style.css
   @desc       America Deserves a Speaker, mobile first. tools/build.sh
-              minifies this to style.min.css, which is what the page loads.
+              minifies this into the <style id="css"> block in index.html;
+              no stylesheet file is served.
               The base (tokens, header, hero, sections, footer) came over from
               kansasdeservesbetter.com on Nov. 7, 2026; the results-table rules
               that page needs were left behind.
   @author     mediaBrilliance digitalxtudio
-  @version    1.0.0
+  @version    1.1.0
   @updated    2026-11-07
   ============================================================================
 */
@@ -115,7 +116,7 @@ h1, h2, h3 { font-family: var(--display); font-weight: 700; line-height: 1.05; t
 */
 
 /* The record: one numbered entry per claim. The number comes from a CSS
-   counter (01-06), so reordering the list renumbers it. The 1px gap over a
+   counter (01, 02 and on), so reordering the list renumbers it. The 1px gap over a
    --line background draws the rules between entries. Two columns from 900px. */
 .ledger { list-style: none; counter-reset: led; margin: 0; padding: 0; display: grid; gap: 1px; background: var(--line); border: 1px solid var(--line); }
 @media (min-width: 900px) { .ledger { grid-template-columns: 1fr 1fr; } }
@@ -133,6 +134,14 @@ h1, h2, h3 { font-family: var(--display); font-weight: 700; line-height: 1.05; t
 .dates strong { display: block; font: 700 1.25rem/1.1 var(--display); text-transform: uppercase; letter-spacing: .04em; color: var(--accent); margin-bottom: .25rem; }
 .steps { margin: 0 0 1.75rem; padding-left: 1.25rem; max-width: 42rem; }
 .steps li { margin-bottom: .75rem; }
+
+/* "The speaker vote, explained" (#faq): question, answer, source, repeated.
+   Questions take the record's h3 size; each source line closes its answer
+   with the gap that separates it from the next question. */
+.faq { max-width: 42rem; }
+.faq h3 { font-size: clamp(1.4rem, 4vw, 1.75rem); margin: 2rem 0 .6rem; }
+.faq h3:first-child { margin-top: 0; }
+.faq p { margin: 0 0 .5rem; }
 
 /*
   Colours: House navy ground, Capitol gold accents, Democratic blue buttons.

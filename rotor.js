@@ -8,7 +8,7 @@
               (#rotor-ref) change together, so a headline is never on screen
               with another headline's caption or source.
   @author     mediaBrilliance digitalxtudio
-  @version    1.0.0
+  @version    1.0.1
   @updated    2026-11-07
   @a11y       Pause button (WCAG 2.2.2), hover and focus hold the current line,
               reduced motion never rotates, screen readers always read line 1
@@ -16,8 +16,8 @@
 
   HOW THE MARKUP PAIRS UP
   Headline N and caption N are the Nth .rotor-line in #rotor and #rotor-cap.
-  Each headline's data-ref names the record item it comes from: 1-6 link to
-  #item-1 to #item-6 in "The record"; 0 links to #act, the petition section.
+  Each headline's data-ref names the record item it comes from: N links to
+  #item-N in "Hakeem Jeffries' record"; 0 links to #act, the petition section.
   Only line 1 ("Earmarked.") is exposed to screen readers. The other lines
   carry aria-hidden, so the page never announces a sentence that changes
   under the listener.
@@ -150,8 +150,8 @@
       caps[i].classList.add('is-on');
       var n = Number(heads[i].getAttribute('data-ref'));
       ref.href = n ? '#item-' + n : '#act';
-      // The record has six items, so a leading zero matches its 01-06 labels.
-      ref.textContent = n ? 'From the record: item 0' + n : 'The ask: sign the petition';
+      // Two digits, to match the record's 01, 02 ... counter labels.
+      ref.textContent = n ? 'From the record: item ' + (n < 10 ? '0' + n : n) : 'The ask: sign the petition';
       ref.classList.remove('is-out');
     }, CONFIG.fade);
   }

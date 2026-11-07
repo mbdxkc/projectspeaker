@@ -13,8 +13,7 @@ https://projectspeaker.org
 ```
 /
 ├── index.html        # The page
-├── style.css         # Mobile first (source)
-├── style.min.css     # What the page loads; built by tools/build.sh
+├── style.css         # Mobile first (source; built inline into index.html)
 ├── rotor.js          # Rotating hero headline (source; the page loads rotor.min.js)
 ├── rep.js            # "Find my representative" (source; the page loads rep.min.js)
 ├── reps.json         # Every House seat and its member, built hourly by tools/reps.py
@@ -33,11 +32,12 @@ https://projectspeaker.org
 - **The hero rotates.** Ten headlines, each with a caption and a link to the record item behind it, change together every 6 seconds. "Earmarked." opens every cycle and holds 10 seconds on first load; the rest follow in random order. A Pause button, hover and keyboard focus stop it, and it stays still under reduced motion. To add or change a headline, edit the matching line in both the headline list and the caption list in `index.html`; the two lists must stay in the same order.
 - **Call your representative:** "Find my representative" asks for the visitor's location once, gets the congressional district from the U.S. Census Bureau's geocoder and looks the seat up in `reps.json`. The button becomes "Call Rep. Name," dialing the member's Washington office, with what to say. The Capitol switchboard and house.gov's address lookup are always on the page.
 - **The signature count updates itself.** `.github/workflows/petition.yml` runs `tools/petition.py` and `tools/reps.py` every hour. The count line between `<!-- petition:start -->` and `<!-- petition:end -->` is rewritten only when the count changes, and the goal follows change.org. Never edit the count by hand.
+- **The speaker vote, explained:** six sourced answers to what people search before the vote (when, how many votes, can members break ranks), mirrored in FAQPage structured data.
 - **Look:** House navy, Capitol gold and Democratic blue under the header carried over from Kansas Deserves Better.
 
 ## Build
 
-Edit `style.css`, `rotor.js` or `rep.js`, then run `tools/build.sh`, which minifies each and stamps its URL in `index.html` with the file's hash. `tools/build.sh --check` changes nothing and exits 1 when a build is stale. Requires `cleancss` and `terser`.
+Edit `style.css`, `rotor.js` or `rep.js`, then run `tools/build.sh`. It minifies the stylesheet into the `<style id="css">` block in `index.html` (one request fewer before first paint) and minifies both scripts, stamping each script URL with its file's hash. `tools/build.sh --check` changes nothing and exits 1 when a build is stale. Requires `cleancss` and `terser`.
 
 ## Deploy
 
