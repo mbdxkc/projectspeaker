@@ -1,0 +1,59 @@
+# ============================================================================
+#   projectspeaker.org: Petition count
+# ============================================================================
+#   Keeps the site current: the signature count on index.html, and
+#   reps.json, the House member list behind "Find my representative".
+#   tools/reps.py rebuilds reps.json from congress-legislators each hour; it
+#   only changes when a member does, so most hours it adds nothing.
+#
+#   Every hour GitHub runs tools/petition.py, which reads the count from the
+#   change.org petition and rewrites one line of index.html. If the count moved,
+#   this workflow commits the change as github-actions[bot] and pushes it to
+#   main, and GitHub Pages redeploys the site from there.
+#
+#   - A quiet hour (count unchanged) makes no commit and no deploy.
+#   - GitHub can start scheduled runs several minutes late, so the page always
+#     shows the time the count was read.
+#   - Run it on demand from the repo's Actions tab: Petition count, Run workflow.
+#   - Because this bot pushes to main, pull before pushing local work.
+# ============================================================================
+name: Petition count
+
+on:
+  schedule:
+    - cron: "7 * * * *"     # seven minutes past every hour, UTC
+  workflow_dispatch:         # adds the manual "Run workflow" button
+
+# Write access to the repository, needed to push the updated page.
+permissions:
+  contents: write
+
+# Never let two runs overlap; a second run waits for the first to finish.
+concurrency:
+  group: petition
+  cancel-in-progress: false
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      # Get the current site
+      - uses: actions/checkout@v4
+
+      # Read the count and rewrite the line if it changed
+      - run: python3 tools/petition.py
+
+      # Rebuild the member list; identical output when no seat has changed
+      - run: python3 tools/reps.py
+
+      # Commit only if either script changed a file. The pull folds in anything
+      # pushed while this run was working, so the push is never rejected.
+      - name: Commit if the count changed
+        run: |
+          git diff --quiet && exit 0
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add index.html reps.json
+          git commit -m "Petition count and House members"
+          git pull --rebase
+          git push

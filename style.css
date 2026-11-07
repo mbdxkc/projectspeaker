@@ -1,0 +1,267 @@
+/*
+  ============================================================================
+  projectspeaker.org
+  ============================================================================
+  @file       style.css
+  @desc       America Deserves a Speaker, mobile first. tools/build.sh
+              minifies this to style.min.css, which is what the page loads.
+              The base (tokens, header, hero, sections, footer) came over from
+              kansasdeservesbetter.com on Nov. 7, 2026; the results-table rules
+              that page needs were left behind.
+  @author     mediaBrilliance digitalxtudio
+  @version    1.0.0
+  @updated    2026-11-07
+  ============================================================================
+*/
+
+@font-face {
+  font-family: "Oswald";
+  font-style: normal;
+  font-weight: 500 700;
+  font-display: swap;
+  src: url("fonts/oswald-latin.woff2") format("woff2");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+:root {
+  --bg: #0b0b0b;
+  --panel: #161616;
+  --line: #2a2a2a;
+  --text: #f2efe8;
+  --muted: #b3aea4;     /* 8.9:1 on --bg */
+  --accent: #f5c400;    /* sunflower, 12:1 on --bg */
+  --accent-ink: #0b0b0b;
+  --display: "Oswald", "Arial Narrow", Impact, sans-serif;
+  --body: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --gutter: clamp(16px, 4vw, 40px);
+  --max: 68rem;
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+
+html { scroll-behavior: smooth; scroll-padding-top: 4rem; }
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font: 400 1.0625rem/1.6 var(--body);
+  -webkit-text-size-adjust: 100%;
+}
+
+a { color: var(--accent); text-underline-offset: .15em; }
+a:hover { text-decoration-thickness: 2px; }
+:focus-visible { outline: 3px solid var(--accent); outline-offset: 3px; }
+
+.skip-link {
+  position: absolute; left: -9999px; top: 0;
+  background: var(--accent); color: var(--accent-ink); padding: .5rem 1rem; z-index: 100;
+}
+.skip-link:focus { left: 1rem; top: 1rem; }
+
+.wrap { max-width: var(--max); margin: 0 auto; padding: 0 var(--gutter); }
+
+h1, h2, h3 { font-family: var(--display); font-weight: 700; line-height: 1.05; text-transform: uppercase; margin: 0; }
+
+/* ------------------------------------------------------------------ header */
+.site-header {
+  position: sticky; top: 0; z-index: 10;
+  background: rgba(11, 11, 11, .94);
+  border-bottom: 1px solid var(--line);
+}
+.site-header .wrap { display: flex; align-items: center; justify-content: space-between; gap: 1rem; min-height: 3.25rem; }
+.mark { font: 700 1.05rem/1 var(--display); text-transform: uppercase; letter-spacing: .02em; color: var(--text); text-decoration: none; white-space: nowrap; padding: .75rem 0; }
+.mark span { color: var(--accent); }
+.nav a {
+  display: block; font: 500 1rem/1 var(--display); text-transform: uppercase; letter-spacing: .04em;
+  color: var(--accent); text-decoration: none; padding: .875rem .25rem; white-space: nowrap;  /* 44px tap target */
+}
+.nav a:hover { color: var(--text); }
+
+/* -------------------------------------------------------------------- hero */
+.hero { padding: clamp(1.5rem, 6vh, 4.5rem) 0 clamp(2rem, 6vh, 4rem); border-bottom: 1px solid var(--line); }
+.kicker { font: 500 .95rem/1.2 var(--display); text-transform: uppercase; letter-spacing: .12em; color: var(--accent); margin: 0 0 clamp(.6rem, 2vh, 1rem); }
+.hero h1 { font-size: clamp(3.25rem, min(15vw, 20vh), 10rem); line-height: .98; color: var(--accent); }
+.lede { font-size: clamp(1.1rem, min(2.6vw, 3vh), 1.5rem); line-height: 1.45; max-width: 44rem; margin: clamp(.9rem, 2.6vh, 1.5rem) 0 .6rem; }
+.src { font-size: .9rem; color: var(--muted); }
+.src a { color: var(--muted); }
+.src a:hover { color: var(--accent); }
+.cite { margin: 0; }
+
+
+/* ---------------------------------------------------------------- sections */
+.section { padding: clamp(3rem, 8vw, 5.5rem) 0; border-bottom: 1px solid var(--line); }
+.section h2 { font-size: clamp(2rem, 6vw, 3.75rem); margin-bottom: 1.25rem; }
+.section-intro { color: var(--muted); font-size: 1.1rem; max-width: 42rem; margin: 0 0 2.5rem; }
+
+
+/* ------------------------------------------------------------------ record */
+.cta {
+  display: inline-block; background: var(--accent); color: var(--accent-ink);
+  font: 700 1.1rem/1 var(--display); text-transform: uppercase; letter-spacing: .04em;
+  text-decoration: none; padding: 1rem 1.5rem; border-radius: 2px; margin: 0 1rem .75rem 0;
+}
+.cta:hover { background: #fff; }
+.record p { max-width: 42rem; margin: 0 0 1.5rem; }
+
+
+
+/* ----------------------------------------------------------------- speaker */
+/*
+  Project Speaker. Everything below is scoped to <body class="speaker">,
+  so the shared header (carried over from Kansas Deserves Better) keeps its
+  black and sunflower while the page itself is House navy.
+*/
+
+/* The record: one numbered entry per claim. The number comes from a CSS
+   counter (01-06), so reordering the list renumbers it. The 1px gap over a
+   --line background draws the rules between entries. Two columns from 900px. */
+.ledger { list-style: none; counter-reset: led; margin: 0; padding: 0; display: grid; gap: 1px; background: var(--line); border: 1px solid var(--line); }
+@media (min-width: 900px) { .ledger { grid-template-columns: 1fr 1fr; } }
+.ledger > li { counter-increment: led; background: var(--bg); padding: 1.25rem; min-width: 0; }
+.ledger > li::before { content: counter(led, decimal-leading-zero); display: block; font: 700 .95rem/1 var(--display); letter-spacing: .08em; color: var(--accent); margin-bottom: .5rem; }
+.ledger h3 { font-size: clamp(1.4rem, 4vw, 1.75rem); margin-bottom: .6rem; }
+.ledger p { margin: 0 0 .75rem; max-width: 40rem; }
+/* .note holds his own explanation, set apart by a rule on the left */
+.ledger .note { color: var(--muted); border-left: 3px solid var(--line); padding-left: .75rem; }
+.ledger .src { margin: 0; }
+
+/* "Ask for a choice": the two key dates, then the three numbered steps */
+.dates { list-style: none; margin: 1.5rem 0; padding: 0; max-width: 42rem; border-top: 1px solid var(--line); }
+.dates li { padding: .75rem 0; border-bottom: 1px solid var(--line); }
+.dates strong { display: block; font: 700 1.25rem/1.1 var(--display); text-transform: uppercase; letter-spacing: .04em; color: var(--accent); margin-bottom: .25rem; }
+.steps { margin: 0 0 1.75rem; padding-left: 1.25rem; max-width: 42rem; }
+.steps li { margin-bottom: .75rem; }
+
+/*
+  Colours: House navy ground, Capitol gold accents, Democratic blue buttons.
+  The palette is set on main and the footer only, so the shared header keeps
+  the site's black and sunflower. Contrast on the navy: text 15.4:1, muted
+  9.6:1, gold 9.0:1, links 10.1:1; white on the blue button 7.2:1. The blue
+  button itself is only 2.4:1 against the navy, so it carries a light border
+  to read as a button.
+*/
+body.speaker { background: #0d1b33; }
+.speaker main, .speaker .site-footer {
+  --bg: #0d1b33;      /* House navy */
+  --line: #2a3d5e;    /* rules and borders */
+  --text: #f5f2ea;    /* ivory */
+  --muted: #b8c2d3;
+  --accent: #d8b86a;  /* Capitol gold */
+  --link: #a9c8ff;
+  --dem: #1f4fbf;     /* Democratic blue */
+  color: var(--text);
+}
+.speaker main a:not(.cta) { color: var(--link); }
+.speaker .src a { color: var(--muted); }
+.speaker .src a:hover, .speaker main a:not(.cta):hover { color: var(--text); }
+.speaker .cta { background: var(--dem); color: #fff; border: 1px solid rgba(255, 255, 255, .6); border-radius: 999px; padding: 1rem 1.75rem; }
+/* The thesis line above the hero button: the display face at a size between
+   the lede and the headline, ivory with its last words in Capitol gold */
+.speaker .thesis { font: 700 clamp(1.6rem, 4.2vw, 2.6rem)/1.1 var(--display); text-transform: uppercase; letter-spacing: .01em;
+  max-width: 34ch; margin: 2rem 0 0; color: var(--text); text-wrap: balance; }
+.speaker .thesis span { color: var(--accent); }
+
+/* Hero button and its live signature count, kept together as one unit with
+   one clear gap above. Side by side when there is room, stacked on phones. */
+.speaker .cta-row { display: flex; flex-wrap: wrap; align-items: center; gap: .75rem 1.25rem; margin-top: 1.5rem; }
+.speaker .cta-row .cta { margin: 0; }
+.speaker .cta-row .src { margin: 0; max-width: 34rem; }
+.speaker .cta:hover { background: #fff; color: var(--bg); }
+.speaker .ledger .note { border-left-color: var(--accent); }
+
+/*
+  Hero rotor (driven by rotor.js).
+  All ten headlines sit in one grid cell, stacked on top of each other, and
+  so do all ten captions. A grid cell is as tall as its tallest item, so the
+  hero keeps one height whichever line is showing and nothing below it moves.
+  minmax(0, 1fr) caps the column at the page width; without it the cell grows
+  to fit its widest text and the page scrolls sideways on phones.
+  Only the line with .is-on is visible. The h1 size here is the starting
+  size; rotor.js then enlarges one-line headlines to fill the same box.
+*/
+.speaker .hero h1 { color: var(--text); font-size: clamp(2.5rem, min(10vw, 12vh), 6.5rem); line-height: 1; }
+.rotor, .rotor-cap { display: grid; grid-template-columns: minmax(0, 1fr); }
+/* "Earmarked." starts at roughly its fitted size, so rotor.js only fine-tunes
+   it instead of doubling it on screen after the font loads. In Oswald 700 the
+   word is about 5.3 times as wide as its font size, so the column width
+   divided by 5.4 fills the line; cqi is the column's width. Capped at 2.5 times
+   the h1 size, the same ceiling rotor.js uses. Browsers without container
+   units keep the h1 size and rotor.js does all the sizing. */
+.rotor { container-type: inline-size; }
+.rotor > .rotor-line:first-child { font-size: min(calc(100cqi / 5.4), 2.5em); }
+/* The swap: the old line fades out and drops slightly, the new one fades in
+   and rises into place. .5s must match CONFIG.fade in rotor.js, which waits
+   for the fade-out to finish before showing the next line. */
+.rotor > .rotor-line, .rotor-cap > .rotor-line { grid-area: 1 / 1; opacity: 0; transform: translateY(.35rem);
+  transition: opacity .5s ease, transform .5s ease; }
+.rotor > .rotor-line.is-on, .rotor-cap > .rotor-line.is-on { opacity: 1; transform: none; }
+.rotor-cap > .rotor-line.is-on { transition-delay: .08s; }  /* the caption arrives a beat after the headline */
+
+/* "From the record: item 0N" link and the Pause button, on one row */
+.rotor-ref { display: flex; flex-wrap: wrap; align-items: center; gap: .25rem 1rem; margin: 0 0 1.25rem;
+  font: 500 .9rem/1.2 var(--display); text-transform: uppercase; letter-spacing: .08em; }
+/* padding makes a 44px tap target; .is-out fades the link with the headline */
+.speaker main .rotor-ref a { color: var(--accent); display: inline-block; padding: .75rem 0; transition: opacity .5s ease; }
+.speaker main .rotor-ref a.is-out { opacity: 0; }
+.rotor-pause { min-height: 44px; padding: 0 1rem; border: 1px solid var(--line); border-radius: 999px; background: none;
+  color: var(--muted); font: inherit; letter-spacing: inherit; text-transform: inherit; cursor: pointer; }
+.rotor-pause:hover { color: var(--text); border-color: var(--muted); }
+
+/* Header on narrow phones: "America Deserves a Speaker" plus "Sign the petition"
+   needs about 400px plus margins, so below 430px the nav link shows only
+   "Sign". " the petition" is hidden visually, not removed,
+   so the link is still announced (and voice-controllable) as "Sign the petition". */
+@media (max-width: 429px) {
+  .speaker .nav-long { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+}
+
+/*
+  "Call your representative" (#call), right after the hero and driven by
+  rep.js. A lighter navy band sets it apart as the page's main
+  action. On #132a52: text 13.3:1, muted 8.3:1, gold 7.8:1,
+  links 8.8:1.
+*/
+.speaker .call { background: #132a52; }
+/* hidden must win over the button styles: .cta sets display, which would
+   otherwise keep a hidden button (#rep-find after a lookup) on screen */
+.speaker [hidden] { display: none !important; }
+.call-lede { font-size: 1.15rem; max-width: 42rem; margin: 0 0 1.5rem; }
+.call #rep-find { margin: 0 0 1.5rem; }
+.call #rep-find:disabled { opacity: .7; cursor: progress; }
+.call-alt, .call .src { max-width: 42rem; }
+.call-alt { margin: 0 0 .75rem; }
+/* the result card rep.js fills in */
+.rep-out { max-width: 42rem; margin: 0 0 1.75rem; padding: 1.25rem; border: 1px solid var(--line); border-radius: 6px; background: rgba(13, 27, 51, .55); }
+.rep-out p { margin: 0 0 .75rem; }
+.rep-out p:last-child { margin-bottom: 0; }
+.rep-kicker { font: 500 .9rem/1.2 var(--display); text-transform: uppercase; letter-spacing: .1em; color: var(--accent); }
+.rep-out .rep-name { font: 700 clamp(1.6rem, 6vw, 2.4rem)/1.05 var(--display); text-transform: uppercase; margin-bottom: .35rem; }
+.rep-where, .rep-msg { color: var(--muted); }
+.rep-actions { display: flex; flex-wrap: wrap; align-items: center; gap: .75rem 1.25rem; }
+.speaker .rep-actions .cta { margin: 0; }
+.rep-phone { font-variant-numeric: tabular-nums; color: var(--muted); }
+
+/* The context line under the rotor that never changes */
+.speaker .lede-fixed { font-size: 1.05rem; color: var(--muted); margin-top: 0; }
+
+/* Reduced motion: rotor.js never rotates, and no line animates in */
+@media (prefers-reduced-motion: reduce) { .rotor > .rotor-line, .rotor-cap > .rotor-line { transition: none; transform: none; } }
+
+/* ----------------------------------------------------------------- footer */
+.site-footer { padding: 2.5rem 0 3rem; color: var(--muted); font-size: .9rem; text-align: center; }
+.site-footer p { margin: 0 auto .6rem; max-width: 46rem; }
+.site-footer .foot-line { max-width: none; }
+@media (min-width: 900px) { .foot-line span { white-space: nowrap; } }  /* break between parts, never inside one */
+@media (max-width: 899px) {
+  .foot-line span { display: block; }
+}
+.site-footer a { color: var(--muted); display: inline-block; padding: .2rem 0; }
+/* studio credit, same as the other mediaBrilliance builds */
+.credit { margin: 1.4rem 0 0; font-size: .75rem; letter-spacing: .02em; }
+.site-footer .credit a { display: inline-flex; align-items: center; gap: .4rem; margin-left: .2rem;
+  padding: 0; color: var(--muted); text-decoration: none; vertical-align: middle; }
+.credit img { display: block; width: auto; height: 1em; }
+.site-footer .credit a:hover, .site-footer .credit a:focus-visible { color: var(--accent); }
+

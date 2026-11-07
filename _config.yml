@@ -1,0 +1,9 @@
+# GitHub Pages publishes every file in the repo unless it is listed here.
+# The sources (style.css, rotor.js, rep.js) stay public on purpose: the page is
+# meant to be read, and View Source should show the commented originals.
+exclude:
+  - README.md
+  - CLAUDE.md
+  - devLog.md
+  - LICENSE
+  - tools

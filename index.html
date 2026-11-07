@@ -1,0 +1,350 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-SFSM1D23NT"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-SFSM1D23NT');
+    gtag('config', 'AW-18498605429');
+  </script>
+  <!--
+  ============================================================================
+  projectspeaker.org
+  ============================================================================
+  @file       index.html
+  @desc       America Deserves a Speaker (Project Speaker): the sourced case for
+              a contested House speaker election in January 2027, backing the
+              change.org petition "House Democrats: CHOOSE A NEW SPEAKER"
+              (Nicole Whitted). Split off kansasdeservesbetter.com/speaker/ on
+              Nov. 7, 2026.
+  @author     mediaBrilliance digitalxtudio
+  @version    1.0.0
+  @updated    2026-11-07
+  @requires   style.min.css, rotor.min.js and rep.min.js (built from style.css,
+              rotor.js and rep.js by tools/build.sh, which also stamps each ?v=
+              hash here), reps.json (built by tools/reps.py),
+              fonts/oswald-latin.woff2
+  @data       The signature count between the petition:start and petition:end
+              comments is rewritten hourly by tools/petition.py (run by
+              .github/workflows/petition.yml). Edit around the markers, never
+              inside them.
+  @record     Every claim links to its source: FEC for money, clerk.house.gov
+              for votes, the publishing outlet for quotes. His own explanation
+              sits beside each item. The rotating headlines and captions
+              restate items from the record and may not say anything it
+              does not.
+  @privacy    #call sends a location to the U.S. Census Bureau's geocoder only
+              when the visitor taps "Find my representative"; nothing is stored
+              or sent to analytics
+  @a11y       Skip link, landmarks, one h1, WCAG 2.2 AA contrast (ratios in
+              style.css), headline rotation with a Pause button, held on
+              hover and focus, off under reduced motion
+  ============================================================================
+  -->
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <title>America Deserves a Speaker | Project Speaker</title>
+  <meta name="description" content="$421,396 through AIPAC’s PAC to Hakeem Jeffries’ committees, and no rival in 16 speaker ballots. Read the sourced record and sign the petition." />
+  <link rel="canonical" href="https://projectspeaker.org/" />
+  <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1" />
+  <meta name="author" content="mediaBrilliance" />
+  <meta name="theme-color" content="#0b0b0b" />
+
+  <meta property="og:site_name" content="America Deserves a Speaker" />
+  <meta property="og:locale" content="en_US" />
+  <meta property="og:title" content="America Deserves a Speaker" />
+  <meta property="og:description" content="Before House Democrats hand Hakeem Jeffries the gavel, read the record. Every line is sourced. Then sign the petition." />
+  <meta property="og:type" content="article" />
+  <meta property="og:url" content="https://projectspeaker.org/" />
+  <!-- Share card: og.png, rendered from tools/og.html. Bump ?v= when it is re-rendered,
+       since Facebook, X and iMessage cache the image by URL. -->
+  <meta property="og:image" content="https://projectspeaker.org/og.png?v=1" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:image:alt" content="Project Speaker: Earmarked. $421,396 earmarked through AIPAC’s PAC to Jeffries’ committees since 2025; House Democrats split 103 to 98 on cutting Israel’s military aid and he voted no; in 16 speaker ballots since 2023 no Democrat has voted for anyone else." />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="America Deserves a Speaker" />
+  <meta name="twitter:description" content="Before House Democrats hand Hakeem Jeffries the gavel, read the record. Every line is sourced. Then sign the petition." />
+  <meta name="twitter:image" content="https://projectspeaker.org/og.png?v=1" />
+  <meta name="twitter:image:alt" content="Project Speaker: Earmarked. $421,396 earmarked through AIPAC’s PAC to Jeffries’ committees since 2025; House Democrats split 103 to 98 on cutting Israel’s military aid and he voted no; in 16 speaker ballots since 2023 no Democrat has voted for anyone else." />
+
+  <link rel="icon" href="favicon.svg" type="image/svg+xml" />
+  <link rel="preload" href="fonts/oswald-latin.woff2" as="font" type="font/woff2" crossorigin />
+  <link rel="stylesheet" href="style.min.css?v=d2d041c8" />
+  <script type="application/ld+json">
+{
+ "@context": "https://schema.org",
+ "@graph": [
+  {
+   "@type": "Organization",
+   "@id": "https://www.mediabrilliance.io/#org",
+   "name": "mediaBrilliance",
+   "url": "https://www.mediabrilliance.io/"
+  },
+  {
+   "@type": "WebSite",
+   "@id": "https://projectspeaker.org/#site",
+   "url": "https://projectspeaker.org/",
+   "name": "America Deserves a Speaker",
+   "inLanguage": "en-US",
+   "publisher": {
+    "@id": "https://www.mediabrilliance.io/#org"
+   }
+  },
+  {
+   "@type": "Article",
+   "@id": "https://projectspeaker.org/#article",
+   "mainEntityOfPage": "https://projectspeaker.org/",
+   "isPartOf": {
+    "@id": "https://projectspeaker.org/#site"
+   },
+   "headline": "America Deserves a Speaker",
+   "description": "$421,396 through AIPAC’s PAC to Hakeem Jeffries’ committees, and no rival in 16 speaker ballots. Read the sourced record and sign the petition.",
+   "image": "https://projectspeaker.org/og.png?v=1",
+   "inLanguage": "en-US",
+   "datePublished": "2026-11-07",
+   "dateModified": "2026-11-07",
+   "publisher": {
+    "@id": "https://www.mediabrilliance.io/#org"
+   },
+   "about": {
+    "@type": "Person",
+    "name": "Hakeem Jeffries",
+    "jobTitle": "House Democratic Leader"
+   }
+  }
+ ]
+}
+  </script>
+  <script src="rotor.min.js?v=e89d15f5" defer></script>
+  <script src="rep.min.js?v=309d8f3f" defer></script>
+</head>
+<body class="speaker">
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <header class="site-header">
+    <div class="wrap">
+      <!-- This page's own name in the shared header; the home page keeps Kansas Deserves Better -->
+      <a class="mark" href="#top">America Deserves <span>a Speaker</span></a>
+      <nav class="nav" aria-label="Pages">
+        <!-- On narrow phones " the petition" is hidden visually but still read aloud (style.css) -->
+        <a href="https://www.change.org/p/house-democrats-choose-a-new-speaker">Sign<span class="nav-long"> the petition</span></a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main">
+    <section class="hero" id="top">
+      <div class="wrap">
+        <p class="kicker">Project Speaker &middot; House speaker vote, January 2027</p>
+        <!-- Rotating headline. Ten lines share one grid cell and rotor.js fades one in at a time.
+             Line 1 is visible in the markup and is the only one screen readers hear; the rest are
+             aria-hidden. data-ref is the record item each line comes from (1-6 = #item-1 to #item-6,
+             0 = the petition section). Order here must match the captions below, line for line. -->
+        <h1 class="rotor" id="rotor">
+          <span class="rotor-line is-on" data-ref="1">Earmarked.</span>
+          <span class="rotor-line" data-ref="1" aria-hidden="true">$421,396 through AIPAC&rsquo;s PAC.</span>
+          <span class="rotor-line" data-ref="1" aria-hidden="true">$149,300. One donor. One day.</span>
+          <span class="rotor-line" data-ref="2" aria-hidden="true">103 Democrats said yes. He said no.</span>
+          <span class="rotor-line" data-ref="3" aria-hidden="true">&ldquo;Don&rsquo;t want us to get even.&rdquo;</span>
+          <span class="rotor-line" data-ref="4" aria-hidden="true">Four months to back Mamdani.</span>
+          <span class="rotor-line" data-ref="5" aria-hidden="true">&ldquo;Exactly the right outcome.&rdquo;</span>
+          <span class="rotor-line" data-ref="6" aria-hidden="true">A PAC to protect incumbents.</span>
+          <span class="rotor-line" data-ref="1" aria-hidden="true">Follow the earmarks.</span>
+          <span class="rotor-line" data-ref="0" aria-hidden="true">Democrats deserve a choice.</span>
+        </h1>
+        <!-- Caption for each headline, same order as the h1 above: caption N states the fact behind headline N. -->
+        <p class="lede rotor-cap" id="rotor-cap">
+          <span class="rotor-line is-on">Donors routed $421,396 through AIPAC&rsquo;s PAC to Jeffries&rsquo; campaign and two joint fundraising committees he heads, February 2025 to September 2026.</span>
+          <span class="rotor-line" aria-hidden="true">That&rsquo;s the total earmarked through AIPAC&rsquo;s PAC to his campaign and two joint committees he heads since February 2025.</span>
+          <span class="rotor-line" aria-hidden="true">On May 20, 2026, one donor sent $149,300 through AIPAC&rsquo;s PAC to a joint fundraising committee Jeffries heads.</span>
+          <span class="rotor-line" aria-hidden="true">On July 15, 2026, 103 House Democrats voted to cut Israel&rsquo;s $3.3 billion in Foreign Military Financing. Jeffries voted no.</span>
+          <span class="rotor-line" aria-hidden="true">The morning after Democrats won the House, Jeffries said on MS NOW: &ldquo;The American people don&rsquo;t want us to get even.&rdquo;</span>
+          <span class="rotor-line" aria-hidden="true">Zohran Mamdani won New York City&rsquo;s mayoral primary in June 2025. Jeffries, who represents Brooklyn, endorsed him on Oct. 24.</span>
+          <span class="rotor-line" aria-hidden="true">That&rsquo;s what Jeffries called Trump&rsquo;s preemptive pardon of Rep. Henry Cuellar, D-Texas, on federal bribery charges in December 2025.</span>
+          <span class="rotor-line" aria-hidden="true">In 2021, Jeffries co-founded Team Blue PAC to defend House Democratic incumbents facing primary challenges.</span>
+          <span class="rotor-line" aria-hidden="true">$421,396 through AIPAC&rsquo;s PAC, $149,300 of it from one donor on one day. Every dollar is on file with the FEC.</span>
+          <span class="rotor-line" aria-hidden="true">A petition asks every member of the incoming Congress to hold a competitive election for speaker.</span>
+        </p>
+        <!-- Link to the record item behind the headline on screen; rotor.js rewrites it on each swap.
+             The Pause button ships hidden and appears only when the script is running. -->
+        <p class="rotor-ref"><a href="#item-1" id="rotor-ref">From the record: item 01</a>
+          <button class="rotor-pause" id="rotor-pause" type="button" aria-pressed="false" hidden>Pause headlines</button></p>
+        <!-- Context that does not rotate -->
+        <p class="lede lede-fixed">Democrats won the House on Nov. 3. Hakeem Jeffries is expected to be sworn in on Jan. 3 as the
+        first Black speaker. In 16 speaker ballots since 2023, not one House Democrat has voted for anyone else. A vote with
+        one name on it is a formality.</p>
+        <p class="src cite">Sources: <a href="#record">the record below</a>; <a href="https://www.nbcnews.com/politics/2026-election/democrats-house-control-midterm-election-wins-trump-check-rcna603397">NBC News</a>, Nov. 3, 2026;
+        <a href="#act">House roll calls</a>.</p>
+        <!-- The page's thesis, set apart right above the button -->
+        <p class="thesis">America deserves a speaker who had to <span>win the job.</span></p>
+        <!-- The button and its live count are one unit: side by side on wide screens, stacked on phones -->
+        <div class="cta-row">
+          <a class="cta" href="https://www.change.org/p/house-democrats-choose-a-new-speaker">Sign the petition</a>
+          <!-- Live count: tools/petition.py replaces the text between the markers when the count changes -->
+          <p class="src cite"><!-- petition:start -->1,010,710 signatures toward 1.5 million as of 12:11 p.m. Central, Nov. 7, 2026.<!-- petition:end --> Petition by Nicole Whitted on
+          <a href="https://www.change.org/p/house-democrats-choose-a-new-speaker">change.org</a>.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Call your representative. The button is hidden in the markup and shown by rep.js only where the browser
+         can share a location; it finds the member for the visitor's district and becomes a "Call Rep. Name" button.
+         The switchboard and the house.gov address lookup below it work with or without the script. -->
+    <section class="section call" id="call" aria-labelledby="call-h">
+      <div class="wrap">
+        <h2 id="call-h">Call your representative</h2>
+        <p class="call-lede">The people choosing the next speaker answer to voters, and that means you. House Democrats are set
+        to pick their nominee on Nov. 18, ABC News reports. Call before then and say it plainly: you want a real contest for
+        speaker.</p>
+        <button class="cta" id="rep-find" type="button" hidden>Find my representative</button>
+        <div class="rep-out" id="rep-out" aria-live="polite" hidden></div>
+        <p class="call-alt">Or call the Capitol switchboard at <a href="tel:+12022243121">(202) 224-3121</a> and ask for
+        your representative&rsquo;s office, or <a href="https://www.house.gov/representatives/find-your-representative">look up
+        your representative by address</a> at house.gov.</p>
+        <p class="src">The button uses your location once, to look up your congressional district with the U.S. Census
+        Bureau. This site does not store it.</p>
+      </div>
+    </section>
+
+    <section class="section" id="record" aria-labelledby="record-h">
+      <div class="wrap">
+        <h2 id="record-h">The record</h2>
+        <p class="section-intro">Not rumors. Not talking points. FEC filings, House roll calls and his own words, each linked to
+        its source, each with his explanation beside it. This is the record House Democrats are about to reward with the
+        gavel.</p>
+        <!-- One entry per claim: what happened, then his explanation (.note), then the source.
+             The ids are what the hero's "From the record" link points at; keep them in order. Items 7 and 8 were added Nov. 7 from congress.gov/govinfo cosponsor data and clerk roll call 200. -->
+        <ol class="ledger">
+          <li id="item-1">
+            <h3>$421,396 through AIPAC&rsquo;s PAC</h3>
+            <p>From February 2025 to September 2026, donors routed $421,396 through AIPAC&rsquo;s political action committee to
+            Jeffries&rsquo; campaign and two joint fundraising committees he heads. One donor sent $149,300 on May 20, 2026,
+            alone.</p>
+            <p class="note">The money is individual donors&rsquo; contributions, earmarked through the PAC, not the PAC&rsquo;s
+            own funds. The two joint committees also raise money for the DCCC and other House Democrats.</p>
+            <p class="src">Source: <a href="https://www.fec.gov/data/disbursements/?committee_id=C00797670&amp;recipient_name=JEFFRIES&amp;two_year_transaction_period=2026">FEC, AIPAC PAC disbursements, 2025-2026</a></p>
+          </li>
+          <li id="item-2">
+            <h3>His caucus split. He voted no.</h3>
+            <p>On July 15, 2026, the House rejected Rep. Thomas Massie&rsquo;s amendment to cut Israel&rsquo;s $3.3 billion in
+            Foreign Military Financing, 104-314. More Democrats voted for it (103) than against it (98). Jeffries voted no.</p>
+            <p class="note">His explanation, the day before: the amendment was &ldquo;overly broad&rdquo; and would limit
+            humanitarian aid, refugee resettlement and embassy funds. He also wrote that &ldquo;American policy in the Middle
+            East must change.&rdquo;</p>
+            <p class="src">Sources: <a href="https://clerk.house.gov/Votes/2026243">House roll call 243</a>;
+            <a href="https://democraticleader.house.gov/media/press-releases/dear-colleague-massie-amendment-and-us-policy-middle-east">Jeffries&rsquo; Dear Colleague letter, July 14, 2026</a>;
+            <a href="https://fmep.org/resource/fmep-legislative-round-up-july-17-2026/">FMEP</a></p>
+          </li>
+          <li id="item-3">
+            <h3>&ldquo;Don&rsquo;t want us to get even&rdquo;</h3>
+            <p>The morning after the election, Jeffries said on MS NOW&rsquo;s &ldquo;Morning Joe&rdquo;: &ldquo;The American
+            people don&rsquo;t want us to get even; they want us to get things done on their behalf because life is way too
+            expensive.&rdquo;</p>
+            <p class="note">In August he named the Judiciary and Oversight committees to lead on accountability and declined to
+            rule impeachment in or out.</p>
+            <p class="src">Source: <a href="https://www.fox5dc.com/news/progressives-fume-hakeem-jeffries-saying-democrats-wont-get-even-trump">FOX 5 DC</a>, Nov. 4, 2026</p>
+          </li>
+          <li id="item-4">
+            <h3>Four months to back his city&rsquo;s nominee</h3>
+            <p>Zohran Mamdani won New York City&rsquo;s Democratic mayoral primary in June 2025. Jeffries, who represents
+            Brooklyn, held off for months and endorsed him on Oct. 24, 2025.</p>
+            <p class="note">His statement cited &ldquo;areas of principled disagreement&rdquo; and said he respected the will
+            of primary voters.</p>
+            <p class="src">Source: <a href="https://www.news4jax.com/news/politics/2025/10/25/jeffries-backs-mamdani-for-nyc-mayor-months-after-primary/">The Associated Press</a>, Oct. 24, 2025</p>
+          </li>
+          <li id="item-5">
+            <h3>&ldquo;Exactly the right outcome&rdquo;</h3>
+            <p>When President Trump gave Rep. Henry Cuellar, D-Texas, a preemptive pardon on federal bribery charges in December
+            2025, Jeffries told CNN: &ldquo;I think the outcome was exactly the right outcome.&rdquo;</p>
+            <p class="note">His reason: &ldquo;this indictment was very thin to begin with, in my view.&rdquo;</p>
+            <p class="src">Source: <a href="https://www.aol.com/news/jeffries-backs-trump-pardon-cuellar-191440901.html">The Hill</a>, Dec. 3, 2025</p>
+          </li>
+          <li id="item-6">
+            <h3>A PAC to shield incumbents from primaries</h3>
+            <p>In June 2021, Jeffries, Josh Gottheimer and Terri Sewell launched Team Blue PAC to defend House Democratic
+            incumbents facing primary challenges.</p>
+            <p class="note">Jeffries called it &ldquo;an extension of my job as caucus chair: to ensure that members are
+            successful.&rdquo;</p>
+            <p class="src">Source: <a href="https://www.nbcnews.com/politics/congress/house-democrats-launch-pac-protect-incumbents-attacks-within-n1272428">NBC News</a>, June 26, 2021</p>
+          </li>
+          <li id="item-7">
+            <h3>Medicare for All, until he led</h3>
+            <p>Jeffries cosponsored the Medicare for All Act in 2019 and was an original cosponsor in 2021. He did not cosponsor
+            the 2023 version, introduced four months after he became Democratic leader.</p>
+            <p class="note">In August 2026 he told NBC&rsquo;s &ldquo;Meet the Press&rdquo;: &ldquo;I haven&rsquo;t cosponsored the
+            Medicare for All legislation that has been introduced over the last several years.&rdquo; He said Democrats should
+            focus on &ldquo;driving down the high cost of living.&rdquo;</p>
+            <p class="src">Sources: congress.gov cosponsor lists for <a href="https://www.congress.gov/bill/116th-congress/house-bill/1384/cosponsors">H.R. 1384 (2019)</a>,
+            <a href="https://www.congress.gov/bill/117th-congress/house-bill/1976/cosponsors">H.R. 1976 (2021)</a> and
+            <a href="https://www.congress.gov/bill/118th-congress/house-bill/3421/cosponsors">H.R. 3421 (2023)</a>;
+            <a href="https://www.newsweek.com/hakeem-jeffries-rejects-medicare-all-dsa-agenda-12328842">Newsweek</a></p>
+          </li>
+          <li id="item-8">
+            <h3>His caucus split again. He voted yes.</h3>
+            <p>On July 17, 2025, the House passed the GENIUS Act, which sets federal rules for stablecoins, 308-122. House
+            Democrats voted 110 to 102 against it. Jeffries voted yes, and the bill went to President Trump, whose family
+            launched a company that issues a stablecoin, Politico reported.</p>
+            <p class="note">No public statement from Jeffries explaining this vote has turned up. If he gave one,
+            <a href="mailto:vc3030@gmail.com?subject=projectspeaker.org%20GENIUS%20Act">send it</a> and it goes
+            here.</p>
+            <p class="src">Sources: <a href="https://clerk.house.gov/Votes/2025200">House roll call 200</a>;
+            <a href="https://www.commondreams.org/news/genius-act-vote">Common Dreams</a>, quoting Politico, July 17, 2025</p>
+          </li>
+        </ol>
+      </div>
+    </section>
+
+    <section class="section record" id="act" aria-labelledby="act-h">
+      <div class="wrap">
+        <h2 id="act-h">Demand a real vote</h2>
+        <p>The speaker sets the House agenda and stands second in line to the presidency, behind only the vice president. A job
+        that powerful should be won in an open contest, not handed down. In 16 speaker ballots since 2023, no House Democrat
+        has voted for anyone but Jeffries. A real contest makes every candidate answer for the agenda before anyone gets the
+        gavel.</p>
+        <p class="src">Sources: <a href="https://www.govinfo.gov/content/pkg/USCODE-2023-title3/html/USCODE-2023-title3-chap1-sec19.htm">3 U.S.C. &sect; 19</a>;
+        House roll calls <a href="https://clerk.house.gov/Votes/20232">2 to 20, Jan. 3-7, 2023</a> (15 ballots) and
+        <a href="https://clerk.house.gov/Votes/20252">2, Jan. 3, 2025</a></p>
+        <!-- The Nov. 18 date is reported, not announced by the caucus, and Fox News reported mid-December; keep the attribution
+             and the conflict until the caucus confirms a date -->
+        <ul class="dates">
+          <li><strong>Nov. 18</strong> House Democrats choose their nominee for speaker behind closed doors, according to
+          <a href="https://abc7news.com/live-updates/midterm-elections-2026-live-updates-election-results-key-races-us/20001292/entry/20016171/">ABC News</a>
+          and <a href="https://news.bgov.com/bloomberg-government-news/house-democratic-leadership-elections-set-for-nov-18-and-19">Bloomberg Government</a>.
+          <a href="https://www.foxnews.com/politics/hakeem-jeffries-declares-bid-house-speaker-after-gops-midterm-massacre">Fox News</a> reported mid-December.
+          A simple majority of the caucus wins the nomination.</li>
+          <li><strong>Jan. 3</strong> The full House elects the speaker.</li>
+        </ul>
+        <ol class="steps">
+          <li><strong>Sign the petition.</strong> It asks every member of the incoming 120th Congress to hold a competitive
+          election for speaker.</li>
+          <li><strong>Call your representative before the caucus votes.</strong> <a href="#call">Find your representative
+          and the number to call</a>.</li>
+          <li><strong>Share this page.</strong> Every claim on it links to its source.</li>
+        </ol>
+        <a class="cta" href="https://www.change.org/p/house-democrats-choose-a-new-speaker">Sign the petition</a>
+      </div>
+    </section>
+  </main>
+
+  <!-- Disclaimers required while the page is an ad destination: who paid, no candidate authorization,
+       no tie to change.org or the petition's author, and the tracking the page carries. -->
+  <footer class="site-footer">
+    <div class="wrap">
+      <p class="foot-line"><span>Paid for by Valdez Campos.</span>
+        <span>Not authorized by any candidate or candidate's committee.</span></p>
+      <p class="foot-line"><span>Not affiliated with change.org or the petition&rsquo;s author.</span>
+        <span>Every claim links to its source. <a href="mailto:vc3030@gmail.com?subject=projectspeaker.org%20correction">Send a correction</a>.</span></p>
+      <p class="foot-line"><span>Uses Google Analytics and Google Ads to count visits.</span>
+        <span>&ldquo;Find my representative&rdquo; sends your location to the U.S. Census Bureau only when tapped.</span></p>
+      <p class="credit">Made in Kansas City by
+        <a href="https://www.mediabrilliance.io" target="_blank" rel="noopener"><img src="images/mb-mark.svg"
+           width="206" height="95" alt="" />mediaBrilliance digitalxtudio</a></p>
+    </div>
+  </footer>
+</body>
+</html>
