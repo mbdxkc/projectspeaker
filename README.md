@@ -18,10 +18,12 @@ https://projectspeaker.org
 ├── rep.js            # "Find my representative" (source; the page loads rep.min.js)
 ├── reps.json         # Every House seat and its member, built hourly by tools/reps.py
 ├── og.png            # Share card, rendered from tools/og.html
+├── 404.html          # Not-found page (root-absolute paths, inline styles)
+├── favicon.svg, apple-touch-icon.png, icon-512.png  # Built by tools/icons.py
 ├── fonts/            # Oswald (SIL OFL), latin subset, self-hosted
 ├── images/           # Studio mark
-├── favicon.svg, robots.txt, sitemap.xml
-├── tools/            # build.sh, petition.py, reps.py, og.html (not published)
+├── robots.txt, sitemap.xml
+├── tools/            # build.sh, petition.py, reps.py, icons.py, og.html (not published)
 ├── .github/          # workflows/petition.yml: hourly count and member list
 └── _config.yml       # Keeps internal files off GitHub Pages
 ```

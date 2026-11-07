@@ -74,3 +74,14 @@ Every link to the petition (header, hero button, the hero's change.org text link
 - **Verify the head after any build step that writes into index.html.** Title, viewport, canonical and JSON-LD parse is a five-line check, and it is the one that caught the deletion
 - **A date given by a constitutional default is not a schedule.** Write "Jan. 3, unless Congress sets another day by law" until a date is announced
 - **One slow Lighthouse run is a sample, not a regression.** Read the network table first: when every request finished long before first paint, the stall is in the harness. Judge on three runs
+
+## 2026-11-07 (night) — Icons, 404, self-switching rep lookup
+
+- **The favicon was Kansas Deserves Better's "K".** The split copied `favicon.svg` and nobody looked at it again; every tab and bookmark for projectspeaker.org showed another site's mark. New icon: Oswald Bold "S" in Capitol gold on House navy, outlined from the font by `tools/icons.py`, which also renders the 180 px Apple touch icon and a 512 px PNG. Proven to reproduce the committed files exactly
+- **404.html:** branded not-found page with "Read the record" and the petition. Root-absolute URLs and inline CSS because Pages serves it at any depth; noindex
+- **The rep lookup now follows the member list across Jan. 3.** `reps.json` carries `"congress"` (119 now, computed from term end dates), and `rep.js` picks the geocoder vintage holding that Congress's lines. When congress-legislators publishes the 120th Congress, the lookup moves to the redrawn 120th lines on the same hourly run. Before this, the page would have paired new members with old lines in every redrawn state until someone edited the vintage by hand. The Republican note no longer says "Jan. 3"; it says "when the new Congress convenes"
+
+### Mistakes → Rules
+
+- **A split copies every file, including the ones that carry the old identity.** Favicon, share card, header text and footer were all checked at the split except the 200-byte SVG in every browser tab. After cloning a site into a new brand, open every image asset, however small
+- **Key a scheduled switch to the data it depends on, not to a calendar date.** The lookup must change lines when the member list changes, and Congress can legally convene on a day other than Jan. 3. Reading the Congress number off the member list makes the two impossible to mismatch

@@ -7,7 +7,7 @@
               the visitor's U.S. House member from their location and turns
               the section's button into a call button for that office.
   @author     mediaBrilliance digitalxtudio
-  @version    1.0.0
+  @version    1.1.0
   @updated    2026-11-07
   @privacy    Nothing happens until the visitor taps "Find my representative".
               Their coordinates then go to one place, the U.S. Census
@@ -18,9 +18,13 @@
   HOW IT WORKS
   1. Tap: the browser asks for location (the browser's own prompt).
   2. The coordinates go to the Census Bureau's geocoder, which returns the
-     congressional district for that point. It uses the 119th Congress lines,
-     the lines today's members were elected on; the new lines some states
-     drew for 2026 take effect when the 120th Congress is sworn in Jan. 3.
+     congressional district for that point, on the lines that match the
+     member list: reps.json says which Congress it describes ("congress"),
+     and CONFIG.lines maps that to a geocoder vintage. Until Jan. 3, 2027 that
+     is the 119th Congress lines today's members were elected on; once the
+     list carries the 120th Congress, the lookup uses the 120th lines, which
+     several states redrew for 2026. No date is coded here: the switch
+     follows the data.
      The geocoder sends no CORS headers, so it is called as JSONP: a script
      tag whose response calls a named function on this page.
   3. The district is looked up in reps.json (same folder), built from the
@@ -42,8 +46,14 @@
   /** Sources and limits. */
   var CONFIG = {
     geocoder: 'https://geocoding.geo.census.gov/geocoder/geographies/coordinates',
-    vintage: 'ACS2025_Current',             // the vintage that returns 119th Congress districts
-    layer: '119th Congressional Districts',
+    // Congress -> the geocoder vintage and layer with that Congress's lines.
+    // Checked Nov. 7, 2026: ACS2025_Current serves only the 119th layer,
+    // Current_Current only the 120th. A Congress missing here falls back to
+    // Current_Current and its "Nth Congressional Districts" layer.
+    lines: {
+      119: { vintage: 'ACS2025_Current', layer: '119th Congressional Districts' },
+      120: { vintage: 'Current_Current', layer: '120th Congressional Districts' }
+    },
     seats: 'reps.json',
     finder: 'https://www.house.gov/representatives/find-your-representative',
     timeout: 15000                          // ms before a lookup counts as failed
@@ -139,18 +149,21 @@
   /* --------------------------------------------------------------- lookup */
 
   /**
-   * Coordinates -> { postal, state, district } from the geocoder.
+   * Coordinates -> { postal, state, district } from the geocoder, on the
+   * lines of the given Congress (reps.json's "congress", 119 if absent).
    * BASENAME is the district number ("3"), or text containing "at Large"
    * for at-large seats, D.C. and the territories, which the seat list files
    * under district 0. Resolves null when the point is in no district.
    */
-  function district(lat, lon) {
+  function district(lat, lon, congress) {
+    var lines = CONFIG.lines[congress] ||
+      { vintage: 'Current_Current', layer: ordinal(congress) + ' Congressional Districts' };
     var url = CONFIG.geocoder + '?x=' + lon + '&y=' + lat +
-      '&benchmark=Public_AR_Current&vintage=' + CONFIG.vintage +
-      '&layers=' + encodeURIComponent(CONFIG.layer);
+      '&benchmark=Public_AR_Current&vintage=' + lines.vintage +
+      '&layers=' + encodeURIComponent(lines.layer);
     return jsonp(url).then(function (data) {
       var g = data && data.result && data.result.geographies;
-      var d = g && g[CONFIG.layer] && g[CONFIG.layer][0];
+      var d = g && g[lines.layer] && g[lines.layer][0];
       var st = d && STATES[d.STATE];
       if (!st) return null;
       var n = parseInt(d.BASENAME, 10);
@@ -190,7 +203,7 @@
     if (rep.p === 'Democrat' && DELEGATE[place.postal]) {
       nodes.push(el('p', 'As a nonvoting member, ' + full + ' does not vote in the House floor election for speaker.', { 'class': 'rep-msg' }));
     } else if (rep.p !== 'Democrat') {
-      nodes.push(el('p', 'Only Democrats vote in the Democratic caucus. Every member votes for speaker on the House floor on Jan. 3, so the call still counts.', { 'class': 'rep-msg' }));
+      nodes.push(el('p', 'Only Democrats vote in the Democratic caucus. Every member votes for speaker on the House floor when the new Congress convenes, so the call still counts.', { 'class': 'rep-msg' }));
     }
 
     var script = el('p', null, { 'class': 'rep-script' });
@@ -224,9 +237,13 @@
       return r.json();
     });
     navigator.geolocation.getCurrentPosition(function (pos) {
-      Promise.all([district(pos.coords.latitude, pos.coords.longitude), seatsReq]).then(function (res) {
-        if (!res[0]) { fail('That location isn’t in a U.S. congressional district. Use the switchboard or the address lookup below.'); return; }
-        show(res[0], res[1]);
+      // The seat list says which Congress it describes, so it arrives before
+      // the district lookup, which needs those lines.
+      seatsReq.then(function (seats) {
+        return district(pos.coords.latitude, pos.coords.longitude, seats.congress || 119).then(function (place) {
+          if (!place) { fail('That location isn’t in a U.S. congressional district. Use the switchboard or the address lookup below.'); return; }
+          show(place, seats);
+        });
       }).catch(function () {
         fail('The lookup didn’t go through. Use the switchboard or the address lookup below.');
       });

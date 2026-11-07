@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <!-- Google tag, same property as the home page, so a 404 shows up in reports with its bad URL.
+       The click listener sends petition_click with location "404". -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-20SJCHR8YG"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-20SJCHR8YG');
+    gtag('config', 'AW-18498605429');
+    document.addEventListener('click', function (e) {
+      var a = e.target.closest && e.target.closest('a[href*="change.org/p/"]');
+      if (a) gtag('event', 'petition_click', { location: a.getAttribute('data-cta') || 'other' });
+    });
+  </script>
+  <!--
+  ============================================================================
+  projectspeaker.org
+  ============================================================================
+  @file       404.html
+  @desc       Not-found page. GitHub Pages serves it for any missing path, at
+              any depth, so every URL here is root-absolute (/fonts/...) and
+              the styles are inline: a relative link would break one folder
+              down.
+  @author     mediaBrilliance digitalxtudio
+  @version    1.0.0
+  @updated    2026-11-07
+  @seo        noindex; no canonical, since this page has no address of its own
+  ============================================================================
+  -->
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Page not found | America Deserves a Speaker</title>
+  <meta name="robots" content="noindex" />
+  <meta name="theme-color" content="#0b0b0b" />
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+  <!-- A trimmed copy of the home page's header, hero and footer rules, with the same colours -->
+  <style>
+    @font-face { font-family: "Oswald"; font-weight: 500 700; font-display: swap; src: url("/fonts/oswald-latin.woff2") format("woff2"); }
+    :root { --navy: #0d1b33; --text: #f5f2ea; --muted: #b8c2d3; --gold: #d8b86a; --link: #a9c8ff; --dem: #1f4fbf;
+      --display: "Oswald", "Arial Narrow", Impact, sans-serif; --gutter: clamp(16px, 4vw, 40px); }
+    * { box-sizing: border-box; }
+    body { margin: 0; background: var(--navy); color: var(--text); font: 400 1.0625rem/1.6 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+      min-height: 100vh; display: flex; flex-direction: column; }
+    a { color: var(--link); text-underline-offset: .15em; }
+    :focus-visible { outline: 3px solid var(--gold); outline-offset: 3px; }
+    .wrap { max-width: 68rem; margin: 0 auto; padding: 0 var(--gutter); width: 100%; }
+    header { background: #0b0b0b; border-bottom: 1px solid #2a2a2a; }
+    .mark { display: inline-block; font: 700 1.05rem/1 var(--display); text-transform: uppercase; letter-spacing: .02em; color: #f2efe8;
+      text-decoration: none; padding: 1rem 0; }
+    .mark span { color: #f5c400; }
+    main { flex: 1; padding: clamp(3rem, 10vh, 6rem) 0; }
+    .kicker { font: 500 .95rem/1.2 var(--display); text-transform: uppercase; letter-spacing: .12em; color: var(--gold); margin: 0 0 1rem; }
+    h1 { font: 700 clamp(2.5rem, 10vw, 5rem)/1 var(--display); text-transform: uppercase; margin: 0 0 1.25rem; }
+    p { max-width: 40rem; }
+    .actions { display: flex; flex-wrap: wrap; gap: .75rem 1rem; margin-top: 2rem; }
+    .cta { display: inline-block; font: 700 1.1rem/1 var(--display); text-transform: uppercase; letter-spacing: .04em; text-decoration: none;
+      padding: 1rem 1.75rem; border-radius: 999px; background: var(--dem); color: #fff; border: 1px solid rgba(255, 255, 255, .6); }
+    .cta.alt { background: none; }
+    .cta:hover { background: #fff; color: var(--navy); }
+    footer { padding: 2rem 0 2.5rem; color: var(--muted); font-size: .9rem; text-align: center; border-top: 1px solid #2a3d5e; }
+    footer p { margin: 0 auto .5rem; }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="wrap"><a class="mark" href="/">America Deserves <span>a Speaker</span></a></div>
+  </header>
+  <main>
+    <div class="wrap">
+      <p class="kicker">Error 404</p>
+      <h1>Page not found</h1>
+      <p>There is nothing at this address. The whole case is on one page: Hakeem Jeffries&rsquo; record, each claim
+      linked to its source, and the petition for a real speaker election.</p>
+      <div class="actions">
+        <a class="cta" href="/">Read the record</a>
+        <a class="cta alt" href="https://www.change.org/p/house-democrats-choose-a-new-speaker" data-cta="404">Sign the petition</a>
+      </div>
+    </div>
+  </main>
+  <footer>
+    <div class="wrap">
+      <p>Paid for by Valdez Campos. Not authorized by any candidate or candidate's committee.</p>
+      <p>Uses Google Analytics and Google Ads to count visits.</p>
+    </div>
+  </footer>
+</body>
+</html>
