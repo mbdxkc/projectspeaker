@@ -15,7 +15,7 @@ Split off kansasdeservesbetter.com/speaker/ on Nov. 7, 2026. The history before 
   5. Wait for the certificate, tick **Enforce HTTPS**, then `curl -sI` http and https, with and without www: expect 301s to https://projectspeaker.org/ and a 200
   6. In kansasdeservesbetter: remove `speaker/`, its workflow steps and build entries; replace the home page link with https://projectspeaker.org/ (no automatic redirect; that repo forbids them)
 - Step 6 done Nov. 7 (kansasdeservesbetter f588005): `/speaker/` there now 404s and that repo's workflow is gone, so this repo's bot is the only one
-- Analytics: the same GA4 (`G-SFSM1D23NT`) and Google Ads (`AW-18498605429`) tags as Kansas Deserves Better; reports split by hostname. Ads final URLs use https://projectspeaker.org/
+- Analytics: its own GA4 property, Project Speaker (`G-20SJCHR8YG`, stream 16294886294, from Nov. 7, 2026; visits before that are in Kansas Deserves Better's `G-SFSM1D23NT`), plus the shared Google Ads tag (`AW-18498605429`). Installed by hand as gtag.js; Google's setup offers to reuse the KDB tag found on the site, which would send every KDB visit here too, so never accept it. The internal-traffic filter (T-Mobile IPv6 prefix `2607:fb91:3c06:383e:`) must be defined on the stream and set Active. Search Console: Domain property, verified by a TXT record at `@` beside SPF Ads final URLs use https://projectspeaker.org/
 
 ## The page
 

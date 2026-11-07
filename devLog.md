@@ -34,3 +34,12 @@ GitHub's check passed at 4:27 p.m., about when the cached 4-hour records were du
 ### Mistakes → Rules
 
 - **A stale GitHub Pages check clears on the cached record's TTL, not on anything done in the UI.** It cleared within minutes of the predicted 4:20 p.m. Predict the expiry from the old TTL and the save time, and wait for it rather than re-saving
+
+## 2026-11-07 (evening) — Own Analytics property, Search Console
+
+New GA4 property Project Speaker, `G-20SJCHR8YG`, replaces Kansas Deserves Better's `G-SFSM1D23NT` in the tag; the Google Ads config line stays. Search Console Domain property verified by a `google-site-verification` TXT record at `@`, added beside `v=spf1 -all` and confirmed at all four Squarespace nameservers before pressing Verify.
+
+### Mistakes → Rules
+
+- **GA4's setup wizard defaults to reusing a tag it finds on the site.** Here that was KDB's, and accepting it would have made Project Speaker a second destination of KDB's tag, mixing both sites' traffic. Pick Install manually and take the `G-` ID from the stream details
+- **"Install manually" can show a Tag Manager container snippet (`gtm.js?id=GTM-…`) with no `config` line**, which sends nothing to GA4 on its own. The Measurement ID on the stream details page is the value a gtag.js site needs
