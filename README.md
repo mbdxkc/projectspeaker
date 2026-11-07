@@ -41,7 +41,7 @@ Edit `style.css`, `rotor.js` or `rep.js`, then run `tools/build.sh`, which minif
 
 ## Deploy
 
-GitHub Pages from `main`. The petition bot pushes to `main` hourly, so `git pull --rebase` before every push. projectspeaker.org forwards to the original copy at kansasdeservesbetter.com/speaker/ until the DNS cutover in CLAUDE.md.
+GitHub Pages from `main`. The petition bot pushes to `main` hourly, so `git pull --rebase` before every push. Custom domain https://projectspeaker.org, HTTPS enforced since Nov. 7, 2026.
 
 ---
 

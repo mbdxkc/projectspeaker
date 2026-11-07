@@ -26,3 +26,11 @@ The custom domain was saved in GitHub at about 12:17, before the Squarespace rec
 - **Change DNS first, wait for it at every authoritative nameserver, then add the custom domain in GitHub.** GitHub checks the domain the moment it is saved and caches whatever it gets for that record's TTL; remove-and-re-add does not flush it. The order was already written in mBcode/CLAUDE.md and this repo's own cutover steps, and was talked past
 - **Leaving a registrar's defaults means inheriting their TTL.** Squarespace's default records were 4 hours; the replacements were 1 hour. Lowering TTLs a day before a planned move is the cheap insurance
 - **`dig` without HTTPS-record support answers a `HTTPS` query as if it were an A lookup.** Query `TYPE65` to see HTTPS/SVCB records
+
+## 2026-11-07 (evening) — Live at projectspeaker.org
+
+GitHub's check passed at 4:27 p.m., about when the cached 4-hour records were due to expire: "DNS check successful," Let's Encrypt certificate (CN=projectspeaker.org, expires Feb. 5, 2027) approved, Enforce HTTPS ticked. Verified: http, http-www and https-www 301 to https://projectspeaker.org/, which returns 200 with the right title; `og.png?v=1`, `reps.json` and `rep.min.js` return 200. Then step 6: kansasdeservesbetter dropped `speaker/`, its petition workflow, the speaker CSS and build steps, and repointed its home link here (f588005). This repo's bot is now the only one updating the count.
+
+### Mistakes → Rules
+
+- **A stale GitHub Pages check clears on the cached record's TTL, not on anything done in the UI.** It cleared within minutes of the predicted 4:20 p.m. Predict the expiry from the old TTL and the save time, and wait for it rather than re-saving

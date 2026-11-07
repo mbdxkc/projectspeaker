@@ -1,25 +1,25 @@
 # projectspeaker/CLAUDE.md
 > America Deserves a Speaker (Project Speaker): the sourced case for a contested House speaker election, January 2027
-> Deploy: GitHub Pages from `main` (mbdxkc/projectspeaker), https://projectspeaker.org (DNS cutover pending, see Deploy)
+> Deploy: GitHub Pages from `main` (mbdxkc/projectspeaker), https://projectspeaker.org
 
 Split off kansasdeservesbetter.com/speaker/ on Nov. 7, 2026. The history before the split is in that repo's devLog.md and CLAUDE.md; this file carries every rule that still applies.
 
 ## Deploy
 
-- GitHub Pages from `main`, root folder. Until DNS moves, the site also answers at https://mbdxkc.github.io/projectspeaker/ (relative paths work at both)
-- **Cutover, in this order** (the CNAME rule from mBcode/CLAUDE.md: a CNAME ahead of DNS takes the site dark):
+- GitHub Pages from `main`, root folder, custom domain projectspeaker.org (`CNAME`), Enforce HTTPS on. Cut over Nov. 7, 2026: certificate approved and HTTPS enforced at 4:27 p.m.; http, www and https-www all 301 to https://projectspeaker.org/. Squarespace DNS: A `@` to GitHub's four IPs, CNAME `www` to mbdxkc.github.io, Email Security records (SPF `-all`, DMARC reject) kept
+- **Cutover, as done** (kept for a future domain move; the CNAME rule from mBcode/CLAUDE.md: a CNAME ahead of DNS takes the site dark) (the CNAME rule from mBcode/CLAUDE.md: a CNAME ahead of DNS takes the site dark):
   1. Squarespace Domains → projectspeaker.org → Website: delete the two Domain forwarding rules (`@` and `www`)
   2. DNS Settings → Custom records: A `@` → 185.199.108.153, 185.199.109.153, 185.199.110.153, 185.199.111.153; CNAME `www` → mbdxkc.github.io. Keep the Email Security records (SPF `-all`, DMARC reject)
   3. Check every GitHub Pages IP answers at the authoritative nameservers (`dig @nse1.squarespacedns.com projectspeaker.org`)
   4. Add a `CNAME` file containing `projectspeaker.org` and push; set the custom domain in Settings → Pages
   5. Wait for the certificate, tick **Enforce HTTPS**, then `curl -sI` http and https, with and without www: expect 301s to https://projectspeaker.org/ and a 200
   6. In kansasdeservesbetter: remove `speaker/`, its workflow steps and build entries; replace the home page link with https://projectspeaker.org/ (no automatic redirect; that repo forbids them)
-- Two hourly workflows run until step 6: this repo's and kansasdeservesbetter's. Both are harmless; each keeps its own copy current
-- Analytics: the same GA4 (`G-SFSM1D23NT`) and Google Ads (`AW-18498605429`) tags as Kansas Deserves Better; reports split by hostname. Ads final URLs can use projectspeaker.org once it serves the site directly
+- Step 6 done Nov. 7 (kansasdeservesbetter f588005): `/speaker/` there now 404s and that repo's workflow is gone, so this repo's bot is the only one
+- Analytics: the same GA4 (`G-SFSM1D23NT`) and Google Ads (`AW-18498605429`) tags as Kansas Deserves Better; reports split by hostname. Ads final URLs use https://projectspeaker.org/
 
 ## The page
 
-- Added 2026-11-07: **Project Speaker**, headline "Earmarked." (Nov. 7; "Open the gavel" retired, and "No gavel for AIPAC" declined as overstating donors' earmarks as AIPAC control), backing the change.org petition "House Democrats: CHOOSE A NEW SPEAKER" (Nicole Whitted). projectspeaker.org is the canonical address. Until the DNS cutover (see Deploy) it still forwards (302) to kansasdeservesbetter.com/speaker/, the original copy. 302 on purpose: a 301 is cached by browsers, which would strand returning visitors if Project Speaker later moves to its own repo at projectspeaker.org. Saving the `@` rule deleted the Squarespace Defaults; the Email Security records (SPF `-all`, DMARC reject) stay, so the domain cannot be spoofed for mail. Canonical, og:url and the sitemap stay on kansasdeservesbetter.com/speaker/. Google Ads final URLs must use kansasdeservesbetter.com, not the forwarding domain
+- Added 2026-11-07: **Project Speaker**, headline "Earmarked." (Nov. 7; "Open the gavel" retired, and "No gavel for AIPAC" declined as overstating donors' earmarks as AIPAC control), backing the change.org petition "House Democrats: CHOOSE A NEW SPEAKER" (Nicole Whitted). projectspeaker.org is the canonical address and serves the site directly. Before the cutover it forwarded (302, so no browser cached it) to kansasdeservesbetter.com/speaker/, which is now gone
 - The shared header reads **America Deserves a Speaker** (Valdez, Nov. 7; also the page title and og:site_name) on this page only (text change in `index.html`; the mark links to `#top`). Below 430px the nav link shows "Sign" (" the petition" is visually hidden, not removed, so the accessible name still contains the visible text), because the full label overflowed 320-360px screens by 4-44px
 - Colours are scoped to `body.speaker main` and the footer (House navy `#0d1b33`, Capitol gold `#d8b86a`, Democratic blue `#1f4fbf` buttons); the shared header keeps the site's black and sunflower. `tools/build.sh` builds and stamps the stylesheet and both scripts
 - **Hero rotor** (`rotor.js`, explained in its comments; the page loads `rotor.min.js`, which `tools/build.sh` builds with terser and stamps, so run the build after any edit): ten headlines in `#rotor` and ten captions in `#rotor-cap`, paired by position, so add, remove or reorder them in both lists together. Each headline's `data-ref` is its record item (1-6 → `#item-N`, 0 → `#act`). Every headline and caption restates an item in the record and may not claim anything the record does not. "Earmarked." stays first and holds 10 s on first load (`CONFIG.firstHold`); the rest shuffle. 6-second interval, .5s fade (`CONFIG.fade` must match the CSS transition). Line 1 is pre-sized in CSS at `min(100cqi / 5.4, 2.5em)` (Oswald 700 "EARMARKED." is about 5.3 em wide), within 2-4 px of the fitted size; if line 1 ever changes, re-derive the 5.4. Both exist for Lighthouse Speed Index: a headline that changes at 6 s or doubles in size after the font loads scored mobile performance 94 (Speed Index 6.7 s); with both, 100 (1.1 s)
