@@ -14,3 +14,15 @@ The repository was created as speakerproject and renamed projectspeaker to match
 
 - **A rename shows up in the REST API before GitHub's GraphQL index.** `gh repo view mbdxkc/projectspeaker` failed minutes after the rename while `gh api repos/mbdxkc/projectspeaker` resolved. A failed lookup straight after a rename is not proof the name is wrong
 - **A chained `check && change` skips the change when the check fails, and the rest of the line still runs.** The failed lookup stopped the folder rename, while a later `;`-separated command started a local server in the wrong directory. Keep the check and the change in separate commands, or separate them with `||` handling that stops everything
+
+## 2026-11-07 (afternoon) — DNS cutover, stalled on GitHub's cache
+
+Squarespace forwarding removed; A records for @ to GitHub Pages' four IPs and a www CNAME to mbdxkc.github.io added around 12:20 p.m. Central. Within minutes all four Squarespace nameservers, and Cloudflare, Google, Quad9, OpenDNS, Level3 and Neustar, returned only GitHub's records, with DNSSEC validating (the AD flag set). GitHub's Pages health check still reported NotServedByPagesError for the apex and InvalidCNAMEError for www, with the certificate stuck at "new." Removing and re-adding the custom domain through the API did not change it.
+
+The custom domain was saved in GitHub at about 12:17, before the Squarespace records changed, on advice given in this session. GitHub's checker resolved the domain then and cached Squarespace's default records, which carried a 4-hour TTL. That cache, not the DNS, is what fails the check; it should expire around 4:20 p.m. Meanwhile http serves the site from GitHub, https shows a certificate warning, and kansasdeservesbetter.com/speaker/ stays the working address.
+
+### Mistakes → Rules
+
+- **Change DNS first, wait for it at every authoritative nameserver, then add the custom domain in GitHub.** GitHub checks the domain the moment it is saved and caches whatever it gets for that record's TTL; remove-and-re-add does not flush it. The order was already written in mBcode/CLAUDE.md and this repo's own cutover steps, and was talked past
+- **Leaving a registrar's defaults means inheriting their TTL.** Squarespace's default records were 4 hours; the replacements were 1 hour. Lowering TTLs a day before a planned move is the cheap insurance
+- **`dig` without HTTPS-record support answers a `HTTPS` query as if it were an A lookup.** Query `TYPE65` to see HTTPS/SVCB records
