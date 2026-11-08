@@ -229,8 +229,8 @@ body.speaker { background: #0d1b33; }
   color: var(--muted); font: inherit; letter-spacing: inherit; text-transform: inherit; cursor: pointer; }
 .rotor-pause:hover { color: var(--text); border-color: var(--muted); }
 
-/* Header below 540px: the mark, the two toggles and "Sign the petition" need
-   about 505px with margins, so the nav link shows only "Sign" (or "Firma").
+/* Header below 540px: the mark, "Sign the petition" and the Play/Pause button
+   need about 460px with margins, so the nav link shows only "Sign" (or "Firma").
    " the petition" is hidden visually, not removed, so the link is still
    announced (and voice-controllable) as "Sign the petition". */
 @media (max-width: 539px) {
@@ -267,26 +267,25 @@ body.speaker { background: #0d1b33; }
 .speaker .lede-fixed { font-size: 1.05rem; color: var(--muted); margin-top: 0; }
 
 /*
-  Sound and motion toggles (#pref-sound, #pref-motion; band.js). Two icon
-  buttons at the right of the header, before "Sign". aria-pressed="true"
-  shows the "on" icon in gold; "false" shows the struck-through one, muted.
+  Play/Pause (#pref-play; band.js), right of "Sign the petition". One icon
+  button, gold: the triangle while nothing moves (data-state="idle"), the
+  two bars while the parade crosses (data-state="playing"). The nav takes
+  margin-left: auto so the mark sits left and the pair sits right.
 */
-.prefs { display: flex; gap: .125rem; margin-left: auto; }
+.site-header .nav { margin-left: auto; }
 .pref { width: 40px; height: 40px; display: grid; place-items: center; padding: 0; border: 0; border-radius: 50%;
-  background: none; color: var(--muted); cursor: pointer; }
+  background: none; color: var(--accent); cursor: pointer; flex: none; }
 .pref svg { width: 20px; height: 20px; }
 .pref:hover { color: var(--text); background: rgba(255, 255, 255, .06); }
-.pref[aria-pressed="true"] { color: var(--accent); }
-.pref[aria-pressed="true"] .i-off, .pref[aria-pressed="false"] .i-on { display: none; }
+.pref[data-state="playing"] .i-play, .pref:not([data-state="playing"]) .i-pause { display: none; }
 .speaker .pref[hidden] { display: none !important; }
-/* Phones: the mark, two toggles and "Sign" need about 394 px at full size
-   (404 with the Spanish "Firma"), so below 430 px the gaps close, the
-   buttons narrow to 34 px (still over WCAG's 24 px minimum target) and the
-   mark steps down; below 375 px it steps down again. Measured in Firefox at
+/* Phones: the mark, "Sign" and the Play/Pause button are tight at 320 px,
+   so below 430 px the gaps close, the button narrows to 34 px (still over
+   WCAG's 24 px minimum target) and the mark steps down; below 375 px it
+   steps down again. Measured in Firefox at
    320 to 540 on both pages; the Spanish "Firma" at 320 is the tightest fit. */
 @media (max-width: 429px) {
   .site-header .wrap { gap: .5rem; }
-  .prefs { gap: 0; }
   .pref { width: 34px; }
   .mark { font-size: .92rem; letter-spacing: .01em; }
 }
@@ -315,33 +314,45 @@ body.speaker { background: #0d1b33; }
 .band.is-on .band-track { animation: band-cross 16s linear forwards; }
 @keyframes band-cross { from { transform: translateX(-100%); } to { transform: translateX(100vw); } }
 .band [class^="b-"], .band [class*=" b-"] { transform-box: fill-box; }
-.band.is-on .b-bob { animation: b-step .5s ease-in-out infinite; }
-.band.is-on .b-leg { transform-origin: 50% 0; animation: b-leg 1s ease-in-out infinite; }
-.band.is-on .b-lb { animation-delay: -.5s; }
-.band.is-on .b-baton { transform-origin: center; animation: b-spin .6s linear infinite; }
-.band.is-on .b-plume { transform-origin: 50% 100%; animation: b-sway 1s ease-in-out infinite; }
-.band.is-on .b-chair { transform-origin: center; animation: b-chair 1s ease-in-out infinite; }
-.band.is-on .b-stick { transform-origin: 0 0; animation: b-hit .25s ease-in-out infinite alternate; }
-.band.is-on .b-stick2 { animation-delay: -.125s; }
-.band.is-on .b-mallet { transform-origin: 100% 0; animation: b-hit .5s ease-in-out infinite alternate; }
+/* Rhythms sit on the 96 bpm beat (.625 s) and scale by --t, a tempo factor each marcher draws at random
+   (band.js pace()), so no two step, swing a leg or hit a drum in lockstep. */
+.band.is-on .b-bob { animation: b-step calc(.625s * var(--t, 1)) ease-in-out infinite; }
+.band.is-on .b-leg { transform-origin: 50% 0; animation: b-leg calc(1.25s * var(--t, 1)) ease-in-out infinite; }
+.band.is-on .b-lb { animation-delay: calc(-.625s * var(--t, 1)); }
+.band.is-on .b-baton { transform-origin: center; animation: b-spin calc(.9s * var(--t, 1)) linear infinite; }
+.band.is-on .b-plume { transform-origin: 50% 100%; animation: b-sway calc(1.25s * var(--t, 1)) ease-in-out infinite; }
+.band.is-on .b-chair { transform-origin: center; animation: b-chair calc(1.25s * var(--t, 1)) ease-in-out infinite; }
+.band.is-on .b-stick { transform-origin: 0 0; animation: b-hit calc(.3125s * var(--t, 1)) ease-in-out infinite alternate; }
+.band.is-on .b-stick2 { animation-delay: calc(-.156s * var(--t, 1)); }
+.band.is-on .b-mallet { transform-origin: 100% 0; animation: b-hit calc(.625s * var(--t, 1)) ease-in-out infinite alternate; }
 .band.is-on .b-flag { transform-origin: 0 50%; animation: b-wave .8s ease-in-out infinite alternate; }
 .band.is-on .b-spark { transform-origin: center; animation: b-twinkle .9s ease-in-out infinite; }
 .band.is-on .b-puff { transform-origin: center; animation: b-puff 1.6s ease-out infinite; }
 .band.is-on .b-note { animation: b-note 1.2s ease-out infinite; }
+/* Everyone's own pace: a drift of --drift units over the whole crossing
+   (--dur, set when the parade starts), so the parade loosens as it goes. */
+.band.is-on .b-pace { animation: b-pace var(--dur, 20s) linear forwards; }
 /* The odd ones: stragglers drift back and hurry up, trippers stumble once,
    and the serious trombonist never bounces; only his slide moves, on the beat. */
 .band.is-on .b-stray { animation: b-stray 3.4s ease-in-out infinite; }
 .band.is-on .b-trip { transform-origin: 50% 100%; animation: b-trip .8s ease-in-out 1 both; }
-.band.is-on .b-steady .b-leg { animation-duration: .88s; }
-.band.is-on .b-slide { animation: b-slide .441s ease-in-out infinite alternate; }
-.band.is-on .b-cym { transform-origin: 50% 50%; animation: b-cym .88s ease-in-out infinite; }
+.band.is-on .b-oops { transform-origin: 50% 50%; animation: b-oops 1.4s ease-in-out 1 both; }
+.band.is-on .b-fumble { transform-origin: 0 0; animation: b-fumble 1.6s ease-in-out 1 both; }
+.band.is-on .b-steady .b-leg { animation-duration: 1.25s; }
+.band.is-on .b-slide { animation: b-slide .625s ease-in-out infinite alternate; }
+.band.is-on .b-cym { transform-origin: 50% 50%; animation: b-cym calc(1.25s * var(--t, 1)) ease-in-out infinite; }
 .band.is-on .b-cym2 { animation-name: b-cym2; }
-/* The protesters: they bob in clusters of about five (one animation per
-   cluster, not per person, so a crowd of hundreds stays light), signs sway,
-   some fists pump, and the megaphone's sound lines pulse with the call. */
-.band.is-on .b-crowd { animation: b-step .52s ease-in-out infinite; }
-.band.is-on .b-sign { transform-origin: 50% 100%; animation: b-sway 1.1s ease-in-out infinite; }
-.band.is-on .b-pump { transform-origin: 0 100%; animation: b-pump .44s ease-in-out infinite alternate; }
+/* What each person does. Periods and starts are inline (band.js clock()),
+   different for every figure; these rules give only the motion. */
+.band.is-on .b-walk { animation: b-step .5s ease-in-out infinite; }
+.band.is-on .b-raise { animation: b-raise 3s ease-in-out infinite; }
+.band.is-on .b-fist { animation: b-fist 4s ease-in-out infinite; }
+.band.is-on .b-clap { transform-origin: 50% 50%; animation: b-clap .4s ease-in-out infinite; }
+.band.is-on .b-hand { transform-origin: 0 100%; animation: b-hand .7s ease-in-out infinite; }
+.band.is-on .b-swing { transform-origin: 50% 0; animation: b-swing 1s ease-in-out infinite; }
+.band.is-on .b-tap { transform-origin: 0 0; animation: b-hit .28s ease-in-out infinite alternate; }
+.band.is-on .b-shake { transform-origin: 50% 50%; animation: b-shake .18s ease-in-out infinite alternate; }
+.band.is-on .b-toot { transform-origin: 0 100%; animation: b-toot 3s ease-in-out infinite; }
 .band.is-on .b-shout { animation: b-twinkle .44s ease-in-out infinite; }
 .band .b-puff, .band .b-note, .band .b-spark { opacity: 0; }
 @keyframes b-step { 50% { transform: translateY(-1.5px); } }
@@ -356,12 +367,21 @@ body.speaker { background: #0d1b33; }
 @keyframes b-note { 0% { opacity: 1; transform: translate(0, 0); } 100% { opacity: 0; transform: translate(5px, -14px); } }
 @keyframes b-stray { 0%, 100% { transform: translateX(0); } 55% { transform: translateX(-16px); } 70% { transform: translateX(-16px) translateY(-1px); } }
 @keyframes b-trip { 0%, 100% { transform: none; } 25% { transform: rotate(14deg) translateY(2px); } 45% { transform: rotate(-9deg) translate(-2px, -3px); } 70% { transform: rotate(4deg); } }
-@keyframes b-pump { from { transform: translateY(0); } to { transform: translateY(-3px); } }
+@keyframes b-oops { 0%, 100% { transform: none; } 20%, 60% { transform: scaleX(-1); } 75% { transform: scaleX(-1) translateY(-1px); } }
+@keyframes b-fumble { 0%, 100% { transform: none; } 25% { transform: translate(2px, -14px) rotate(40deg); } 45% { transform: translate(6px, 16px) rotate(160deg); } 60% { transform: translate(6px, 30px) rotate(200deg); } 80% { transform: translate(2px, 6px) rotate(60deg); } }
+@keyframes b-pace { from { transform: translateX(0); } to { transform: translateX(var(--drift, 0px)); } }
+@keyframes b-raise { 0%, 35%, 100% { transform: translateY(7px) rotate(-6deg); } 45%, 80% { transform: translateY(0) rotate(4deg); } }
+@keyframes b-fist { 0%, 50%, 100% { transform: translateY(9px); } 58%, 70%, 82% { transform: translateY(0); } 64%, 76% { transform: translateY(4px); } }
+@keyframes b-clap { 0%, 100% { transform: scaleX(1); } 50% { transform: scaleX(.55); } }
+@keyframes b-hand { 0%, 100% { transform: rotate(-12deg); } 50% { transform: rotate(14deg); } }
+@keyframes b-swing { 0%, 100% { transform: rotate(-10deg); } 50% { transform: rotate(10deg); } }
+@keyframes b-shake { from { transform: rotate(-14deg); } to { transform: rotate(14deg); } }
+@keyframes b-toot { 0%, 60%, 100% { transform: rotate(0); } 70%, 90% { transform: rotate(-18deg); } }
 @keyframes b-slide { from { transform: translateX(0); } to { transform: translateX(7px); } }
 @keyframes b-cym { 0%, 80%, 100% { transform: translateX(0); } 90% { transform: translateX(5px) scaleY(1.15); } }
 @keyframes b-cym2 { 0%, 80%, 100% { transform: translateX(0); } 90% { transform: translateX(-5px) scaleY(1.15); } }
 
-/* Motion off, from the header toggle (band.js sets the class): no band, no
+/* Paused, from the header Play/Pause (band.js sets the class): no band, no
    fades, no smooth scroll. rotor.js reads the same class and holds line 1. */
 .motion-off .band { display: none; }
 html.motion-off { scroll-behavior: auto; }

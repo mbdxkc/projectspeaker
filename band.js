@@ -3,26 +3,26 @@
   projectspeaker.org
   ============================================================================
   @file       band.js
-  @desc       The marching band that parades behind the header text, its
-              march, and the two header toggles that control them: Sound and
-              Motion.
+  @desc       The parade behind the header text (marching band and a crowd
+              of protesters), its march, and the header Play/Pause button.
   @author     mediaBrilliance digitalxtudio
-  @version    3.0.0
+  @version    3.4.0
   @updated    2026-11-07
-  @a11y       The band is decorative (aria-hidden, no pointer events, behind
-              the header text at reduced opacity). Both toggles are real
-              buttons with aria-pressed and a label in the page's language.
-              Motion off stops the parade, the headline rotation (rotor.js
-              reads the same class) and smooth scrolling. Sound is on by
-              default and plays only once the browser allows it, after the
-              visitor's first tap or key press; the header toggle stops it.
+  @a11y       The parade is decorative (aria-hidden, no pointer events,
+              behind the header text at reduced opacity). Play/Pause is a
+              real button whose label says what it will do, in the page's
+              language. Pause stops the parade and sound, holds the headline
+              rotation (rotor.js reads the same class) and is remembered;
+              reduced motion on the device counts as paused. The march is
+              drums only for now (CONFIG.drums; horns and chant off); it plays
+              only once the browser allows sound, after the first tap or key.
   ============================================================================
 
   WHEN THE BAND MARCHES
   Once per page load, at a random moment 3 to 20 seconds after the page is
-  ready, if Motion is on and the tab is visible. Turning Sound on before then
-  sends the band out at once, with the march. It crosses left to right at
-  about 90 px a second, so the crossing takes longer on a wide screen; the
+  ready, unless the visitor has paused it and the tab is visible. Play sends
+  a new one out at any time. It crosses left to right at
+  about 50 px a second, so the crossing takes longer on a wide screen; the
   time is rounded to whole bars of music so the band and the march end
   together.
 
@@ -31,9 +31,13 @@
   bearer, three trumpets, a solo snare, sometimes the serious trombonist,
   two sousaphones, the drumline (three snares, tenors, three bass drums in
   graded sizes, cymbals), another solo snare, a trumpet and two dancers
-  swinging folding chairs, with smoke puffs behind. Rows sit far apart, one
-  or two stragglers drift behind and catch up, a few marchers are out of
-  step, and two or three trip once somewhere in the crossing. The serious
+  swinging folding chairs, with smoke puffs behind. Rows sit 58 units apart.
+  The band is trained, so it holds formation (small drift, tempos within 5%),
+  but not perfect: now and then a straggler drifts back and catches up, one
+  or two marchers trip, one turns the wrong way for a beat, a few are out of
+  step, and the drum major sometimes fumbles the baton. The crowd around it
+  is dealt fresh on every pass: trail length, spacing, height, depth and
+  what each person is doing. The serious
   trombonist (about two loads in five) has sunglasses, a level gaze, no
   bounce and a slide that never misses.
 
@@ -45,15 +49,19 @@
   cluster. The whole scene is built when the parade starts (build), not at
   page load, so its 2,500 or so nodes cost nothing until then.
 
-  THE TOGGLES
-  #pref-sound and #pref-motion in the header. Their state lives on <html> as
-  classes (sound-on, motion-off, motion-on) and in localStorage, so a choice
-  holds on the next visit; if storage is blocked, the defaults apply:
-  Sound on, Motion on, or Motion off when the device asks for reduced motion.
-  "motion-on" records an explicit choice to override that device setting.
+  THE PLAY/PAUSE BUTTON
+  #pref-play, right of "Sign the petition". It shows Play while nothing is
+  moving and Pause while the parade crosses (data-state idle or playing;
+  the label comes from data-play and data-pause, in the page's language).
+  Pause stops the parade and any sound, adds motion-off to <html> (rotor.js
+  holds the headline; style.css drops fades) and is remembered as
+  ps-parade=off, so the parade does not start by itself next time; Play
+  sends a newly dealt parade across at once and clears that. With no choice
+  stored, reduced motion on the device counts as paused.
 
   THE MUSIC
-  An original march in G minor, 4/4 at 136 beats a minute, synthesized with
+  An original march in G minor, 4/4 at 96 beats a minute (an easy Sunday
+  tempo), synthesized with
   the Web Audio API and scheduled bar by bar to the length of the parade:
   two bars of drumline cadence, then an eight-bar strain repeated as needed,
   then an ending. After the intro, every twelve bars open with four of
@@ -80,17 +88,19 @@
 
   var root = document.documentElement;
   var header = document.querySelector('.site-header');
-  var soundBtn = document.getElementById('pref-sound');
-  var motionBtn = document.getElementById('pref-motion');
-  if (!header || !soundBtn || !motionBtn) return;
+  var btn = document.getElementById('pref-play');
+  if (!header || !btn) return;
 
   var CONFIG = {
     delayMin: 3000,    // ms after the page is ready before the band can start
     delayMax: 20000,
-    speed: 90,         // px a second across the screen
-    bpm: 136,
+    speed: 50,         // px a second across the screen: an easy Sunday parade
+    bpm: 96,           // the drums, and every step and stick, at a stroll
     volume: 0.2,
-    serious: 0.4       // chance the serious trombonist marches this load
+    serious: 0.4,      // chance the serious trombonist marches this load
+    drums: true,       // the drumline sound (Valdez, Nov. 7: "add the drums")
+    horns: false,      // the brass tune; off for now
+    chant: false       // the democracy chant; off for now
   };
 
   /* ---------------------------------------------------------- preferences */
@@ -99,20 +109,22 @@
   function save(key, v) { try { localStorage.setItem(key, v); } catch (e) { /* defaults next time */ } }
 
   var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  var motion = load('ps-motion') ? load('ps-motion') === 'on' : !reduce;
-  var sound = load('ps-sound') !== 'off';   // on unless the visitor turned it off
+  // "motion" is false once the visitor has pressed Pause (remembered as
+  // ps-parade=off) or, with no choice yet, when the device asks for reduced
+  // motion. It stops the parade starting on its own and holds the rotor.
+  var motion = load('ps-parade') ? load('ps-parade') === 'on' : !reduce;
+  var sound = true;   // whatever is switched on in CONFIG plays whenever the parade does
 
-  /** Mirrors the state onto <html> and the buttons. */
+  /** Mirrors the state onto <html> (rotor.js and style.css read it) and the button. */
   function apply() {
     root.classList.toggle('motion-off', !motion);
     root.classList.toggle('motion-on', motion && reduce);   // explicit override of the device setting
-    root.classList.toggle('sound-on', sound);
-    motionBtn.setAttribute('aria-pressed', String(motion));
-    soundBtn.setAttribute('aria-pressed', String(sound));
+    var on = band.classList.contains('is-on');
+    btn.setAttribute('data-state', on ? 'playing' : 'idle');
+    var label = btn.getAttribute(on ? 'data-pause' : 'data-play');
+    btn.setAttribute('aria-label', label);
+    btn.setAttribute('title', label);
   }
-  apply();
-  soundBtn.hidden = false;
-  motionBtn.hidden = false;
 
   function rand(a, b) { return a + Math.random() * (b - a); }
 
@@ -231,7 +243,7 @@
     var curve = new Float32Array(1024);
     for (var ci = 0; ci < 1024; ci++) { var xv = ci / 511.5 - 1; curve[ci] = Math.tanh(2.2 * xv) / Math.tanh(2.2); }
     function brass(m, t, d, v, dest, peak, body) {
-      if (!m || !live(t)) return;
+      if (!CONFIG.horns || !m || !live(t)) return;
       var f = freq(m), start = at(t), end = start + d;
       var o = ctx.createOscillator(), drive = ctx.createWaveShaper(), lp = ctx.createBiquadFilter();
       var bell = ctx.createBiquadFilter(), g = ctx.createGain();
@@ -360,7 +372,7 @@
       var k12 = (bar - 2) % 12;
       if (k12 < 4) {
         drums(t, k12 === 3 ? PAT.fill : PAT.groove, bar, k12 === 3);
-        shout(t, k12 % 2 ? ANSWER : CALL, k12 % 2 === 1);
+        if (CONFIG.chant) shout(t, k12 % 2 ? ANSWER : CALL, k12 % 2 === 1);
         if (k12 === 0) cymbal(t, 1.2, 0.8);
         cymbal(t + BEAT, 0.22, 0.3); cymbal(t + 3 * BEAT, 0.22, 0.3);
         continue;
@@ -414,7 +426,7 @@
    * band already halfway across.
    */
   function startMusic(bars, offset) {
-    if (!sound || playing) return;
+    if (!(CONFIG.drums || CONFIG.horns || CONFIG.chant) || !sound || playing) return;
     if (!ctx) {
       var AC = window.AudioContext || window.webkitAudioContext;
       if (!AC) return;
@@ -463,7 +475,7 @@
 
   var NAVY = '#10213f', BLUE = '#1f4fbf', GOLD = '#d8b86a', IVORY = '#f5f2ea', RED = '#c8102e', WOOD = '#6b4a1f';
   var SKIN = ['#8d5524', '#e0ac69', '#5c3a1e', '#f1c27d', '#c68642', '#ffdbac', '#a0662f', '#e8b98a', '#6b4423', '#d9a066', '#f0c8a0'];
-  var GAP = 46;          // units between rows; wide on purpose
+  var GAP = 58;          // units between rows of the band; wide on purpose
 
   function spark(x, y, d) {
     return '<path class="b-spark" style="animation-delay:' + d.toFixed(2) + 's" transform="translate(' + x + ' ' + y + ')" ' +
@@ -513,8 +525,9 @@
     switch (kind) {
       case 'major':
         return jacket(NAVY) + spark(14, 27, 0) + spark(22, 33, .4) + head(s) + shako(true) + arm(24, 26, 29, 21, NAVY) +
-          '<g transform="translate(29 20)"><g class="b-baton"><rect x="-12" y="-.9" width="24" height="1.8" rx=".9" fill="' + IVORY + '"/>' +
-          '<circle cx="-12" cy="0" r="2" fill="' + GOLD + '"/><circle cx="12" cy="0" r="2" fill="' + GOLD + '"/></g></g>';
+          '<g transform="translate(29 20)"><g class="' + (Math.random() < 0.5 ? 'b-fumble' : '') + '" style="animation-delay:' + rand(4, 14).toFixed(2) + 's">' +
+          '<g class="b-baton"><rect x="-12" y="-.9" width="24" height="1.8" rx=".9" fill="' + IVORY + '"/>' +
+          '<circle cx="-12" cy="0" r="2" fill="' + GOLD + '"/><circle cx="12" cy="0" r="2" fill="' + GOLD + '"/></g></g></g>';
       case 'majorette':
         return '<path d="M12 23h13l4 19H8z" fill="' + GOLD + '"/>' + spark(13, 30, .1) + spark(19, 26, .5) + spark(24, 35, .2) +
           spark(16, 38, .7) + spark(21, 31, .9) + head(s) + '<circle cx="18.5" cy="12.5" r="3" fill="#2b1a10"/>' +
@@ -526,8 +539,9 @@
           '<path d="M27-3.4h16M27-.3h16M27 2.8h16" stroke="' + RED + '" stroke-width="1.6"/>' +
           '<rect x="27" y="-5" width="7" height="5.6" fill="' + BLUE + '"/></g>' + arm(24, 27, 27, 24, BLUE);
       case 'trumpet':
-        return jacket(BLUE) + spark(14, 33, i * .15 % 1) + head(s) + shako(false) + arm(24, 27, 24, 20, BLUE) +
-          '<rect x="22" y="18.3" width="9" height="2" rx="1" fill="' + GOLD + '"/><path d="M31 19.3 36 15.8V22.8z" fill="' + GOLD + '"/>' +
+        return jacket(BLUE) + spark(14, 33, i * .15 % 1) + head(s) + shako(false) +
+          '<g class="b-toot" style="' + clock(2.4, 5) + '">' + arm(24, 27, 24, 20, BLUE) +
+          '<rect x="22" y="18.3" width="9" height="2" rx="1" fill="' + GOLD + '"/><path d="M31 19.3 36 15.8V22.8z" fill="' + GOLD + '"/></g>' +
           note(36, 12, i * .2 % 1.2);
       case 'serious':
         // Sunglasses, brows set, mouth flat, slide dead on the beat.
@@ -578,61 +592,102 @@
   /** One pick from a list. */
   function any(list) { return list[Math.floor(Math.random() * list.length)]; }
 
+  /** An inline animation clock: a random period in seconds and a random start within it. */
+  function clock(min, max) {
+    var d = rand(min, max);
+    return 'animation-duration:' + d.toFixed(2) + 's;animation-delay:-' + rand(0, d).toFixed(2) + 's';
+  }
+
+  /**
+   * Everyone's own pace. The whole parade crosses on one track, so each
+   * person also drifts by --drift units over the crossing (b-pace, timed to
+   * the parade): some gain ground, some lose it, and the parade loosens as
+   * it goes instead of moving as one block. --t scales every rhythm inside
+   * the figure (step, legs, sticks, batons), so nobody plays or marches in
+   * lockstep with a neighbour.
+   */
+  function pace(spread, inner, tempo) {
+    var k = tempo || 0.15;   // the crowd varies about 15%; the trained band about 5%
+    return '<g class="b-pace" style="--drift:' + rand(-spread, spread).toFixed(1) + 'px;--t:' + rand(1 - k, 1 + k).toFixed(2) + '">' + inner + '</g>';
+  }
+
+  // What a protester is doing, and how often each is dealt out.
+  var ACTS = ['sign', 'sign', 'sign', 'sign', 'sign', 'fist', 'fist', 'fist', 'flag', 'flag', 'clap', 'clap',
+    'wave', 'wave', 'walk', 'walk', 'drum', 'drum', 'drum', 'drum', 'drum', 'tamb', 'tamb', 'horn'];
+
   /**
    * One protester, facing right, feet at y 60 in a 62-unit figure, drawn
-   * simpler than a marcher (they are many and small): a sign on a stick,
-   * a raised fist, a small flag, a megaphone or just walking.
+   * simpler than a marcher (they are many and small), doing one thing on
+   * their own clock: raising and lowering a sign, pumping a fist in bursts,
+   * waving a flag or a hand, clapping, walking, or playing a hand drum, a
+   * tambourine or a horn.
    */
   function protester(kind) {
     var skin = any(SKIN), shirt = any(SHIRTS), hair = any(HAIR), g = '';
+    var limb = 'stroke="' + skin + '" stroke-width="2.6" stroke-linecap="round" fill="none"';
     g += '<rect x="9" y="46" width="3.4" height="13" rx="1.2" fill="#2b2f3a"/><rect x="13.2" y="46" width="3.4" height="13" rx="1.2" fill="#2b2f3a"/>';
     g += '<rect x="7" y="30" width="11" height="17" rx="3" fill="' + shirt + '"/>';
     g += '<circle cx="12.5" cy="25" r="4.3" fill="' + skin + '"/>';
     g += Math.random() < 0.3 ? '<path d="M8 24a4.6 4.6 0 0 1 9.2 0h2.4" stroke="' + any(SHIRTS) + '" stroke-width="2.4" fill="none"/>'
       : '<path d="M8.2 24.5a4.3 4.3 0 0 1 8.6-1.5c-2-1-5-1.2-8.6 1.5z" fill="' + hair + '"/>';
-    if (kind === 'sign') {
-      var c = any(SIGNS), ink = c === '#1f4fbf' || c === '#c8102e' ? '#ffffff' : '#10213f';
-      g += '<path d="M16 33l3-10" stroke="' + skin + '" stroke-width="2.6" stroke-linecap="round"/>';
-      g += '<g class="b-sign" style="animation-delay:-' + rand(0, 1).toFixed(2) + 's"><path d="M19.5 27V9" stroke="#8a6a2b" stroke-width="1.2"/>' +
-        '<rect x="11" y="0" width="17" height="10" rx="1" fill="' + c + '"/>' +
-        (Math.random() < 0.3 ? '<path d="M19.5 2.2l.9 2 2.2.2-1.7 1.4.6 2.2-2-1.2-2 1.2.6-2.2-1.7-1.4 2.2-.2z" fill="' + ink + '"/>'
-          : '<path d="M13.5 3.2h12M13.5 5.4h9M13.5 7.6h11" stroke="' + ink + '" stroke-width="1.1"/>') + '</g>';
-    } else if (kind === 'fist') {
-      g += '<g class="' + (Math.random() < 0.5 ? 'b-pump' : '') + '" style="animation-delay:-' + rand(0, .5).toFixed(2) + 's">' +
-        '<path d="M16 33l1.5-13" stroke="' + skin + '" stroke-width="2.6" stroke-linecap="round"/><circle cx="17.6" cy="18.6" r="2.3" fill="' + skin + '"/></g>';
-    } else if (kind === 'flag') {
-      g += '<path d="M16 33l2-8" stroke="' + skin + '" stroke-width="2.6" stroke-linecap="round"/><path d="M18.5 30V8" stroke="#8a6a2b" stroke-width="1"/>' +
-        '<g class="b-flag"><rect x="18.5" y="8" width="10" height="6.5" fill="#f5f2ea"/><path d="M18.5 9.2h10M18.5 11.3h10M18.5 13.4h10" stroke="#c8102e" stroke-width="1"/>' +
-        '<rect x="18.5" y="8" width="4.4" height="3.4" fill="#1f4fbf"/></g>';
-    } else if (kind === 'mega') {
-      g += '<path d="M16 32l3-6" stroke="' + skin + '" stroke-width="2.6" stroke-linecap="round"/><path d="M17 24.5l7-3.5v9l-7-3.5z" fill="#e8e8e8"/>' +
-        '<path class="b-shout" d="M26 22.5c2 1.5 2 4.5 0 6M28.5 21c3 2.5 3 6.5 0 9" stroke="#ffffff" stroke-width=".9" fill="none"/>';
-    } else {
-      g += '<path d="M9 33l-1 8M16 33l1 8" stroke="' + skin + '" stroke-width="2.4" stroke-linecap="round"/>';
+    if (kind !== 'clap' && kind !== 'walk') g += '<path d="M9 33l-1.4 8" ' + limb + '/>';   // the other arm, hanging
+    switch (kind) {
+      case 'sign':
+        var c = any(SIGNS), ink = c === '#1f4fbf' || c === '#c8102e' ? '#ffffff' : '#10213f';
+        g += '<g class="b-raise" style="' + clock(2, 5) + '"><path d="M16 33l3-10" ' + limb + '/><path d="M19.5 27V9" stroke="#8a6a2b" stroke-width="1.2"/>' +
+          '<rect x="11" y="0" width="17" height="10" rx="1" fill="' + c + '"/>' +
+          (Math.random() < 0.3 ? '<path d="M19.5 2.2l.9 2 2.2.2-1.7 1.4.6 2.2-2-1.2-2 1.2.6-2.2-1.7-1.4 2.2-.2z" fill="' + ink + '"/>'
+            : '<path d="M13.5 3.2h12M13.5 5.4h9M13.5 7.6h11" stroke="' + ink + '" stroke-width="1.1"/>') + '</g>';
+        break;
+      case 'fist':
+        g += '<g class="b-fist" style="' + clock(2.4, 6) + '"><path d="M16 33l1.5-13" ' + limb + '/><circle cx="17.6" cy="18.6" r="2.3" fill="' + skin + '"/></g>';
+        break;
+      case 'flag':
+        g += '<g class="b-raise" style="' + clock(3, 6) + '"><path d="M16 33l2-8" ' + limb + '/><path d="M18.5 30V8" stroke="#8a6a2b" stroke-width="1"/>' +
+          '<g class="b-flag" style="' + clock(.6, 1) + '"><rect x="18.5" y="8" width="10" height="6.5" fill="#f5f2ea"/>' +
+          '<path d="M18.5 9.2h10M18.5 11.3h10M18.5 13.4h10" stroke="#c8102e" stroke-width="1"/><rect x="18.5" y="8" width="4.4" height="3.4" fill="#1f4fbf"/></g></g>';
+        break;
+      case 'clap':
+        g += '<g class="b-clap" style="' + clock(.3, .5) + '"><path d="M8.5 33l3.8-5M16.5 33l-3.2-5" ' + limb + '/></g>';
+        break;
+      case 'wave':
+        g += '<g class="b-hand" style="' + clock(.5, .9) + '"><path d="M16 33l2-12" ' + limb + '/><circle cx="18.2" cy="20.4" r="1.9" fill="' + skin + '"/></g>';
+        break;
+      case 'walk':
+        g += '<g class="b-swing" style="' + clock(.9, 1.3) + '"><path d="M9 33l-1 8M16 33l1 8" ' + limb + '/></g>';
+        break;
+      case 'drum':
+        g += '<ellipse cx="18" cy="39" rx="4.4" ry="2.4" fill="#d8b86a" stroke="#8a6a2b" stroke-width=".8"/>' +
+          '<g class="b-tap" style="' + clock(.2, .34) + '"><path d="M16 33l3 3" ' + limb + '/><path d="M19 36l3.5-3" stroke="#6b4a1f" stroke-width="1.1"/></g>';
+        break;
+      case 'tamb':
+        g += '<g class="b-raise" style="' + clock(1.8, 3.6) + '"><path d="M16 33l2-11" ' + limb + '/>' +
+          '<g class="b-shake" style="' + clock(.14, .22) + '"><circle cx="18.5" cy="19" r="3.6" fill="none" stroke="#d8b86a" stroke-width="1.6"/>' +
+          '<circle cx="15.2" cy="19" r=".9" fill="#e8e8e8"/><circle cx="21.8" cy="19" r=".9" fill="#e8e8e8"/></g></g>';
+        break;
+      case 'horn':
+        g += '<g class="b-toot" style="' + clock(1.6, 3.6) + '"><path d="M16 32l3-5" ' + limb + '/><path d="M16.5 26l11-3.4v5.8z" fill="#d8b86a"/></g>';
+        break;
+      case 'mega':
+        g += '<path d="M16 32l3-6" ' + limb + '/><path d="M17 24.5l7-3.5v9l-7-3.5z" fill="#e8e8e8"/>' +
+          '<path class="b-shout" d="M26 22.5c2 1.5 2 4.5 0 6M28.5 21c3 2.5 3 6.5 0 9" stroke="#ffffff" stroke-width=".9" fill="none"/>';
+        break;
     }
     return g;
   }
 
-  /** A crowd row from x0 to x1: spacing grows toward x0 when thinning (the tail). */
+  /** A crowd row from x0 to x1; when thinning (the trail), spacing grows toward x0. */
   function crowdRow(x0, x1, opts) {
-    var out = '', cluster = [], x = x1;
-    function flush() {
-      if (!cluster.length) return;
-      out += '<g class="b-crowd" style="animation-delay:-' + rand(0, .5).toFixed(2) + 's;animation-duration:' + rand(.46, .6).toFixed(2) + 's">' +
-        cluster.join('') + '</g>';
-      cluster = [];
-    }
+    var out = '', x = x1;
     while (x > x0) {
       var tail = opts.thin ? 1 + Math.pow((x1 - x) / (x1 - x0), 2) * 6 : 1;
-      var kind = Math.random() < 0.55 ? 'sign' : any(['fist', 'fist', 'flag', 'walk', 'walk']);
       var stray = opts.thin && tail > 3.5 && Math.random() < 0.5;
-      var person = '<g transform="translate(' + x.toFixed(1) + ' ' + opts.y + ') scale(' + opts.scale + ')">' +
-        (stray ? '<g class="b-stray" style="animation-delay:-' + rand(0, 3).toFixed(2) + 's">' + protester(kind) + '</g>' : protester(kind)) + '</g>';
-      cluster.push(person);
-      if (cluster.length >= 5 || stray) flush();
+      var body = '<g class="b-walk" style="' + clock(.6, .85) + '">' + protester(any(ACTS)) + '</g>';
+      var y = opts.y + rand(-3, 3), sc = opts.scale * rand(0.92, 1.08);   // nobody stands on a grid
+      out += '<g transform="translate(' + x.toFixed(1) + ' ' + y.toFixed(1) + ') scale(' + sc.toFixed(3) + ')">' +
+        pace(stray ? 50 : 34, stray ? '<g class="b-stray" style="' + clock(2.6, 4.2) + '">' + body + '</g>' : body) + '</g>';
       x -= rand(opts.gap[0], opts.gap[1]) * tail;
     }
-    flush();
     return out;
   }
 
@@ -645,30 +700,39 @@
    * load, so the hundreds of figures cost nothing until they are needed.
    */
   function scene() {
-    var rows = ['chair', 'chair', 'trumpet', 'snare', 'cymbal', 'bass3', 'bass2', 'bass1', 'tenor', 'snare', 'snare', 'snare',
-      'sousa', 'sousa'];
+    // The drumline is the heart of it: five snares, two tenors, five bass
+    // drums high to low, two cymbals, and solo snares among the horns.
+    var rows = ['chair', 'chair', 'trumpet', 'snare', 'cymbal', 'cymbal', 'bass3', 'bass3', 'bass2', 'bass2', 'bass1', 'tenor',
+      'tenor', 'snare', 'snare', 'snare', 'snare', 'snare', 'sousa', 'sousa'];
     if (Math.random() < CONFIG.serious) rows.push('serious');
     rows = rows.concat(['snare', 'trumpet', 'trumpet', 'trumpet', 'flag', 'majorette', 'major']);
     var strays = [], trips = [];
-    while (strays.length < 1 + (Math.random() < 0.5 ? 1 : 0)) {
+    while (strays.length < (Math.random() < 0.6 ? 1 : 0)) {
       var a = Math.floor(rand(0, rows.length - 1));
       if (rows[a] !== 'serious' && strays.indexOf(a) < 0) strays.push(a);
     }
-    while (trips.length < 2 + (Math.random() < 0.5 ? 1 : 0)) {
+    while (trips.length < 1 + (Math.random() < 0.5 ? 1 : 0)) {
       var b = Math.floor(rand(0, rows.length));
       if (rows[b] !== 'serious' && trips.indexOf(b) < 0) trips.push(b);
     }
-    var TRAIL = 760, x = TRAIL + 30, parts = [];
+    // The crowd is dealt fresh on every pass: trail length, rows, spacing.
+    var TRAIL = rand(620, 900), x = TRAIL + 30, parts = [];
+    var oops = Math.random() < 0.6 ? Math.floor(rand(0, rows.length)) : -1;
+    if (rows[oops] === 'serious') oops = -1;
     rows.forEach(function (kind, i) {
       var s = SKIN[(i * 7) % SKIN.length];
       var stray = strays.indexOf(i) >= 0, trip = trips.indexOf(i) >= 0, serious = kind === 'serious';
       if (stray) x += rand(14, 26);                                     // a straggler leaves a hole
       var off = serious ? 0 : (Math.random() < 0.25 ? -rand(.1, .4) : 0);   // some march out of step
-      parts.push('<g transform="translate(' + x.toFixed(1) + ' 0)">' +
-        '<g class="' + (stray ? 'b-stray' : '') + '" style="animation-delay:-' + rand(0, 3).toFixed(2) + 's">' +
+      var who = '<g class="' + (stray ? 'b-stray' : '') + '" style="animation-delay:-' + rand(0, 3).toFixed(2) + 's">' +
         '<g class="' + (trip ? 'b-trip' : '') + '" style="animation-delay:' + rand(1.5, 9).toFixed(2) + 's">' +
         '<g class="' + (serious ? 'b-steady' : 'b-bob') + '" style="animation-delay:' + off.toFixed(2) + 's">' +
-        legs(kind === 'majorette' ? s : IVORY) + figure(kind, s, i) + '</g></g></g></g>');
+        legs(kind === 'majorette' ? s : IVORY) + figure(kind, s, i) + '</g></g></g>';
+      // A trained band: small drift and tempo spread, so the rows hold. The
+      // serious trombonist keeps perfect time; one marcher a pass may turn the
+      // wrong way for a beat (b-oops).
+      if (i === oops) who = '<g class="b-oops" style="animation-delay:' + rand(3, 12).toFixed(2) + 's">' + who + '</g>';
+      parts.push('<g transform="translate(' + x.toFixed(1) + ' 0)">' + (serious ? who : pace(7, who, 0.05)) + '</g>');
       x += GAP + rand(-3, 3);
     });
     var end = x + 10;
@@ -678,14 +742,15 @@
         (50 - (k % 2) * 9) + '" r="5.5" fill="#e9ecf2"/>';
     }
     // Behind the band: a dim back row the whole length, and the far rows of the trail.
-    var back = '<g opacity=".72">' + crowdRow(0, TRAIL, { y: 22, scale: .6, gap: [8, 13], thin: true }) +
-      crowdRow(TRAIL, end - 20, { y: 22, scale: .6, gap: [11, 17] }) + '</g>' +
-      crowdRow(0, TRAIL, { y: 16, scale: .72, gap: [9, 15], thin: true });
+    var back = '<g opacity=".72">' + crowdRow(0, TRAIL, { y: 22, scale: .6, gap: [10, 16], thin: true }) +
+      crowdRow(TRAIL, end - 20, { y: 22, scale: .6, gap: [14, 21] }) + '</g>' +
+      crowdRow(0, TRAIL, { y: 16, scale: .72, gap: [11, 18], thin: true });
     // In front: the near row of the trail, and protesters walking among the musicians.
-    var front = crowdRow(0, TRAIL, { y: 14, scale: .82, gap: [10, 17], thin: true }) +
-      crowdRow(TRAIL + 40, end - 30, { y: 15, scale: .78, gap: [30, 48] });
+    var front = crowdRow(0, TRAIL, { y: 14, scale: .82, gap: [12, 20], thin: true }) +
+      crowdRow(TRAIL + 40, end - 30, { y: 15, scale: .78, gap: [34, 52] });
     // The one with the megaphone leads the call, near the front of the trail.
-    var mega = '<g transform="translate(' + (TRAIL - 34) + ' 14) scale(.82)"><g class="b-crowd">' + protester('mega') + '</g></g>';
+    var mega = '<g transform="translate(' + (TRAIL - 34) + ' 14) scale(.82)">' +
+      pace(20, '<g class="b-walk" style="' + clock(.46, .56) + '">' + protester('mega') + '</g>') + '</g>';
     return { svg: back + smoke + parts.join('') + front + mega, width: end };
   }
 
@@ -694,16 +759,17 @@
   band.setAttribute('aria-hidden', 'true');
   header.appendChild(band);
   var track = null;
+  apply();
+  btn.hidden = false;
 
-  /** Draws the scene into the header the first time it is needed. */
+  /** Draws a freshly dealt scene into the header (each parade is a new crowd). */
   function build() {
-    if (track) return;
     var made = scene();
     band.innerHTML = '<div class="band-track"><svg viewBox="0 -10 ' + made.width.toFixed(0) + ' 72" height="100%" ' +
       'preserveAspectRatio="xMinYMax meet" focusable="false">' + made.svg + '</svg></div>';   // constant markup built above; no data
     track = band.firstChild;
     track.addEventListener('animationend', function (e) {
-      if (e.target === track) band.classList.remove('is-on');
+      if (e.target === track) { band.classList.remove('is-on'); apply(); }
     });
   }
 
@@ -711,44 +777,50 @@
 
   var marched = false, startedAt = 0, bars = 0;
 
+  /** Sends a parade across now. The automatic one runs once per load; Play can repeat it. */
   function parade() {
-    if (marched || !motion) return;
+    if (band.classList.contains('is-on')) return;
     marched = true;
     build();
     // Crossing time from the distance, rounded to whole bars of the march.
+    // The band must be displayed to measure (paused, it is display: none).
     var dist = window.innerWidth + track.getBoundingClientRect().width;
     bars = Math.max(6, Math.round(dist / CONFIG.speed / BAR));
     startedAt = Date.now();
     track.style.animationDuration = (bars * BAR).toFixed(3) + 's';
+    track.style.setProperty('--dur', (bars * BAR).toFixed(3) + 's');   // each person's drift spans the crossing
     band.classList.add('is-on');
+    apply();
     startMusic(bars, 0);
   }
   function scheduleParade() {
     var wait = rand(CONFIG.delayMin, CONFIG.delayMax);
     setTimeout(function go() {
       if (document.hidden) { document.addEventListener('visibilitychange', go, { once: true }); return; }
-      parade();
+      if (motion && !marched) parade();
     }, wait);
   }
   if (document.readyState === 'complete') scheduleParade();
   else window.addEventListener('load', scheduleParade);
 
-  /* ------------------------------------------------------------- toggles */
+  /* ---------------------------------------------------------- play/pause */
 
-  soundBtn.addEventListener('click', function () {
-    sound = !sound;
-    save('ps-sound', sound ? 'on' : 'off');
+  // Play when nothing is moving: a new parade, now, and the visitor's choice
+  // to have motion is remembered. Pause while it is moving: the parade and
+  // any sound stop, the rotor holds, and the parade will not start on its
+  // own again until Play is pressed.
+  btn.addEventListener('click', function () {
+    if (band.classList.contains('is-on')) {
+      band.classList.remove('is-on');
+      stopMusic();
+      motion = false;
+      save('ps-parade', 'off');
+    } else {
+      motion = true;
+      save('ps-parade', 'on');
+      apply();   // unhide the band first: parade() measures it, and a hidden band measures 0
+      parade();
+    }
     apply();
-    if (!sound) { stopMusic(); return; }
-    if (band.classList.contains('is-on')) startMusic(bars, (Date.now() - startedAt) / 1000);   // join the band where it is
-    else if (!marched && motion) parade();                                                      // send it out now
-    else startMusic(10, 0);                                                                      // the march alone
-  });
-
-  motionBtn.addEventListener('click', function () {
-    motion = !motion;
-    save('ps-motion', motion ? 'on' : 'off');
-    apply();
-    if (!motion) band.classList.remove('is-on');
   });
 })();

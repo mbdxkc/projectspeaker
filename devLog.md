@@ -173,3 +173,21 @@ The scene is built at parade time instead of page load, which keeps ~2,500 SVG n
 - **Formant filters eat level.** Narrow bandpasses keep only the energy near two vowel frequencies, so voices that looked loud enough on paper rendered at half the brass level. Measure RMS per bar after any change to a filter bank, and raise the source, not the master
 - **Draw many, animate few.** Hundreds of figures stay smooth when they move in clusters of five under one animation each; per-figure animations would have meant hundreds of running transforms for the same picture
 - **Defer what only matters later.** A decoration that appears 3-20 seconds in should not cost DOM, layout or memory at load; build it when it is needed
+
+## 2026-11-07 (late) — Parade: everyone their own, one Play/Pause, Sunday tempo, drums back
+
+Valdez's next rounds, in order: lose the song for now; give every person their own random behavior and pace; turn the two header toggles into one Play/Pause to the right of "Sign the petition"; deal the crowd fresh on every pass while the trained band holds formation, with occasional errors and more room between rows; then slow everything to a Sunday-parade tempo and bring back the drums and more drummers.
+
+- Each protester now does one thing on an inline clock of its own (sign, fist, flag, wave, clap, walk, hand drum, tambourine, horn) and drifts at its own pace over the crossing (`--drift`, `b-pace`, timed by `--dur`); musicians carry a tempo factor `--t` that scales every rhythm in their figure
+- Play/Pause replaced Sound and Motion. Pause stops the parade and sound, holds the rotor and is remembered
+- Every pass builds a new scene; the band drifts ±7 with tempos within 5%, the crowd ±34 within 15%, and errors are occasional: a straggler, a trip or two, a wrong-way turn, a fumbled baton. Band rows 58 units apart
+- Tempo 96 bpm and ~50 px/s: 45 s across a phone, 60 s at 1280. Sound is the drumline alone; horns and chant are switched off in CONFIG with their code intact. The drumline grew to five snares, two tenors, five bass drums and two cymbals; hand drums are the crowd's most common instrument
+
+Checked in Firefox: 183 people with 164 distinct behavior periods and 31 tempos, drift spreading from ±2 to ±13 units in nine seconds, 61 fps; the Play/Pause cycle including persistence across reload; header fit 320-768 on both pages; drum signal at the destination after Play and silence after Pause; Lighthouse 100.
+
+### Mistakes → Rules
+
+- **Measure an element only while it is displayed.** Play after a Pause measured the band while `motion-off` still had it `display: none`, got a width of 0, and timed a 60-second crossing at 25. Order state changes before layout reads, and treat a 0 width as a bug, not a band
+- **Ask when one word can mean two opposite things.** "Lose the sign" next to "raising a sign" could have deleted the protest signs; one question found it meant the song
+- **Randomize timing per element, not per group, when the request is "not in sync".** Cluster animation kept the crowd cheap and made it move in blocks; per-figure clocks cost more and give the picture asked for. Measure the frame rate after switching
+- **A trained group and a crowd need different randomness.** The same drift and tempo spread on both made the band look like part of the crowd; separate parameters keep the band a band
