@@ -1,13 +1,13 @@
 # ============================================================================
 #   projectspeaker.org: Petition count
 # ============================================================================
-#   Keeps the site current: the signature count on index.html, and
+#   Keeps the site current: the signature count on index.html and es/index.html, and
 #   reps.json, the House member list behind "Find my representative".
 #   tools/reps.py rebuilds reps.json from congress-legislators each hour; it
 #   only changes when a member does, so most hours it adds nothing.
 #
 #   Every hour GitHub runs tools/petition.py, which reads the count from the
-#   change.org petition and rewrites one line of index.html. If the count moved,
+#   change.org petition and rewrites one line on each page. If the count moved,
 #   this workflow commits the change as github-actions[bot] and pushes it to
 #   main, and GitHub Pages redeploys the site from there.
 #
@@ -53,7 +53,7 @@ jobs:
           git diff --quiet && exit 0
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add index.html reps.json
+          git add index.html es/index.html reps.json
           git commit -m "Petition count and House members"
           git pull --rebase
           git push

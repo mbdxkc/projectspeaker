@@ -1,0 +1,473 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-20SJCHR8YG"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-20SJCHR8YG');
+    gtag('config', 'AW-18498605429');
+    // Key event: any click on a link to the petition sends petition_click,
+    // with "location" from the link's data-cta (header, hero, hero-count,
+    // act, faq) so reports show which link converts. Marked as a key event in
+    // GA4 (Admin, Key events). gtag sends events by sendBeacon, so the hit
+    // survives the page leaving for change.org.
+    document.addEventListener('click', function (e) {
+      var a = e.target.closest && e.target.closest('a[href*="change.org/p/"]');
+      if (a) gtag('event', 'petition_click', { location: a.getAttribute('data-cta') || 'other' });
+    });
+  </script>
+  <!--
+  ============================================================================
+  projectspeaker.org/es/
+  ============================================================================
+  @file       es/index.html
+  @desc       America Deserves a Speaker in Spanish: the same page as
+              index.html, translated. Added Nov. 7, 2026.
+  @author     mediaBrilliance digitalxtudio
+  @version    1.0.0
+  @updated    2026-11-07
+  @sync       Every edit to index.html is an edit to this file. The two pages
+              share no markup, so a corrected number, date or source has to be
+              made twice. Grep this file for the same claim before committing.
+  @voice      tú, plain everyday Spanish as spoken in the U.S. "Speaker" is
+              "la presidencia de la Cámara" or "quien preside la Cámara", so
+              the copy never genders the office. Quotes are translated and the
+              footer says so; source links stay to the English originals. U.S.
+              number format ($421,396; $3,300 millones), Spanish dates (3 de
+              noviembre de 2026). The site name stays in English.
+  @requires   the same build as index.html (tools/build.sh inlines the CSS in
+              the style element with id "css" and stamps both scripts, loaded
+              through ../), the count line (tools/petition.py writes it in
+              Spanish) and /reps.json. rotor.js and rep.js take their words
+              from data attributes and the html lang.
+  ============================================================================
+  -->
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <title>America Deserves a Speaker: el historial de Hakeem Jeffries</title>
+  <meta name="description" content="$421,396 por el PAC de AIPAC y ningún rival en 20 votaciones. Lee el historial de Hakeem Jeffries, con sus fuentes, y firma la petición." />
+  <link rel="canonical" href="https://projectspeaker.org/es/" />
+  <link rel="alternate" hreflang="en" href="https://projectspeaker.org/" />
+  <link rel="alternate" hreflang="es" href="https://projectspeaker.org/es/" />
+  <link rel="alternate" hreflang="x-default" href="https://projectspeaker.org/" />
+  <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1" />
+  <meta name="author" content="mediaBrilliance" />
+  <meta name="theme-color" content="#0b0b0b" />
+
+  <meta property="og:site_name" content="America Deserves a Speaker" />
+  <meta property="og:locale" content="es_LA" />
+  <meta property="og:locale:alternate" content="en_US" />
+  <meta property="og:title" content="America Deserves a Speaker: el historial de Hakeem Jeffries" />
+  <meta property="og:description" content="Antes de que los demócratas de la Cámara le entreguen el mazo a Hakeem Jeffries, lee su historial. Cada dato tiene su fuente." />
+  <meta property="og:type" content="article" />
+  <meta property="article:published_time" content="2026-11-07" />
+  <meta property="article:modified_time" content="2026-11-07" />
+  <meta property="og:url" content="https://projectspeaker.org/es/" />
+  <!-- The share card is English only; this page reuses it (tools/og.html). -->
+  <meta property="og:image" content="https://projectspeaker.org/og.png?v=2" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:image:alt" content="Project Speaker: Earmarked. $421,396 earmarked through AIPAC’s PAC to Jeffries’ committees since 2025; House Democrats split 103 to 98 on cutting Israel’s military aid and he voted no; in 20 speaker ballots since 2023 no Democrat has voted for anyone else." />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="America Deserves a Speaker: el historial de Hakeem Jeffries" />
+  <meta name="twitter:description" content="Antes de que los demócratas de la Cámara le entreguen el mazo a Hakeem Jeffries, lee su historial. Cada dato tiene su fuente." />
+  <meta name="twitter:image" content="https://projectspeaker.org/og.png?v=2" />
+  <meta name="twitter:image:alt" content="Project Speaker: Earmarked. $421,396 earmarked through AIPAC’s PAC to Jeffries’ committees since 2025; House Democrats split 103 to 98 on cutting Israel’s military aid and he voted no; in 20 speaker ballots since 2023 no Democrat has voted for anyone else." />
+
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+  <link rel="icon" href="/icon-512.png" type="image/png" sizes="512x512" />
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+  <link rel="preload" href="/fonts/oswald-latin.woff2" as="font" type="font/woff2" crossorigin />
+  <!-- The whole stylesheet, minified from style.css by tools/build.sh, the same block index.html carries. -->
+  <style id="css">@font-face{font-family:Oswald;font-style:normal;font-weight:500 700;font-display:swap;src:url("/fonts/oswald-latin.woff2") format("woff2");unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}:root{--bg:#0b0b0b;--panel:#161616;--line:#2a2a2a;--text:#f2efe8;--muted:#b3aea4;--accent:#f5c400;--accent-ink:#0b0b0b;--display:"Oswald","Arial Narrow",Impact,sans-serif;--body:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;--gutter:clamp(16px, 4vw, 40px);--max:68rem}*,::after,::before{box-sizing:border-box}html{scroll-behavior:smooth;scroll-padding-top:4rem}@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}body{margin:0;background:var(--bg);color:var(--text);font:400 1.0625rem/1.6 var(--body);-webkit-text-size-adjust:100%}a{color:var(--accent);text-underline-offset:.15em}a:hover{text-decoration-thickness:2px}:focus-visible{outline:3px solid var(--accent);outline-offset:3px}.skip-link{position:absolute;left:-9999px;top:0;background:var(--accent);color:var(--accent-ink);padding:.5rem 1rem;z-index:100}.skip-link:focus{left:1rem;top:1rem}.wrap{max-width:var(--max);margin:0 auto;padding:0 var(--gutter)}h1,h2,h3{font-family:var(--display);font-weight:700;line-height:1.05;text-transform:uppercase;margin:0}.site-header{position:sticky;top:0;z-index:10;background:rgba(11,11,11,.94);border-bottom:1px solid var(--line)}.site-header .wrap{display:flex;align-items:center;justify-content:space-between;gap:1rem;min-height:3.25rem}.mark{font:700 1.05rem/1 var(--display);text-transform:uppercase;letter-spacing:.02em;color:var(--text);text-decoration:none;white-space:nowrap;padding:.75rem 0}.mark span{color:var(--accent)}.nav a{display:block;font:500 1rem/1 var(--display);text-transform:uppercase;letter-spacing:.04em;color:var(--accent);text-decoration:none;padding:.875rem .25rem;white-space:nowrap}.nav a:hover{color:var(--text)}.hero{padding:clamp(1.5rem,6vh,4.5rem) 0 clamp(2rem,6vh,4rem);border-bottom:1px solid var(--line)}.kicker{font:500 .95rem/1.2 var(--display);text-transform:uppercase;letter-spacing:.12em;color:var(--accent);margin:0 0 clamp(.6rem,2vh,1rem)}.hero h1{font-size:clamp(3.25rem, min(15vw, 20vh), 10rem);line-height:.98;color:var(--accent)}.lede{font-size:clamp(1.1rem, min(2.6vw, 3vh), 1.5rem);line-height:1.45;max-width:44rem;margin:clamp(.9rem,2.6vh,1.5rem) 0 .6rem}.src{font-size:.9rem;color:var(--muted)}.src a{color:var(--muted)}.src a:hover{color:var(--accent)}.cite{margin:0}.section{padding:clamp(3rem,8vw,5.5rem) 0;border-bottom:1px solid var(--line)}.section h2{font-size:clamp(2rem, 6vw, 3.75rem);margin-bottom:1.25rem}.section-intro{color:var(--muted);font-size:1.1rem;max-width:42rem;margin:0 0 2.5rem}.cta{display:inline-block;background:var(--accent);color:var(--accent-ink);font:700 1.1rem/1 var(--display);text-transform:uppercase;letter-spacing:.04em;text-decoration:none;padding:1rem 1.5rem;border-radius:2px;margin:0 1rem .75rem 0}.cta:hover{background:#fff}.record p{max-width:42rem;margin:0 0 1.5rem}.ledger{list-style:none;counter-reset:led;margin:0;padding:0;display:grid;gap:1px;background:var(--line);border:1px solid var(--line)}@media (min-width:900px){.ledger{grid-template-columns:1fr 1fr}.ledger>li:last-child:nth-child(odd){grid-column:1/-1}}.ledger>li{counter-increment:led;background:var(--bg);padding:1.25rem;min-width:0}.ledger>li::before{content:counter(led,decimal-leading-zero);display:block;font:700 .95rem/1 var(--display);letter-spacing:.08em;color:var(--accent);margin-bottom:.5rem}.ledger h3{font-size:clamp(1.4rem, 4vw, 1.75rem);margin-bottom:.6rem}.ledger p{margin:0 0 .75rem;max-width:40rem}.ledger .note{color:var(--muted);border-left:3px solid var(--line);padding-left:.75rem}.ledger .src{margin:0}.dates{list-style:none;margin:1.5rem 0;padding:0;max-width:42rem;border-top:1px solid var(--line)}.dates li{padding:.75rem 0;border-bottom:1px solid var(--line)}.dates strong{display:block;font:700 1.25rem/1.1 var(--display);text-transform:uppercase;letter-spacing:.04em;color:var(--accent);margin-bottom:.25rem}.steps{margin:0 0 1.75rem;padding-left:1.25rem;max-width:42rem}.steps li{margin-bottom:.75rem}.faq{max-width:42rem}.faq h3{font-size:clamp(1.4rem, 4vw, 1.75rem);margin:2rem 0 .6rem}.faq h3:first-child{margin-top:0}.faq p{margin:0 0 .5rem}body.speaker{background:#0d1b33}.speaker .site-footer,.speaker main{--bg:#0d1b33;--line:#2a3d5e;--text:#f5f2ea;--muted:#b8c2d3;--accent:#d8b86a;--link:#a9c8ff;--dem:#1f4fbf;color:var(--text)}.speaker main a:not(.cta){color:var(--link)}.speaker .src a{color:var(--muted)}.speaker .src a:hover,.speaker main a:not(.cta):hover{color:var(--text)}.speaker .cta{background:var(--dem);color:#fff;border:1px solid rgba(255,255,255,.6);border-radius:999px;padding:1rem 1.75rem}.speaker .thesis{font:700 clamp(1.6rem, 4.2vw, 2.6rem)/1.1 var(--display);text-transform:uppercase;letter-spacing:.01em;max-width:34ch;margin:2rem 0 0;color:var(--text);text-wrap:balance}.speaker .thesis span{color:var(--accent)}.speaker .cta-row{display:flex;flex-wrap:wrap;align-items:center;gap:.75rem 1.25rem;margin-top:1.5rem}.speaker .cta-row .cta{margin:0}.speaker .cta-row .src{margin:0;max-width:34rem}.speaker .cta:hover{background:#fff;color:var(--bg)}.speaker .ledger .note{border-left-color:var(--accent)}.speaker .hero h1{color:var(--text);font-size:clamp(2.5rem, min(10vw, 12vh), 6.5rem);line-height:1}.rotor,.rotor-cap{display:grid;grid-template-columns:minmax(0,1fr)}.rotor{container-type:inline-size}.rotor>.rotor-line:first-child{font-size:min(calc(100cqi / 5.4), 2.5em)}:lang(es) .rotor>.rotor-line:first-child{font-size:min(calc(100cqi / 5.5), 2.5em)}.lang{margin:0 0 .25rem;font-size:.95rem}.lang a{display:inline-block;padding:.65rem 0}.rotor-cap>.rotor-line,.rotor>.rotor-line{grid-area:1/1;opacity:0;transform:translateY(.35rem);transition:opacity .5s ease,transform .5s ease}.rotor-cap>.rotor-line.is-on,.rotor>.rotor-line.is-on{opacity:1;transform:none}.rotor-cap>.rotor-line.is-on{transition-delay:.08s}.rotor-ref{display:flex;flex-wrap:wrap;align-items:center;gap:.25rem 1rem;margin:0 0 1.25rem;font:500 .9rem/1.2 var(--display);text-transform:uppercase;letter-spacing:.08em}.speaker main .rotor-ref a{color:var(--accent);display:inline-block;padding:.75rem 0;transition:opacity .5s ease}.speaker main .rotor-ref a.is-out{opacity:0}.rotor-pause{min-height:44px;padding:0 1rem;border:1px solid var(--line);border-radius:999px;background:0 0;color:var(--muted);font:inherit;letter-spacing:inherit;text-transform:inherit;cursor:pointer}.rotor-pause:hover{color:var(--text);border-color:var(--muted)}@media (max-width:429px){.speaker .nav-long{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}}.speaker .call{background:#132a52}.speaker [hidden]{display:none!important}.call-lede{font-size:1.15rem;max-width:42rem;margin:0 0 1.5rem}.call #rep-find{margin:0 0 1.5rem}.call #rep-find:disabled{opacity:.7;cursor:progress}.call .src,.call-alt{max-width:42rem}.call-alt{margin:0 0 .75rem}.rep-out{max-width:42rem;margin:0 0 1.75rem;padding:1.25rem;border:1px solid var(--line);border-radius:6px;background:rgba(13,27,51,.55)}.rep-out p{margin:0 0 .75rem}.rep-out p:last-child{margin-bottom:0}.rep-kicker{font:500 .9rem/1.2 var(--display);text-transform:uppercase;letter-spacing:.1em;color:var(--accent)}.rep-out .rep-name{font:700 clamp(1.6rem, 6vw, 2.4rem)/1.05 var(--display);text-transform:uppercase;margin-bottom:.35rem}.rep-msg,.rep-where{color:var(--muted)}.rep-actions{display:flex;flex-wrap:wrap;align-items:center;gap:.75rem 1.25rem}.speaker .rep-actions .cta{margin:0}.rep-phone{font-variant-numeric:tabular-nums;color:var(--muted)}.speaker .lede-fixed{font-size:1.05rem;color:var(--muted);margin-top:0}@media (prefers-reduced-motion:reduce){.rotor-cap>.rotor-line,.rotor>.rotor-line{transition:none;transform:none}}.site-footer{padding:2.5rem 0 3rem;color:var(--muted);font-size:.9rem;text-align:center}.site-footer p{margin:0 auto .6rem;max-width:46rem}.site-footer .foot-line{max-width:none}@media (min-width:900px){.foot-line span{white-space:nowrap}}@media (max-width:899px){.foot-line span{display:block}}.site-footer a{color:var(--muted);display:inline-block;padding:.2rem 0}.credit{margin:1.4rem 0 0;font-size:.75rem;letter-spacing:.02em}.site-footer .credit a{display:inline-flex;align-items:center;gap:.4rem;margin-left:.2rem;padding:0;color:var(--muted);text-decoration:none;vertical-align:middle}.credit img{display:block;width:auto;height:1em}.site-footer .credit a:focus-visible,.site-footer .credit a:hover{color:var(--accent)}</style>
+  <!-- Structured data: the Spanish WebPage (a translation of the English one), the shared Person and site
+       nodes, and a FAQPage that repeats the #faq answers word for word. -->
+  <script type="application/ld+json">
+{
+ "@context": "https://schema.org",
+ "@graph": [
+  {
+   "@type": "Organization",
+   "@id": "https://www.mediabrilliance.io/#org",
+   "name": "mediaBrilliance",
+   "url": "https://www.mediabrilliance.io/"
+  },
+  {
+   "@type": "WebSite",
+   "@id": "https://projectspeaker.org/#site",
+   "url": "https://projectspeaker.org/",
+   "name": "America Deserves a Speaker",
+   "alternateName": "Project Speaker",
+   "inLanguage": [
+    "en-US",
+    "es-US"
+   ],
+   "publisher": {
+    "@id": "https://www.mediabrilliance.io/#org"
+   }
+  },
+  {
+   "@type": "WebPage",
+   "@id": "https://projectspeaker.org/es/#page",
+   "url": "https://projectspeaker.org/es/",
+   "name": "America Deserves a Speaker: el historial de Hakeem Jeffries",
+   "description": "$421,396 por el PAC de AIPAC y ningún rival en 20 votaciones. Lee el historial de Hakeem Jeffries, con sus fuentes, y firma la petición.",
+   "isPartOf": {
+    "@id": "https://projectspeaker.org/#site"
+   },
+   "about": {
+    "@id": "https://projectspeaker.org/#jeffries"
+   },
+   "inLanguage": "es-US",
+   "translationOfWork": {
+    "@id": "https://projectspeaker.org/#page"
+   },
+   "primaryImageOfPage": {
+    "@type": "ImageObject",
+    "url": "https://projectspeaker.org/og.png?v=2",
+    "width": 1200,
+    "height": 630
+   },
+   "datePublished": "2026-11-07",
+   "dateModified": "2026-11-07"
+  },
+  {
+   "@type": "Person",
+   "@id": "https://projectspeaker.org/#jeffries",
+   "name": "Hakeem Jeffries",
+   "jobTitle": "House Democratic Leader",
+   "memberOf": {
+    "@type": "GovernmentOrganization",
+    "name": "U.S. House of Representatives"
+   },
+   "url": "https://jeffries.house.gov/",
+   "sameAs": [
+    "https://www.wikidata.org/wiki/Q5640425",
+    "https://en.wikipedia.org/wiki/Hakeem_Jeffries",
+    "https://bioguide.congress.gov/search/bio/J000294"
+   ]
+  },
+  {
+   "@type": "FAQPage",
+   "@id": "https://projectspeaker.org/es/#faq",
+   "isPartOf": {
+    "@id": "https://projectspeaker.org/es/#page"
+   },
+   "inLanguage": "es-US",
+   "mainEntity": [
+    {
+     "@type": "Question",
+     "name": "¿Cuándo elige la Cámara a su próximo presidente?",
+     "acceptedAnswer": {
+      "@type": "Answer",
+      "text": "Cuando el 120.º Congreso se reúna por primera vez. La Enmienda 20 fija esa fecha al mediodía del 3 de enero de 2027, salvo que el Congreso elija otro día por ley, y la Cámara elige por tradición a su presidente por votación nominal en cuanto se instala. Antes, los demócratas de la Cámara eligen a su candidato a puerta cerrada; ABC News y Bloomberg Government informan que esa votación será el 18 de noviembre."
+     }
+    },
+    {
+     "@type": "Question",
+     "name": "¿Cuántos votos hacen falta para presidir la Cámara?",
+     "acceptedAnswer": {
+      "@type": "Answer",
+      "text": "La mayoría de los votos emitidos por una persona con nombre. Eso es 218 solo si los 435 miembros votan por alguien; las ausencias y los votos de “presente” bajan el número necesario."
+     }
+    },
+    {
+     "@type": "Question",
+     "name": "¿Puede un demócrata votar por alguien que no sea Jeffries?",
+     "acceptedAnswer": {
+      "@type": "Answer",
+      "text": "Sí. La bancada de cada partido elige a un candidato, pero en el pleno cada miembro puede votar por quien quiera, nominado o no. En 14 de las 17 elecciones para la presidencia de la Cámara desde 1997, algunos miembros votaron por alguien que no era el candidato de su partido. En las 20 votaciones desde 2023, ningún demócrata de la Cámara lo ha hecho."
+     }
+    },
+    {
+     "@type": "Question",
+     "name": "¿Quien preside la Cámara tiene que ser miembro de la Cámara?",
+     "acceptedAnswer": {
+      "@type": "Answer",
+      "text": "No. La Constitución no lo exige, pero hasta ahora todas las personas que la han presidido han sido miembros."
+     }
+    },
+    {
+     "@type": "Question",
+     "name": "¿Por qué importa quién preside la Cámara?",
+     "acceptedAnswer": {
+      "@type": "Answer",
+      "text": "Quien preside la Cámara ocupa el segundo lugar en la línea de sucesión presidencial, solo detrás del vicepresidente, según la ley federal, y dirige la Cámara."
+     }
+    },
+    {
+     "@type": "Question",
+     "name": "¿Qué pide la petición?",
+     "acceptedAnswer": {
+      "@type": "Answer",
+      "text": "La petición de Nicole Whitted en change.org pide a cada miembro del nuevo 120.º Congreso que haga una elección competitiva para la presidencia de la Cámara."
+     }
+    }
+   ]
+  }
+ ]
+}
+  </script>
+  <script src="../rotor.min.js?v=19f43eac" defer></script>
+  <script src="../rep.min.js?v=3f5c7197" defer></script>
+</head>
+<body class="speaker">
+  <a class="skip-link" href="#main">Saltar al contenido</a>
+
+  <header class="site-header">
+    <div class="wrap">
+      <!-- The site name stays in English on both editions -->
+      <a class="mark" href="#top" lang="en">America Deserves <span>a Speaker</span></a>
+      <nav class="nav" aria-label="Páginas">
+        <a href="https://www.change.org/p/house-democrats-choose-a-new-speaker" data-cta="header">Firma<span class="nav-long"> la petición</span></a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main">
+    <section class="hero" id="top">
+      <div class="wrap">
+        <p class="kicker">Hakeem Jeffries &middot; Presidencia de la Cámara, enero de 2027</p>
+        <p class="lang"><a href="/" hreflang="en" lang="en">Read this page in English</a></p>
+        <!-- Rotating headline: same mechanism and order as index.html; data-ref is the record item behind each
+             line (N = #item-N, 0 = the petition section). Order must match the captions below, line for line. -->
+        <h1 class="rotor" id="rotor">
+          <span class="rotor-line is-on" data-ref="1">Canalizado.</span>
+          <span class="rotor-line" data-ref="1" aria-hidden="true">$421,396 por el PAC de AIPAC.</span>
+          <span class="rotor-line" data-ref="1" aria-hidden="true">$149,300. Un donante. Un día.</span>
+          <span class="rotor-line" data-ref="2" aria-hidden="true">103 demócratas votaron sí. Él votó no.</span>
+          <span class="rotor-line" data-ref="3" aria-hidden="true">&ldquo;No quieren que nos desquitemos.&rdquo;</span>
+          <span class="rotor-line" data-ref="4" aria-hidden="true">Cuatro meses para apoyar a Mamdani.</span>
+          <span class="rotor-line" data-ref="5" aria-hidden="true">&ldquo;Exactamente el resultado correcto.&rdquo;</span>
+          <span class="rotor-line" data-ref="6" aria-hidden="true">Un PAC para proteger a los que ya tienen el cargo.</span>
+          <span class="rotor-line" data-ref="1" aria-hidden="true">Sigue el dinero canalizado.</span>
+          <span class="rotor-line" data-ref="0" aria-hidden="true">Los demócratas merecen poder elegir.</span>
+        </h1>
+        <p class="lede rotor-cap" id="rotor-cap">
+          <span class="rotor-line is-on">Donantes canalizaron $421,396 por el PAC de AIPAC hacia la campaña de Jeffries y dos comités conjuntos de recaudación que él encabeza, de febrero de 2025 a septiembre de 2026.</span>
+          <span class="rotor-line" aria-hidden="true">Ese es el total canalizado por el PAC de AIPAC hacia su campaña y dos comités conjuntos que él encabeza desde febrero de 2025.</span>
+          <span class="rotor-line" aria-hidden="true">El 20 de mayo de 2026, un solo donante envió $149,300 por el PAC de AIPAC a un comité conjunto de recaudación que encabeza Jeffries.</span>
+          <span class="rotor-line" aria-hidden="true">El 15 de julio de 2026, 103 demócratas de la Cámara votaron por recortar los $3,300 millones de Financiamiento Militar Extranjero para Israel. Jeffries votó en contra.</span>
+          <span class="rotor-line" aria-hidden="true">La mañana después de que los demócratas ganaron la Cámara, Jeffries dijo en MS NOW: &ldquo;El pueblo estadounidense no quiere que nos desquitemos&rdquo;.</span>
+          <span class="rotor-line" aria-hidden="true">Zohran Mamdani ganó la primaria para alcalde de Nueva York en junio de 2025. Jeffries, que representa a Brooklyn, lo respaldó el 24 de octubre.</span>
+          <span class="rotor-line" aria-hidden="true">Así llamó Jeffries al indulto preventivo de Trump al representante Henry Cuellar, demócrata de Texas, por cargos federales de soborno en diciembre de 2025.</span>
+          <span class="rotor-line" aria-hidden="true">En 2021, Jeffries cofundó Team Blue PAC para defender a demócratas de la Cámara en funciones ante retos en las primarias.</span>
+          <span class="rotor-line" aria-hidden="true">$421,396 por el PAC de AIPAC, $149,300 de un solo donante en un solo día. Cada dólar está registrado en la FEC.</span>
+          <span class="rotor-line" aria-hidden="true">Una petición pide a cada miembro del nuevo Congreso que haga una elección competitiva para la presidencia de la Cámara.</span>
+        </p>
+        <!-- rotor.js writes the label from data-item and data-ask, and the button from data-pause and data-play -->
+        <p class="rotor-ref"><a href="#item-1" id="rotor-ref" data-item="Del historial: dato " data-ask="La petición: fírmala">Del historial: dato 01</a>
+          <button class="rotor-pause" id="rotor-pause" type="button" aria-pressed="false" data-pause="Pausar titulares" data-play="Reanudar titulares" hidden>Pausar titulares</button></p>
+        <p class="lede lede-fixed">Los demócratas ganaron la Cámara el 3 de noviembre. Se espera que Hakeem Jeffries jure el 3 de enero
+        como la primera persona negra en presidir la Cámara. En 20 votaciones para la presidencia desde 2023, ningún demócrata de
+        la Cámara ha votado por nadie más. Una votación con un solo nombre es un trámite.</p>
+        <p class="src cite">Fuentes: <a href="#record">el historial abajo</a>; <a href="https://www.nbcnews.com/politics/2026-election/democrats-house-control-midterm-election-wins-trump-check-rcna603397">NBC News</a>, 3 de noviembre de 2026;
+        <a href="#act">votaciones de la Cámara</a>.</p>
+        <p class="thesis">Estados Unidos merece que la presidencia de la Cámara <span>se gane, no se herede.</span></p>
+        <div class="cta-row">
+          <a class="cta" href="https://www.change.org/p/house-democrats-choose-a-new-speaker" data-cta="hero">Firma la petición</a>
+          <!-- Live count: tools/petition.py writes the Spanish line between the markers when the count changes -->
+          <p class="src cite"><!-- petition:start -->1,039,414 firmas de una meta de 1.5 millones, a las 5:58 p.m. hora del centro, 7 de noviembre de 2026.<!-- petition:end --> Petición de Nicole Whitted en
+          <a href="https://www.change.org/p/house-democrats-choose-a-new-speaker" data-cta="hero-count">change.org</a>.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="section call" id="call" aria-labelledby="call-h">
+      <div class="wrap">
+        <h2 id="call-h">Llama a tu representante</h2>
+        <p class="call-lede">Quienes eligen la presidencia de la Cámara responden ante los votantes, y eso te incluye. Los demócratas
+        de la Cámara elegirán a su candidato el 18 de noviembre, según ABC News. Llama antes y dilo claro: quieres una contienda
+        real por la presidencia de la Cámara.</p>
+        <button class="cta" id="rep-find" type="button" hidden>Busca a tu representante</button>
+        <div class="rep-out" id="rep-out" aria-live="polite" hidden></div>
+        <p class="call-alt">O llama a la central telefónica del Capitolio al <a href="tel:+12022243121">(202) 224-3121</a> y pide
+        la oficina de tu representante, o <a href="https://www.house.gov/representatives/find-your-representative">busca a tu
+        representante por dirección</a> en house.gov (en inglés).</p>
+        <p class="src">El botón usa tu ubicación una vez, para buscar tu distrito del Congreso con la Oficina del Censo de EE. UU.
+        Este sitio no la guarda.</p>
+      </div>
+    </section>
+
+    <section class="section" id="record" aria-labelledby="record-h">
+      <div class="wrap">
+        <h2 id="record-h">El historial de Hakeem Jeffries</h2>
+        <p class="section-intro">No son rumores ni consignas. Son registros de la FEC, votaciones de la Cámara y sus propias
+        palabras, cada uno con su fuente y con su explicación al lado. Este es el historial que los demócratas de la Cámara están
+        por premiar con el mazo.</p>
+        <ol class="ledger">
+          <li id="item-1">
+            <h3>$421,396 por el PAC de AIPAC</h3>
+            <p>De febrero de 2025 a septiembre de 2026, donantes canalizaron $421,396 por el comité de acción política de AIPAC
+            hacia la campaña de Jeffries y dos comités conjuntos de recaudación que él encabeza. Un solo donante envió $149,300 el
+            20 de mayo de 2026.</p>
+            <p class="note">Es dinero de donantes individuales, canalizado por el PAC, no fondos propios del PAC. Los dos comités
+            conjuntos también recaudan para el DCCC y otros demócratas de la Cámara.</p>
+            <p class="src">Fuente: <a href="https://www.fec.gov/data/disbursements/?committee_id=C00797670&amp;recipient_name=JEFFRIES&amp;two_year_transaction_period=2026">FEC, desembolsos del PAC de AIPAC, 2025-2026</a></p>
+          </li>
+          <li id="item-2">
+            <h3>Su bancada se dividió. Él votó no.</h3>
+            <p>El 15 de julio de 2026, la Cámara rechazó 104-314 la enmienda del representante Thomas Massie para recortar los
+            $3,300 millones de Financiamiento Militar Extranjero para Israel. Más demócratas votaron a favor (103) que en contra
+            (98). Jeffries votó en contra.</p>
+            <p class="note">Su explicación, el día anterior: la enmienda era &ldquo;demasiado amplia&rdquo; y limitaría la ayuda
+            humanitaria, el reasentamiento de refugiados y los fondos de embajadas. También escribió que &ldquo;la política de
+            Estados Unidos en Medio Oriente debe cambiar&rdquo;.</p>
+            <p class="src">Fuentes: <a href="https://clerk.house.gov/Votes/2026243">votación nominal 243 de la Cámara</a>;
+            <a href="https://democraticleader.house.gov/media/press-releases/dear-colleague-massie-amendment-and-us-policy-middle-east">carta de Jeffries a sus colegas, 14 de julio de 2026</a>;
+            <a href="https://fmep.org/resource/fmep-legislative-round-up-july-17-2026/">FMEP</a></p>
+          </li>
+          <li id="item-3">
+            <h3>&ldquo;No quieren que nos desquitemos&rdquo;</h3>
+            <p>La mañana después de la elección, Jeffries dijo en &ldquo;Morning Joe&rdquo; de MS NOW: &ldquo;El pueblo
+            estadounidense no quiere que nos desquitemos; quiere que resolvamos las cosas en su nombre, porque la vida está
+            demasiado cara&rdquo;.</p>
+            <p class="note">En agosto nombró a los comités Judicial y de Supervisión para encabezar la rendición de cuentas y no
+            quiso descartar ni confirmar un juicio político.</p>
+            <p class="src">Fuente: <a href="https://www.fox5dc.com/news/progressives-fume-hakeem-jeffries-saying-democrats-wont-get-even-trump">FOX 5 DC</a>, 4 de noviembre de 2026</p>
+          </li>
+          <li id="item-4">
+            <h3>Cuatro meses para apoyar al candidato de su ciudad</h3>
+            <p>Zohran Mamdani ganó la primaria demócrata para alcalde de Nueva York en junio de 2025. Jeffries, que representa a
+            Brooklyn, esperó meses y lo respaldó el 24 de octubre de 2025.</p>
+            <p class="note">Su declaración citó &ldquo;áreas de desacuerdo de principios&rdquo; y dijo que respetaba la voluntad de
+            los votantes de la primaria.</p>
+            <p class="src">Fuente: <a href="https://www.news4jax.com/news/politics/2025/10/25/jeffries-backs-mamdani-for-nyc-mayor-months-after-primary/">The Associated Press</a>, 24 de octubre de 2025</p>
+          </li>
+          <li id="item-5">
+            <h3>&ldquo;Exactamente el resultado correcto&rdquo;</h3>
+            <p>Cuando el presidente Trump le dio al representante Henry Cuellar, demócrata de Texas, un indulto preventivo por
+            cargos federales de soborno en diciembre de 2025, Jeffries le dijo a CNN: &ldquo;Creo que el resultado fue
+            exactamente el resultado correcto&rdquo;.</p>
+            <p class="note">Su razón: &ldquo;esta acusación era muy débil desde el principio, en mi opinión&rdquo;.</p>
+            <p class="src">Fuente: <a href="https://thehill.com/homenews/house/5632133-jeffries-trump-pardon-cuellar/">The Hill</a>, 3 de diciembre de 2025</p>
+          </li>
+          <li id="item-6">
+            <h3>Un PAC para proteger a congresistas de las primarias</h3>
+            <p>En junio de 2021, Jeffries, Josh Gottheimer y Terri Sewell lanzaron Team Blue PAC para defender a demócratas de la
+            Cámara en funciones que enfrentaban retos en las primarias.</p>
+            <p class="note">Jeffries lo llamó &ldquo;una extensión de mi trabajo como presidente de la bancada: asegurar que los
+            miembros tengan éxito&rdquo;.</p>
+            <p class="src">Fuente: <a href="https://www.nbcnews.com/politics/congress/house-democrats-launch-pac-protect-incumbents-attacks-within-n1272428">NBC News</a>, 26 de junio de 2021</p>
+          </li>
+          <li id="item-7">
+            <h3>Medicare para Todos, hasta que llegó al liderazgo</h3>
+            <p>Jeffries copatrocinó la Ley de Medicare para Todos en 2019 y fue copatrocinador original en 2021. No copatrocinó la
+            versión de 2023, presentada cuatro meses después de que se convirtió en líder demócrata.</p>
+            <p class="note">En agosto de 2026 le dijo a &ldquo;Meet the Press&rdquo; de NBC: &ldquo;No he copatrocinado la
+            legislación de Medicare para Todos que se ha presentado en los últimos años&rdquo;. Dijo que los demócratas deben
+            enfocarse en &ldquo;bajar el alto costo de la vida&rdquo;.</p>
+            <p class="src">Fuentes: listas de copatrocinadores en congress.gov de <a href="https://www.congress.gov/bill/116th-congress/house-bill/1384/cosponsors">H.R. 1384 (2019)</a>,
+            <a href="https://www.congress.gov/bill/117th-congress/house-bill/1976/cosponsors">H.R. 1976 (2021)</a> y
+            <a href="https://www.congress.gov/bill/118th-congress/house-bill/3421/cosponsors">H.R. 3421 (2023)</a>;
+            <a href="https://www.newsweek.com/hakeem-jeffries-rejects-medicare-all-dsa-agenda-12328842">Newsweek</a></p>
+          </li>
+          <li id="item-8">
+            <h3>Su bancada se dividió otra vez. Él votó sí.</h3>
+            <p>El 17 de julio de 2025, la Cámara aprobó 308-122 la Ley GENIUS, que fija reglas federales para las stablecoins.
+            Los demócratas de la Cámara votaron 110 a 102 en contra. Jeffries votó a favor, y el proyecto pasó al presidente Trump,
+            cuya familia lanzó una empresa que emite una stablecoin, según Politico.</p>
+            <p class="note">No ha aparecido ninguna declaración pública de Jeffries que explique este voto. Si dio una,
+            <a href="mailto:vc3030@gmail.com?subject=projectspeaker.org%2Fes%20GENIUS%20Act">envíala</a> y la ponemos aquí.</p>
+            <p class="src">Fuentes: <a href="https://clerk.house.gov/Votes/2025200">votación nominal 200 de la Cámara</a>;
+            <a href="https://www.commondreams.org/news/genius-act-vote">Common Dreams</a>, citando a Politico, 17 de julio de 2025</p>
+          </li>
+          <li id="item-9">
+            <h3>$188,600 de ejecutivos de tecnología militar</h3>
+            <p>El director ejecutivo del contratista de defensa Anduril Industries donó $100,000 a un comité conjunto de
+            recaudación que encabeza Jeffries en abril de 2026, y el cofundador y director de operaciones de Anduril donó $44,300
+            a otro en agosto. Un gerente de la empresa de análisis de datos Palantir donó $44,300 en febrero de 2025.</p>
+            <p class="note">No ha aparecido ninguna declaración pública de Jeffries sobre estas donaciones. Para dar escala: su
+            campaña recaudó $12.7 millones de individuos en 2025-26 hasta el 14 de octubre, y $8.1 millones de eso vino de
+            donantes que dieron $200 o menos. Los comités conjuntos también recaudan para otros demócratas de la Cámara.</p>
+            <p class="src">Fuentes: ingresos en la FEC de empleados de <a href="https://www.fec.gov/data/receipts/?committee_id=C00768200&amp;committee_id=C00916429&amp;contributor_employer=ANDURIL&amp;two_year_transaction_period=2026">Anduril</a>
+            y <a href="https://www.fec.gov/data/receipts/?committee_id=C00768200&amp;contributor_employer=PALANTIR&amp;two_year_transaction_period=2026">Palantir</a>;
+            <a href="https://www.fec.gov/data/committee/C00503052/?cycle=2026">Jeffries for Congress, totales 2025-26</a>; publicado primero por Sludge, 4 de noviembre de 2026</p>
+          </li>
+        </ol>
+      </div>
+    </section>
+
+    <section class="section record" id="act" aria-labelledby="act-h">
+      <div class="wrap">
+        <h2 id="act-h">Exige una votación de verdad</h2>
+        <p>Quien preside la Cámara fija su agenda y ocupa el segundo lugar en la línea de sucesión presidencial, solo detrás del
+        vicepresidente. Un cargo con tanto poder debe ganarse en una contienda abierta, no heredarse. En 20 votaciones para la
+        presidencia de la Cámara desde 2023, ningún demócrata ha votado por nadie más que Jeffries. Una contienda real obliga a
+        cada candidato a responder por su agenda antes de recibir el mazo.</p>
+        <p class="src">Fuentes: <a href="https://www.govinfo.gov/content/pkg/USCODE-2023-title3/html/USCODE-2023-title3-chap1-sec19.htm">3 U.S.C. &sect; 19</a>;
+        votaciones nominales de la Cámara <a href="https://clerk.house.gov/Votes/20232">2 a 20, 3-7 de enero de 2023</a> (15 votaciones),
+        <a href="https://clerk.house.gov/Votes/2023521">521, 523, 525 y 527, 17-25 de octubre de 2023</a> (cuatro votaciones, tras la destitución del presidente Kevin McCarthy) y
+        <a href="https://clerk.house.gov/Votes/20252">2, 3 de enero de 2025</a></p>
+        <!-- Nov. 18 is reported, not announced, and Fox News reported mid-December; keep both until the caucus confirms -->
+        <ul class="dates">
+          <li><strong>18 de noviembre</strong> Los demócratas de la Cámara eligen a puerta cerrada a su candidato para la
+          presidencia, según <a href="https://abc7news.com/live-updates/midterm-elections-2026-live-updates-election-results-key-races-us/20001292/entry/20016171/">ABC News</a>
+          y <a href="https://news.bgov.com/bloomberg-government-news/house-democratic-leadership-elections-set-for-nov-18-and-19">Bloomberg Government</a>.
+          <a href="https://www.foxnews.com/politics/hakeem-jeffries-declares-bid-house-speaker-after-gops-midterm-massacre">Fox News</a> informó que sería a mediados de diciembre.
+          Gana la nominación quien obtenga la mayoría simple de la bancada.</li>
+          <li><strong>3 de enero</strong> El 120.º Congreso se instala al mediodía, la fecha que fija la <a href="https://www.archives.gov/founding-docs/amendments-11-27">Enmienda 20</a>
+          salvo que el Congreso elija otro día por ley, y el pleno de la Cámara elige a quien la presidirá por votación nominal,
+          <a href="https://www.congress.gov/crs-product/RL30857">como es tradición</a> al reunirse por primera vez.</li>
+        </ul>
+        <ol class="steps">
+          <li><strong>Firma la petición.</strong> Pide a cada miembro del nuevo 120.º Congreso que haga una elección competitiva
+          para la presidencia de la Cámara.</li>
+          <li><strong>Llama a tu representante antes de que vote la bancada.</strong> <a href="#call">Encuentra a tu representante
+          y el número para llamar</a>.</li>
+          <li><strong>Comparte esta página.</strong> Cada dato tiene su fuente.</li>
+        </ol>
+        <a class="cta" href="https://www.change.org/p/house-democrats-choose-a-new-speaker" data-cta="act">Firma la petición</a>
+      </div>
+    </section>
+
+    <!-- Same six questions as index.html, translated; the FAQPage JSON-LD repeats these answers word for word. -->
+    <section class="section" id="faq" aria-labelledby="faq-h">
+      <div class="wrap">
+        <h2 id="faq-h">Cómo se elige la presidencia de la Cámara</h2>
+        <div class="faq">
+          <h3>&iquest;Cuándo elige la Cámara a su próximo presidente?</h3>
+          <p>Cuando el 120.º Congreso se reúna por primera vez. La Enmienda 20 fija esa fecha al mediodía del 3 de enero de 2027, salvo que el Congreso elija otro día por ley, y la Cámara elige por tradición a su presidente por votación nominal en cuanto se instala. Antes, los demócratas de la Cámara eligen a su candidato a puerta cerrada; ABC News y Bloomberg Government informan que esa votación será el 18 de noviembre.</p>
+          <p class="src">Fuentes: <a href="https://www.archives.gov/founding-docs/amendments-11-27">Enmienda 20</a>, Archivos Nacionales; <a href="https://www.congress.gov/crs-product/RL30857">Servicio de Investigación del Congreso, RL30857</a>; <a href="#act">informes sobre la votación de la bancada</a></p>
+          <h3>&iquest;Cuántos votos hacen falta para presidir la Cámara?</h3>
+          <p>La mayoría de los votos emitidos por una persona con nombre. Eso es 218 solo si los 435 miembros votan por alguien; las ausencias y los votos de &ldquo;presente&rdquo; bajan el número necesario.</p>
+          <p class="src">Fuente: <a href="https://www.congress.gov/crs-product/RL30857">Servicio de Investigación del Congreso, RL30857</a></p>
+          <h3>&iquest;Puede un demócrata votar por alguien que no sea Jeffries?</h3>
+          <p>Sí. La bancada de cada partido elige a un candidato, pero en el pleno cada miembro puede votar por quien quiera, nominado o no. En 14 de las 17 elecciones para la presidencia de la Cámara desde 1997, algunos miembros votaron por alguien que no era el candidato de su partido. En las 20 votaciones desde 2023, ningún demócrata de la Cámara lo ha hecho.</p>
+          <p class="src">Fuentes: <a href="https://www.congress.gov/crs-product/RL30857">Servicio de Investigación del Congreso, RL30857</a>; <a href="#act">votaciones de la Cámara</a></p>
+          <h3>&iquest;Quien preside la Cámara tiene que ser miembro de la Cámara?</h3>
+          <p>No. La Constitución no lo exige, pero hasta ahora todas las personas que la han presidido han sido miembros.</p>
+          <p class="src">Fuente: <a href="https://www.congress.gov/crs-product/RL30857">Servicio de Investigación del Congreso, RL30857</a></p>
+          <h3>&iquest;Por qué importa quién preside la Cámara?</h3>
+          <p>Quien preside la Cámara ocupa el segundo lugar en la línea de sucesión presidencial, solo detrás del vicepresidente, según la ley federal, y dirige la Cámara.</p>
+          <p class="src">Fuente: <a href="https://www.govinfo.gov/content/pkg/USCODE-2023-title3/html/USCODE-2023-title3-chap1-sec19.htm">3 U.S.C. &sect; 19</a></p>
+          <h3>&iquest;Qué pide la petición?</h3>
+          <p>La petición de Nicole Whitted en change.org pide a cada miembro del nuevo 120.º Congreso que haga una elección competitiva para la presidencia de la Cámara.</p>
+          <p class="src">Fuente: <a href="https://www.change.org/p/house-democrats-choose-a-new-speaker" data-cta="faq">la petición</a></p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- The disclaimers in Spanish, then the paid-for line again in English, as the ad rules expect -->
+  <footer class="site-footer">
+    <div class="wrap">
+      <p class="foot-line"><span>Pagado por Valdez Campos.</span>
+        <span>No autorizado por ningún candidato ni comité de candidato.</span></p>
+      <p class="foot-line" lang="en"><span>Paid for by Valdez Campos.</span>
+        <span>Not authorized by any candidate or candidate's committee.</span></p>
+      <p class="foot-line"><span>Sin relación con change.org ni con la autora de la petición.</span>
+        <span>Las citas están traducidas del inglés; las fuentes enlazan a los originales en inglés. <a href="mailto:vc3030@gmail.com?subject=projectspeaker.org%2Fes%20correcci%C3%B3n">Envía una corrección</a>.</span></p>
+      <p class="foot-line"><span>Usa Google Analytics y Google Ads para contar visitas.</span>
+        <span>&ldquo;Busca a tu representante&rdquo; envía tu ubicación a la Oficina del Censo de EE. UU. solo si lo tocas.</span></p>
+      <p class="credit">Hecho en Kansas City por
+        <a href="https://www.mediabrilliance.io" target="_blank" rel="noopener"><img src="../images/mb-mark.svg"
+           width="206" height="95" alt="" />mediaBrilliance digitalxtudio</a></p>
+    </div>
+  </footer>
+</body>
+</html>

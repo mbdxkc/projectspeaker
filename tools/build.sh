@@ -8,8 +8,9 @@
 #   @updated    2026-11-07
 # ============================================================================
 #
-#   index.html carries the minified stylesheet inline, in <style id="css">,
-#   and loads rotor.min.js and rep.min.js. An edit to style.css, rotor.js or
+#   index.html and es/index.html (the Spanish edition) each carry the
+#   minified stylesheet inline, in <style id="css">, and load rotor.min.js
+#   and rep.min.js (es/ through ../). An edit to style.css, rotor.js or
 #   rep.js ships as a no-op until this runs: the site looks unchanged and
 #   nothing errors.
 #
@@ -41,6 +42,7 @@ for tool in cleancss terser; do
   command -v "$tool" >/dev/null 2>&1 || { echo "error: $tool not found (see REQUIRES above)" >&2; exit 1; }
 done
 
+PAGES="index.html es/index.html"
 tmp="$(mktemp -d)"
 trap 'rm -rf "$tmp"' EXIT
 stale=0
@@ -62,50 +64,57 @@ build() {
 }
 
 # inline_css: minify style.css into $tmp and write it between <style id="css">
-# and </style> in index.html. Python does the swap because minified CSS is
+# and </style> in each page. Python does the swap because minified CSS is
 # full of characters sed would treat as syntax.
 inline_css() {
   cleancss -O1 -o "$tmp/style.min.css" style.css
   local rc=0
-  python3 - "$tmp/style.min.css" "$CHECK" <<'PY' || rc=$?
+  python3 - "$tmp/style.min.css" "$CHECK" $PAGES <<'PY' || rc=$?
 import re, sys
 css = open(sys.argv[1]).read().strip()
 check = sys.argv[2] == "1"
-page = open("index.html").read()
-# Exactly one opening tag, on its own line. A comment that quotes the tag
-# once matched first and the swap deleted everything from that comment to the
-# real </style>: the viewport, title and every meta tag (Nov. 7, 2026).
-if page.count('<style id="css">') != 1:
-    sys.exit('error: index.html must contain <style id="css"> exactly once')
-m = re.search(r'^  <style id="css">(.*?)</style>$', page, re.S | re.M)
-if not m:
-    sys.exit('error: <style id="css"> must open a line in index.html')
-if m.group(1) == css:
-    print("ok     index.html (inline CSS)")
-elif check:
-    print("stale  index.html (inline CSS)")
-    sys.exit(3)
-else:
-    open("index.html", "w").write(page[:m.start(1)] + css + page[m.end(1):])
-    print(f"inline index.html <- style.css ({len(css)} bytes)")
+stale = False
+for path in sys.argv[3:]:
+  page = open(path).read()
+  # Exactly one opening tag, on its own line. A comment that quotes the tag
+  # once matched first and the swap deleted everything from that comment to
+  # the real </style>: the viewport, title and every meta tag (Nov. 7, 2026).
+  if page.count('<style id="css">') != 1:
+    sys.exit(f'error: {path} must contain <style id="css"> exactly once')
+  m = re.search(r'^  <style id="css">(.*?)</style>$', page, re.S | re.M)
+  if not m:
+    sys.exit(f'error: <style id="css"> must open a line in {path}')
+  if m.group(1) == css:
+    print(f"ok     {path} (inline CSS)")
+  elif check:
+    print(f"stale  {path} (inline CSS)")
+    stale = True
+  else:
+    open(path, "w").write(page[:m.start(1)] + css + page[m.end(1):])
+    print(f"inline {path} <- style.css ({len(css)} bytes)")
+if stale:
+  sys.exit(3)
 PY
   if (( rc == 3 )); then stale=1; elif (( rc )); then exit "$rc"; fi
 }
 
-# stamp <file>: point index.html at <file>?v=<hash of the built file>
+# stamp <file>: point each page at <file>?v=<hash of the built file>. The
+# Spanish page writes the same URL with a leading ../, kept as it is.
 stamp() {
-  local file="$1" re hash
+  local file="$1" re hash page
   re="${file//./\\.}"
   hash="$(shasum -a 256 "$tmp/$file" | cut -c1-8)"
-  if grep -q "\"$re?v=$hash\"" index.html; then
-    :
-  elif (( CHECK )); then
-    echo "stale  index.html ($file stamp)"; stale=1
-  else
-    sed -i '' -E "s#\"$re(\\?v=[0-9a-f]+)?\"#\"$file?v=$hash\"#" index.html
-    grep -q "\"$re?v=$hash\"" index.html || { echo "error: no $file reference in index.html" >&2; exit 1; }
-    echo "stamp  index.html -> $file?v=$hash"
-  fi
+  for page in $PAGES; do
+    if grep -qE "\"(\.\./)?$re\?v=$hash\"" "$page"; then
+      :
+    elif (( CHECK )); then
+      echo "stale  $page ($file stamp)"; stale=1
+    else
+      sed -i '' -E "s#\"((\.\./)?)$re(\\?v=[0-9a-f]+)?\"#\"\1$file?v=$hash\"#" "$page"
+      grep -qE "\"(\.\./)?$re\?v=$hash\"" "$page" || { echo "error: no $file reference in $page" >&2; exit 1; }
+      echo "stamp  $page -> $file?v=$hash"
+    fi
+  done
 }
 
 inline_css

@@ -8,7 +8,7 @@
               (#rotor-ref) change together, so a headline is never on screen
               with another headline's caption or source.
   @author     mediaBrilliance digitalxtudio
-  @version    1.0.1
+  @version    1.1.0
   @updated    2026-11-07
   @a11y       Pause button (WCAG 2.2.2), hover and focus hold the current line,
               reduced motion never rotates, screen readers always read line 1
@@ -32,6 +32,12 @@
   while the Pause button is pressed. Under prefers-reduced-motion it never
   starts, and the page keeps "Earmarked.".
 
+  LANGUAGE
+  The words the script writes come from data attributes in the markup, so the
+  Spanish page (es/index.html) runs this same file: data-item and data-ask on
+  #rotor-ref, data-pause and data-play on the Pause button. English is the
+  fallback when an attribute is missing.
+
   WITHOUT JAVASCRIPT
   The markup already shows line 1 (class is-on), and the Pause button ships
   with the hidden attribute, so a visitor without scripts sees a complete,
@@ -54,6 +60,14 @@
   var ref = document.getElementById('rotor-ref');
   var btn = document.getElementById('rotor-pause');
   if (!head || !cap || !ref || !btn) return;
+
+  // Words this script writes, from the markup (see LANGUAGE above).
+  var WORDS = {
+    item: ref.getAttribute('data-item') || 'From the record: item ',
+    ask: ref.getAttribute('data-ask') || 'The ask: sign the petition',
+    pause: btn.getAttribute('data-pause') || 'Pause headlines',
+    play: btn.getAttribute('data-play') || 'Play headlines'
+  };
 
   var heads = head.querySelectorAll('.rotor-line');
   var caps = cap.querySelectorAll('.rotor-line');
@@ -151,7 +165,7 @@
       var n = Number(heads[i].getAttribute('data-ref'));
       ref.href = n ? '#item-' + n : '#act';
       // Two digits, to match the record's 01, 02 ... counter labels.
-      ref.textContent = n ? 'From the record: item ' + (n < 10 ? '0' + n : n) : 'The ask: sign the petition';
+      ref.textContent = n ? WORDS.item + (n < 10 ? '0' + n : n) : WORDS.ask;
       ref.classList.remove('is-out');
     }, CONFIG.fade);
   }
@@ -196,6 +210,6 @@
   btn.addEventListener('click', function () {
     paused = !paused;
     btn.setAttribute('aria-pressed', String(paused));
-    btn.textContent = paused ? 'Play headlines' : 'Pause headlines';
+    btn.textContent = paused ? WORDS.play : WORDS.pause;
   });
 })();

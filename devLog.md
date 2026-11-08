@@ -85,3 +85,18 @@ Every link to the petition (header, hero button, the hero's change.org text link
 
 - **A split copies every file, including the ones that carry the old identity.** Favicon, share card, header text and footer were all checked at the split except the 200-byte SVG in every browser tab. After cloning a site into a new brand, open every image asset, however small
 - **Key a scheduled switch to the data it depends on, not to a calendar date.** The lookup must change lines when the member list changes, and Congress can legally convene on a day other than Jan. 3. Reading the Congress number off the member list makes the two impossible to mismatch
+
+## 2026-11-07 (night) — Spanish edition, record item 9
+
+**Spanish edition, `/es/`.** The full page translated: hero and its ten rotating lines, the call section, all nine record items, the ask, the FAQ and the footer, with the paid-for line repeated in English. FAQPage JSON-LD generated from the same list as the visible answers. The machinery was made bilingual rather than forked: the build inlines CSS and stamps scripts on both pages, the count bot writes a Spanish line, `rotor.js` reads its labels from data attributes, and `rep.js` carries an en/es string table chosen by `<html lang>`. Tested in Firefox: no horizontal scroll from 320 to 1920 on either page, Spanish labels after rotation and on pause, every petition link firing with its location, and the lookup in Spanish for KS-3, KS-2 (Republican note), D.C. (delegate note) and London.
+
+**Record item 9, from FEC schedule A.** Anduril's CEO $100,000 and co-founder/COO $44,300 to Jeffries' joint committees in 2026, and a Palantir manager $44,300 in 2025: $188,600, matching Sludge's figures to the dollar once the memo allocations to the campaign are left out. The note carries the counterweight: most of his campaign's individual money ($8.1M of $12.7M) came in gifts of $200 or less. The Atlantic "bend the knee" quote stays off: the original returns 403 here and the archive route was refused, so it waits for a read in a browser.
+
+The ledger is now odd-numbered, so the last item spans both columns at 900 px and up instead of leaving an empty cell filled with the rule colour.
+
+### Mistakes → Rules
+
+- **A conduit's memo rows are not more money.** FEC schedule A lists a joint committee's allocation to the campaign as memo line-12 entries under the original donor; adding them to the joint-committee receipt double-counts. Total only non-memo receipts
+- **Make shared scripts multilingual before translating the page.** A copied `rep.js` for Spanish would have been a second file to keep in sync with every fix; one file with a string table and two copies of the markup is the smaller cost
+- **Re-derive any size calibrated to a word when the word changes.** The headline pre-size divides by the first line's measured width; the Spanish word is 1.5% wider and would have overflowed the column for a frame
+- **Contract Spanish prepositions when composing strings.** "de" + "el distrito" is "del distrito"; a string table that concatenates parts needs the rule written into the function

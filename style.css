@@ -10,7 +10,7 @@
               kansasdeservesbetter.com on Nov. 7, 2026; the results-table rules
               that page needs were left behind.
   @author     mediaBrilliance digitalxtudio
-  @version    1.1.0
+  @version    1.2.0
   @updated    2026-11-07
   ============================================================================
 */
@@ -20,7 +20,7 @@
   font-style: normal;
   font-weight: 500 700;
   font-display: swap;
-  src: url("fonts/oswald-latin.woff2") format("woff2");
+  src: url("/fonts/oswald-latin.woff2") format("woff2");  /* root-absolute: the same CSS is inlined in /es/ */
   unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
 }
 
@@ -119,7 +119,12 @@ h1, h2, h3 { font-family: var(--display); font-weight: 700; line-height: 1.05; t
    counter (01, 02 and on), so reordering the list renumbers it. The 1px gap over a
    --line background draws the rules between entries. Two columns from 900px. */
 .ledger { list-style: none; counter-reset: led; margin: 0; padding: 0; display: grid; gap: 1px; background: var(--line); border: 1px solid var(--line); }
-@media (min-width: 900px) { .ledger { grid-template-columns: 1fr 1fr; } }
+@media (min-width: 900px) {
+  .ledger { grid-template-columns: 1fr 1fr; }
+  /* An odd count leaves an empty cell that the --line background would fill
+     solid; the last item spans both columns instead. */
+  .ledger > li:last-child:nth-child(odd) { grid-column: 1 / -1; }
+}
 .ledger > li { counter-increment: led; background: var(--bg); padding: 1.25rem; min-width: 0; }
 .ledger > li::before { content: counter(led, decimal-leading-zero); display: block; font: 700 .95rem/1 var(--display); letter-spacing: .08em; color: var(--accent); margin-bottom: .5rem; }
 .ledger h3 { font-size: clamp(1.4rem, 4vw, 1.75rem); margin-bottom: .6rem; }
@@ -200,6 +205,12 @@ body.speaker { background: #0d1b33; }
    units keep the h1 size and rotor.js does all the sizing. */
 .rotor { container-type: inline-size; }
 .rotor > .rotor-line:first-child { font-size: min(calc(100cqi / 5.4), 2.5em); }
+/* Spanish line 1, "Canalizado.", is about 5.45 em wide (Earmarked. 5.37), so
+   it divides by 5.5. Re-derive from the font's advance widths if it changes. */
+:lang(es) .rotor > .rotor-line:first-child { font-size: min(calc(100cqi / 5.5), 2.5em); }
+/* The language switch under the kicker; padding makes a 44px tap target */
+.lang { margin: 0 0 .25rem; font-size: .95rem; }
+.lang a { display: inline-block; padding: .65rem 0; }
 /* The swap: the old line fades out and drops slightly, the new one fades in
    and rises into place. .5s must match CONFIG.fade in rotor.js, which waits
    for the fade-out to finish before showing the next line. */
