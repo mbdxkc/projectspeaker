@@ -7,7 +7,7 @@
               march, and the two header toggles that control them: Sound and
               Motion.
   @author     mediaBrilliance digitalxtudio
-  @version    2.2.0
+  @version    3.0.0
   @updated    2026-11-07
   @a11y       The band is decorative (aria-hidden, no pointer events, behind
               the header text at reduced opacity). Both toggles are real
@@ -22,7 +22,7 @@
   Once per page load, at a random moment 3 to 20 seconds after the page is
   ready, if Motion is on and the tab is visible. Turning Sound on before then
   sends the band out at once, with the march. It crosses left to right at
-  about 70 px a second, so the crossing takes longer on a wide screen; the
+  about 90 px a second, so the crossing takes longer on a wide screen; the
   time is rounded to whole bars of music so the band and the march end
   together.
 
@@ -37,6 +37,14 @@
   trombonist (about two loads in five) has sunglasses, a level gaze, no
   bounce and a slide that never misses.
 
+  THE CROWD
+  Hundreds of pro-democracy protesters with signs, flags, raised fists and
+  one megaphone: a dim back row walking behind the band, a front row among
+  the musicians, and a long trail behind the band that thins into
+  stragglers. They bob in clusters of about five, one animation per
+  cluster. The whole scene is built when the parade starts (build), not at
+  page load, so its 2,500 or so nodes cost nothing until then.
+
   THE TOGGLES
   #pref-sound and #pref-motion in the header. Their state lives on <html> as
   classes (sound-on, motion-off, motion-on) and in localStorage, so a choice
@@ -48,7 +56,12 @@
   An original march in G minor, 4/4 at 136 beats a minute, synthesized with
   the Web Audio API and scheduled bar by bar to the length of the parade:
   two bars of drumline cadence, then an eight-bar strain repeated as needed,
-  then an ending. Brass is built to sound blown, not held: one clean voice
+  then an ending. After the intro, every twelve bars open with four of
+  chant over the drums: "Tell me what democracy looks like!" from the
+  megaphone, "This is what democracy looks like!" from the crowd, twice.
+  The crowd is fourteen voices of different pitch shouting each syllable
+  through formant filters set to its vowel, a hair apart; the browser's
+  speech voice says the words on top where speechSynthesis exists. Brass is built to sound blown, not held: one clean voice
   per player (stacked detuned saws read as an accordion), a pitch scoop into
   each note and a small fall off it, brightness that flares on the tongued
   attack and settles, light saturation and a presence peak for the bell, and
@@ -74,7 +87,7 @@
   var CONFIG = {
     delayMin: 3000,    // ms after the page is ready before the band can start
     delayMax: 20000,
-    speed: 70,         // px a second across the screen
+    speed: 90,         // px a second across the screen
     bpm: 136,
     volume: 0.2,
     serious: 0.4       // chance the serious trombonist marches this load
@@ -265,6 +278,70 @@
       }
     }
 
+    // The chant. "Tell me what democracy looks like!" from a megaphone,
+    // "This is what democracy looks like!" back from the crowd, one bar each
+    // over the drums. Each syllable is a burst of voices through two formant
+    // filters tuned to its vowel, so it reads as people shouting on the beat;
+    // the browser's own speech voice says the words on top, where it can.
+    var VOWEL = { e: [550, 1800], i: [300, 2300], a: [640, 1190], I: [400, 1900], o: [750, 1100],
+      '@': [500, 1500], u: [450, 1050], ai: [700, 1200, 300, 2200] };
+    // [sixteenth, vowel, consonant (t click, s hiss, - soft), pitch, length in sixteenths]
+    var CALL = [[0, 'e', 't', 1, 2], [2, 'i', '-', 1, 2], [4, 'a', '-', 1, 2], [6, 'I', 't', 1, 1], [7, 'o', '-', 1.12, 1],
+      [8, '@', '-', 1, 2], [10, 'i', 's', 1, 2], [12, 'u', '-', 1.05, 2], [14, 'ai', '-', 0.95, 2]];
+    var ANSWER = [[0, 'I', 's', 1.05, 2], [2, 'I', 's', 1, 2], [4, 'a', '-', 1, 2], [6, 'I', 't', 1, 1], [7, 'o', '-', 1.12, 1],
+      [8, '@', '-', 1, 2], [10, 'i', 's', 1, 2], [12, 'u', 's', 1.05, 2], [14, 'ai', 't', 0.95, 2]];
+    var megaphone = ctx.createWaveShaper(); megaphone.curve = curve;
+    var horn = ctx.createBiquadFilter(); horn.type = 'bandpass'; horn.frequency.value = 1300; horn.Q.value = 0.7;
+    megaphone.connect(horn); horn.connect(pan(-0.2));
+
+    function shout(t, words, crowd) {
+      if (!live(t + BAR)) return;
+      var sides = crowd ? [pan(-0.5), pan(0.5)] : [megaphone];
+      sides.forEach(function (dest, side) {
+        var f1 = ctx.createBiquadFilter(), f2 = ctx.createBiquadFilter(), mix = ctx.createGain();
+        f1.type = f2.type = 'bandpass'; f1.Q.value = 5; f2.Q.value = 7;
+        mix.gain.value = crowd ? 3.2 : 4;
+        f1.connect(mix); f2.connect(mix); mix.connect(dest);
+        words.forEach(function (w) {
+          var v = VOWEL[w[1]], st = at(t + w[0] * STEP), len = w[4] * STEP;
+          f1.frequency.setValueAtTime(v[0], st); f2.frequency.setValueAtTime(v[1], st);
+          if (v[2]) { f1.frequency.linearRampToValueAtTime(v[2], st + len); f2.frequency.linearRampToValueAtTime(v[3], st + len); }
+          if (w[2] === 's') burst(t + w[0] * STEP, 0.07, crowd ? 0.22 : 0.3, 'highpass', 4500, 0, dest);
+          if (w[2] === 't') burst(t + w[0] * STEP, 0.025, crowd ? 0.3 : 0.4, 'bandpass', 3000, 1, dest);
+        });
+        var n = crowd ? 14 : 2;
+        for (var k = 0; k < n; k++) {
+          var o = ctx.createOscillator(), g = ctx.createGain();
+          var base = crowd ? rand(100, 250) : 165 + k * 3;
+          o.type = 'sawtooth';
+          g.gain.value = 0;
+          words.forEach(function (w) {
+            var st = at(t + w[0] * STEP) + (crowd ? rand(0, 0.035) : 0), len = w[4] * STEP * 0.8;
+            o.frequency.setValueAtTime(base * w[3] * rand(0.98, 1.02), st);
+            g.gain.setTargetAtTime(crowd ? 0.22 : 0.45, st, 0.012);
+            g.gain.setTargetAtTime(0, st + len, 0.03);
+          });
+          o.connect(g); g.connect(f1); g.connect(f2);
+          o.start(at(t)); o.stop(at(t + BAR));
+        }
+      });
+      // The words themselves, where the browser has a speech voice.
+      say(crowd ? 'This is what democracy looks like!' : 'Tell me what democracy looks like!', at(t), crowd);
+    }
+
+    var talk = [];
+    function say(text, when, crowd) {
+      if (!window.speechSynthesis) return;
+      var ms = (when - ctx.currentTime) * 1000 - 60;
+      talk.push(setTimeout(function () {
+        var u = new SpeechSynthesisUtterance(text);
+        var voices = speechSynthesis.getVoices().filter(function (v) { return /^en(-|_)US/i.test(v.lang); });
+        if (voices.length) u.voice = voices[crowd ? Math.min(1, voices.length - 1) : 0];
+        u.lang = 'en-US'; u.rate = crowd ? 1.15 : 1.25; u.pitch = crowd ? 0.85 : 1.15; u.volume = 1;
+        speechSynthesis.speak(u);
+      }, Math.max(0, ms)));
+    }
+
     var total = bars * BAR;
     for (var bar = 0; bar < bars; bar++) {
       var t = bar * BAR;
@@ -278,7 +355,17 @@
         cymbal(t, 1.6, 1);
         continue;
       }
-      var n = (bar - 2) % 8, fill = n === 3 || n === 7;
+      // After the intro, a cycle of twelve bars: four of chant over the
+      // drums (call, answer, call, answer), then the eight-bar strain.
+      var k12 = (bar - 2) % 12;
+      if (k12 < 4) {
+        drums(t, k12 === 3 ? PAT.fill : PAT.groove, bar, k12 === 3);
+        shout(t, k12 % 2 ? ANSWER : CALL, k12 % 2 === 1);
+        if (k12 === 0) cymbal(t, 1.2, 0.8);
+        cymbal(t + BEAT, 0.22, 0.3); cymbal(t + 3 * BEAT, 0.22, 0.3);
+        continue;
+      }
+      var n = k12 - 4, fill = n === 3 || n === 7;
       drums(t, fill ? PAT.fill : PAT.groove, bar, fill);
       // Trumpets: the tune, three players.
       var tt = t;
@@ -309,6 +396,8 @@
 
     return {
       stop: function () {
+        talk.forEach(clearTimeout);
+        if (window.speechSynthesis) speechSynthesis.cancel();
         out.gain.setTargetAtTime(0, ctx.currentTime, 0.12);
         setTimeout(function () { out.disconnect(); }, 1200);
       }
@@ -480,12 +569,82 @@
     return '';
   }
 
+  /* ------------------------------------------------------------- the crowd */
+
+  var SHIRTS = ['#1f4fbf', '#c8102e', '#f5f2ea', '#d8b86a', '#3c7a5a', '#6a4c93', '#e07a5f', '#2a9d8f', '#264653', '#f4a261', '#8d99ae'];
+  var SIGNS = ['#f5f2ea', '#ffffff', '#d8b86a', '#1f4fbf', '#c8102e', '#f4a261'];
+  var HAIR = ['#1b1209', '#3a2416', '#6b4423', '#b07a3c', '#d9c28a', '#9a9a9a', '#2b1a10'];
+
+  /** One pick from a list. */
+  function any(list) { return list[Math.floor(Math.random() * list.length)]; }
+
   /**
-   * Back to front, the way it is drawn (the band moves right, so the front
-   * is the largest x). Stragglers, missteps and out-of-step marchers are
-   * dealt out at random each load.
+   * One protester, facing right, feet at y 60 in a 62-unit figure, drawn
+   * simpler than a marcher (they are many and small): a sign on a stick,
+   * a raised fist, a small flag, a megaphone or just walking.
    */
-  function lineup() {
+  function protester(kind) {
+    var skin = any(SKIN), shirt = any(SHIRTS), hair = any(HAIR), g = '';
+    g += '<rect x="9" y="46" width="3.4" height="13" rx="1.2" fill="#2b2f3a"/><rect x="13.2" y="46" width="3.4" height="13" rx="1.2" fill="#2b2f3a"/>';
+    g += '<rect x="7" y="30" width="11" height="17" rx="3" fill="' + shirt + '"/>';
+    g += '<circle cx="12.5" cy="25" r="4.3" fill="' + skin + '"/>';
+    g += Math.random() < 0.3 ? '<path d="M8 24a4.6 4.6 0 0 1 9.2 0h2.4" stroke="' + any(SHIRTS) + '" stroke-width="2.4" fill="none"/>'
+      : '<path d="M8.2 24.5a4.3 4.3 0 0 1 8.6-1.5c-2-1-5-1.2-8.6 1.5z" fill="' + hair + '"/>';
+    if (kind === 'sign') {
+      var c = any(SIGNS), ink = c === '#1f4fbf' || c === '#c8102e' ? '#ffffff' : '#10213f';
+      g += '<path d="M16 33l3-10" stroke="' + skin + '" stroke-width="2.6" stroke-linecap="round"/>';
+      g += '<g class="b-sign" style="animation-delay:-' + rand(0, 1).toFixed(2) + 's"><path d="M19.5 27V9" stroke="#8a6a2b" stroke-width="1.2"/>' +
+        '<rect x="11" y="0" width="17" height="10" rx="1" fill="' + c + '"/>' +
+        (Math.random() < 0.3 ? '<path d="M19.5 2.2l.9 2 2.2.2-1.7 1.4.6 2.2-2-1.2-2 1.2.6-2.2-1.7-1.4 2.2-.2z" fill="' + ink + '"/>'
+          : '<path d="M13.5 3.2h12M13.5 5.4h9M13.5 7.6h11" stroke="' + ink + '" stroke-width="1.1"/>') + '</g>';
+    } else if (kind === 'fist') {
+      g += '<g class="' + (Math.random() < 0.5 ? 'b-pump' : '') + '" style="animation-delay:-' + rand(0, .5).toFixed(2) + 's">' +
+        '<path d="M16 33l1.5-13" stroke="' + skin + '" stroke-width="2.6" stroke-linecap="round"/><circle cx="17.6" cy="18.6" r="2.3" fill="' + skin + '"/></g>';
+    } else if (kind === 'flag') {
+      g += '<path d="M16 33l2-8" stroke="' + skin + '" stroke-width="2.6" stroke-linecap="round"/><path d="M18.5 30V8" stroke="#8a6a2b" stroke-width="1"/>' +
+        '<g class="b-flag"><rect x="18.5" y="8" width="10" height="6.5" fill="#f5f2ea"/><path d="M18.5 9.2h10M18.5 11.3h10M18.5 13.4h10" stroke="#c8102e" stroke-width="1"/>' +
+        '<rect x="18.5" y="8" width="4.4" height="3.4" fill="#1f4fbf"/></g>';
+    } else if (kind === 'mega') {
+      g += '<path d="M16 32l3-6" stroke="' + skin + '" stroke-width="2.6" stroke-linecap="round"/><path d="M17 24.5l7-3.5v9l-7-3.5z" fill="#e8e8e8"/>' +
+        '<path class="b-shout" d="M26 22.5c2 1.5 2 4.5 0 6M28.5 21c3 2.5 3 6.5 0 9" stroke="#ffffff" stroke-width=".9" fill="none"/>';
+    } else {
+      g += '<path d="M9 33l-1 8M16 33l1 8" stroke="' + skin + '" stroke-width="2.4" stroke-linecap="round"/>';
+    }
+    return g;
+  }
+
+  /** A crowd row from x0 to x1: spacing grows toward x0 when thinning (the tail). */
+  function crowdRow(x0, x1, opts) {
+    var out = '', cluster = [], x = x1;
+    function flush() {
+      if (!cluster.length) return;
+      out += '<g class="b-crowd" style="animation-delay:-' + rand(0, .5).toFixed(2) + 's;animation-duration:' + rand(.46, .6).toFixed(2) + 's">' +
+        cluster.join('') + '</g>';
+      cluster = [];
+    }
+    while (x > x0) {
+      var tail = opts.thin ? 1 + Math.pow((x1 - x) / (x1 - x0), 2) * 6 : 1;
+      var kind = Math.random() < 0.55 ? 'sign' : any(['fist', 'fist', 'flag', 'walk', 'walk']);
+      var stray = opts.thin && tail > 3.5 && Math.random() < 0.5;
+      var person = '<g transform="translate(' + x.toFixed(1) + ' ' + opts.y + ') scale(' + opts.scale + ')">' +
+        (stray ? '<g class="b-stray" style="animation-delay:-' + rand(0, 3).toFixed(2) + 's">' + protester(kind) + '</g>' : protester(kind)) + '</g>';
+      cluster.push(person);
+      if (cluster.length >= 5 || stray) flush();
+      x -= rand(opts.gap[0], opts.gap[1]) * tail;
+    }
+    flush();
+    return out;
+  }
+
+  /**
+   * The whole scene, back to front, the way it is drawn (the parade moves
+   * right, so the front is the largest x): the trail of protesters, the
+   * back row walking behind the band, the band, then the front row among
+   * the musicians. Stragglers, missteps and out-of-step marchers are dealt
+   * out at random each load. Built when the parade starts, not at page
+   * load, so the hundreds of figures cost nothing until they are needed.
+   */
+  function scene() {
     var rows = ['chair', 'chair', 'trumpet', 'snare', 'cymbal', 'bass3', 'bass2', 'bass1', 'tenor', 'snare', 'snare', 'snare',
       'sousa', 'sousa'];
     if (Math.random() < CONFIG.serious) rows.push('serious');
@@ -499,7 +658,7 @@
       var b = Math.floor(rand(0, rows.length));
       if (rows[b] !== 'serious' && trips.indexOf(b) < 0) trips.push(b);
     }
-    var x = 30, parts = [];
+    var TRAIL = 760, x = TRAIL + 30, parts = [];
     rows.forEach(function (kind, i) {
       var s = SKIN[(i * 7) % SKIN.length];
       var stray = strays.indexOf(i) >= 0, trip = trips.indexOf(i) >= 0, serious = kind === 'serious';
@@ -512,22 +671,41 @@
         legs(kind === 'majorette' ? s : IVORY) + figure(kind, s, i) + '</g></g></g></g>');
       x += GAP + rand(-3, 3);
     });
+    var end = x + 10;
     var smoke = '';
     for (var k = 0; k < 7; k++) {
-      smoke += '<circle class="b-puff" style="animation-delay:' + (k * .23).toFixed(2) + 's" cx="' + (6 + (k % 3) * 7) + '" cy="' +
+      smoke += '<circle class="b-puff" style="animation-delay:' + (k * .23).toFixed(2) + 's" cx="' + (TRAIL + 6 + (k % 3) * 7) + '" cy="' +
         (50 - (k % 2) * 9) + '" r="5.5" fill="#e9ecf2"/>';
     }
-    return { svg: smoke + parts.join(''), width: x + 10 };
+    // Behind the band: a dim back row the whole length, and the far rows of the trail.
+    var back = '<g opacity=".72">' + crowdRow(0, TRAIL, { y: 22, scale: .6, gap: [8, 13], thin: true }) +
+      crowdRow(TRAIL, end - 20, { y: 22, scale: .6, gap: [11, 17] }) + '</g>' +
+      crowdRow(0, TRAIL, { y: 16, scale: .72, gap: [9, 15], thin: true });
+    // In front: the near row of the trail, and protesters walking among the musicians.
+    var front = crowdRow(0, TRAIL, { y: 14, scale: .82, gap: [10, 17], thin: true }) +
+      crowdRow(TRAIL + 40, end - 30, { y: 15, scale: .78, gap: [30, 48] });
+    // The one with the megaphone leads the call, near the front of the trail.
+    var mega = '<g transform="translate(' + (TRAIL - 34) + ' 14) scale(.82)"><g class="b-crowd">' + protester('mega') + '</g></g>';
+    return { svg: back + smoke + parts.join('') + front + mega, width: end };
   }
 
-  var made = lineup();
   var band = document.createElement('div');
   band.className = 'band';
   band.setAttribute('aria-hidden', 'true');
-  band.innerHTML = '<div class="band-track"><svg viewBox="0 -10 ' + made.width.toFixed(0) + ' 72" height="100%" ' +
-    'preserveAspectRatio="xMinYMax meet" focusable="false">' + made.svg + '</svg></div>';   // constant markup built above; no data
   header.appendChild(band);
-  var track = band.firstChild;
+  var track = null;
+
+  /** Draws the scene into the header the first time it is needed. */
+  function build() {
+    if (track) return;
+    var made = scene();
+    band.innerHTML = '<div class="band-track"><svg viewBox="0 -10 ' + made.width.toFixed(0) + ' 72" height="100%" ' +
+      'preserveAspectRatio="xMinYMax meet" focusable="false">' + made.svg + '</svg></div>';   // constant markup built above; no data
+    track = band.firstChild;
+    track.addEventListener('animationend', function (e) {
+      if (e.target === track) band.classList.remove('is-on');
+    });
+  }
 
   /* -------------------------------------------------------------- parade */
 
@@ -536,6 +714,7 @@
   function parade() {
     if (marched || !motion) return;
     marched = true;
+    build();
     // Crossing time from the distance, rounded to whole bars of the march.
     var dist = window.innerWidth + track.getBoundingClientRect().width;
     bars = Math.max(6, Math.round(dist / CONFIG.speed / BAR));
@@ -544,10 +723,6 @@
     band.classList.add('is-on');
     startMusic(bars, 0);
   }
-  track.addEventListener('animationend', function (e) {
-    if (e.target === track) band.classList.remove('is-on');
-  });
-
   function scheduleParade() {
     var wait = rand(CONFIG.delayMin, CONFIG.delayMax);
     setTimeout(function go() {

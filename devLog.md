@@ -160,3 +160,16 @@ It did play, but only for someone who pressed Sound: the toggle defaulted off, a
 - **"No audio" as a requested switch means audio is the default.** Reading a request for an off switch as a request for an on switch inverted the feature and made it look broken
 - **Never schedule music into a suspended AudioContext and hope.** It plays from its own clock when it resumes, out of sync with whatever it was meant to accompany; schedule at unlock time from the current position
 - **Clear persisted state before each check of a persisted toggle, in every step.** The Spanish-page reading of "no AudioContext" was the English step's saved Sound on, turned off by the test's own click: the same trap already written down an hour earlier
+
+## 2026-11-07 (night) — Protesters and the chant
+
+Valdez asked for hundreds of pro-democracy protesters in the parade, among the band and on both sides, a long trail of stragglers behind, all chanting "Tell me what democracy looks like / This is what democracy looks like." The scene now draws a dim back row behind the band, a front row among the musicians and a long trail that thins to a few stragglers, with signs, flags, fists and a megaphone leading the call. The march gained four chant bars per cycle: synthesized crowd voices shaped by vowel formants on the rhythm of the words, with the browser's speech voice saying them on top.
+
+The scene is built at parade time instead of page load, which keeps ~2,500 SVG nodes out of the initial page; Lighthouse is unchanged at 100. Rendered checks: the crowd at 2.2x in three frames, real-size frames at 390 and 1280 behind the header text, 62 fps in Firefox, and the chant bars' level matched to the brass bars.
+
+### Mistakes → Rules
+
+- **An offline render bypasses the autoplay guard it is supposed to test around.** OfflineAudioContext reports "suspended" until it renders, so the new unlock check skipped scheduling and produced a silent file, which then overwrote the Desktop preview. A test harness that patches the page must be re-checked whenever the page's guards change
+- **Formant filters eat level.** Narrow bandpasses keep only the energy near two vowel frequencies, so voices that looked loud enough on paper rendered at half the brass level. Measure RMS per bar after any change to a filter bank, and raise the source, not the master
+- **Draw many, animate few.** Hundreds of figures stay smooth when they move in clusters of five under one animation each; per-figure animations would have meant hundreds of running transforms for the same picture
+- **Defer what only matters later.** A decoration that appears 3-20 seconds in should not cost DOM, layout or memory at load; build it when it is needed
