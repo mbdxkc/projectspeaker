@@ -17,6 +17,7 @@ https://projectspeaker.org
 ├── style.css         # Mobile first (source; built inline into index.html)
 ├── rotor.js          # Rotating hero headline (source; the page loads rotor.min.js)
 ├── rep.js            # "Find my representative" (source; the page loads rep.min.js)
+├── totop.js          # Back-to-top arrow (source; the page loads totop.min.js)
 ├── reps.json         # Every House seat and its member, built hourly by tools/reps.py
 ├── og.png            # Share card, rendered from tools/og.html
 ├── 404.html          # Not-found page (root-absolute paths, inline styles)
@@ -42,7 +43,7 @@ https://projectspeaker.org
 
 ## Build
 
-Edit `style.css`, `rotor.js` or `rep.js`, then run `tools/build.sh`. It minifies the stylesheet into the `<style id="css">` block in `index.html` (one request fewer before first paint) and minifies both scripts, stamping each script URL with its file's hash. `tools/build.sh --check` changes nothing and exits 1 when a build is stale. Requires `cleancss` and `terser`.
+Edit `style.css`, `rotor.js`, `rep.js` or `totop.js`, then run `tools/build.sh`. It minifies the stylesheet into the `<style id="css">` block in `index.html` (one request fewer before first paint) and minifies the scripts, stamping each script URL with its file's hash. `tools/build.sh --check` changes nothing and exits 1 when a build is stale. Requires `cleancss` and `terser`.
 
 ## Deploy
 

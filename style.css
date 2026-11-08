@@ -10,7 +10,7 @@
               kansasdeservesbetter.com on Nov. 7, 2026; the results-table rules
               that page needs were left behind.
   @author     mediaBrilliance digitalxtudio
-  @version    1.2.0
+  @version    1.3.0
   @updated    2026-11-07
   ============================================================================
 */
@@ -266,8 +266,32 @@ body.speaker { background: #0d1b33; }
 /* The context line under the rotor that never changes */
 .speaker .lede-fixed { font-size: 1.05rem; color: var(--muted); margin-top: 0; }
 
+/*
+  Back to top (#to-top, driven by totop.js). A 48px navy circle with a gold
+  arrow and a hairline gold edge, low in the corner where a thumb rests and
+  text rarely runs. It fades in once the hero is off screen; hidden, it is
+  visibility: hidden, so it cannot take focus or a tap. The insets keep it
+  clear of the iPhone home indicator and rounded corners.
+*/
+.to-top {
+  position: fixed; z-index: 50;
+  right: max(16px, env(safe-area-inset-right)); bottom: max(16px, env(safe-area-inset-bottom));
+  width: 48px; height: 48px; border-radius: 50%;
+  display: grid; place-items: center;
+  background: #132a52; color: #d8b86a; border: 1px solid rgba(216, 184, 106, .45);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, .35);
+  opacity: 0; visibility: hidden; transform: translateY(8px);
+  transition: opacity .25s ease, transform .25s ease, visibility 0s linear .25s;
+}
+.to-top.is-on { opacity: .92; visibility: visible; transform: none; transition: opacity .25s ease, transform .25s ease; }
+.to-top:hover, .to-top:focus-visible { opacity: 1; background: #1a3666; border-color: #d8b86a; }
+.speaker .to-top[hidden] { display: none !important; }
+
 /* Reduced motion: rotor.js never rotates, and no line animates in */
-@media (prefers-reduced-motion: reduce) { .rotor > .rotor-line, .rotor-cap > .rotor-line { transition: none; transform: none; } }
+@media (prefers-reduced-motion: reduce) {
+  .rotor > .rotor-line, .rotor-cap > .rotor-line { transition: none; transform: none; }
+  .to-top, .to-top.is-on { transition: none; transform: none; }
+}
 
 /* ----------------------------------------------------------------- footer */
 .site-footer { padding: 2.5rem 0 3rem; color: var(--muted); font-size: .9rem; text-align: center; }

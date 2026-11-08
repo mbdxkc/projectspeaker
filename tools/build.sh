@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # ============================================================================
 #   projectspeaker.org
-#   Build: inline the minified stylesheet, minify both scripts, stamp them
+#   Build: inline the minified stylesheet, minify the scripts, stamp them
 # ============================================================================
 #   @file       tools/build.sh
 #   @author     mediaBrilliance digitalxtudio
@@ -9,9 +9,9 @@
 # ============================================================================
 #
 #   index.html and es/index.html (the Spanish edition) each carry the
-#   minified stylesheet inline, in <style id="css">, and load rotor.min.js
-#   and rep.min.js (es/ through ../). An edit to style.css, rotor.js or
-#   rep.js ships as a no-op until this runs: the site looks unchanged and
+#   minified stylesheet inline, in <style id="css">, and load rotor.min.js,
+#   rep.min.js and totop.min.js (es/ through ../). An edit to style.css, rotor.js or
+#   rep.js or totop.js ships as a no-op until this runs: the site looks unchanged and
 #   nothing errors.
 #
 #   Why inline: the page is one screen of HTML that almost every visitor
@@ -120,6 +120,7 @@ stamp() {
 inline_css
 build rotor.js rotor.min.js;   stamp rotor.min.js
 build rep.js rep.min.js;       stamp rep.min.js
+build totop.js totop.min.js;   stamp totop.min.js
 
 if (( stale )); then
   echo "Build is out of date. Run tools/build.sh" >&2

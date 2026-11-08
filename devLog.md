@@ -112,3 +112,11 @@ The things that cannot be done tonight are dated in TODO.md instead: the Atlanti
 
 - **A file left on the Desktop is not a deliverable that stays delivered.** The Lighthouse folder written an hour earlier was gone when the Spanish reports went to join it; it was rebuilt from the scratchpad runs. Keep the sources until the user has the result, and check the target exists before writing into it
 - **Ads naming a sitting member of Congress are election ads to Google and Meta.** Put the verification requirement at the top of the copy, before anyone pastes a headline into an unverified account
+
+## 2026-11-07 (night) — Back-to-top arrow
+
+A 48 px navy circle with a gold arrow fades in at the bottom right once the hero leaves the screen and fades out when it returns, on both editions. An IntersectionObserver on `#top` does the work, so nothing runs during scrolling; hidden, the link is `visibility: hidden` and cannot take focus. Tested in Firefox at 390 and 1280 on `/` and `/es/`: hidden at the top, shown past the hero 16 px from both edges, back at `scrollY` 0 and hidden again after a tap.
+
+### Mistakes → Rules
+
+- **Fade with opacity, hide with visibility, and delay the visibility change until the fade ends.** Opacity alone leaves an invisible link in the tab order and under the thumb; `display: none` cannot fade. `visibility 0s linear .25s` on the way out, immediate on the way in
