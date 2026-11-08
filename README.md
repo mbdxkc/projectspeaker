@@ -25,6 +25,7 @@ https://projectspeaker.org
 ├── images/           # Studio mark
 ├── robots.txt, sitemap.xml
 ├── tools/            # build.sh, petition.py, reps.py, icons.py, og.html (not published)
+├── campaign/         # Ad, social, email and text copy (not published)
 ├── .github/          # workflows/petition.yml: hourly count and member list
 └── _config.yml       # Keeps internal files off GitHub Pages
 ```

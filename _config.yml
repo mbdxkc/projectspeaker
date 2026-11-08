@@ -7,3 +7,4 @@ exclude:
   - devLog.md
   - LICENSE
   - tools
+  - campaign

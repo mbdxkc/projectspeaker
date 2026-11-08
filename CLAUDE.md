@@ -46,6 +46,16 @@ Split off kansasdeservesbetter.com/speaker/ on Nov. 7, 2026. The history before 
 - Rotor line 1 is "Canalizado." (5.45 em in Oswald 700), pre-sized at `100cqi / 5.5` under `:lang(es)`
 - hreflang en, es and x-default in both heads and in `sitemap.xml`; each page links to the other under the kicker (`.lang`). The share card is English only and both pages use it
 
+## Campaign copy (`campaign/CAMPAIGN.md`)
+
+- Paste-ready Google Ads (English and Spanish responsive search ads, sitelinks, keywords), an eight-slide Instagram carousel with caption and alt text, one email and three texts, written Nov. 7. Lengths are checked by script: ad headlines 30 characters, descriptions 90, texts 160
+- It restates the record, so it is part of the sync: a changed figure on the page is a changed figure there. Excluded from Pages in `_config.yml`
+- Ads featuring Jeffries count as U.S. election ads on Google and as political ads on Meta; both need the advertiser verified first
+
+## Dated follow-ups
+
+In `dezVault/log/TODO.md`: the Atlantic quote (Nov. 9), confirming the caucus vote date (Nov. 12), retargeting the page after the caucus vote (Nov. 18), the AIPAC PAC monthly FEC report (Nov. 21) and the Jan. 4 check that the rep lookup moved to the 120th Congress.
+
 ## Record rules
 
 Every line here is read by people looking for an error.

@@ -101,3 +101,14 @@ The ledger is now odd-numbered, so the last item spans both columns at 900 px an
 - **Re-derive any size calibrated to a word when the word changes.** The headline pre-size divides by the first line's measured width; the Spanish word is 1.5% wider and would have overflowed the column for a frame
 - **The rotor's height is its tallest line in the fallback font, not in Oswald.** A Spanish headline long enough to wrap to a third line before the font loaded made the box shrink when Oswald arrived and moved the paragraph below it (CLS 0.038 live). Shortening that line ("Un PAC para proteger a congresistas.") brought CLS to 0 on three runs. Keep every rotor line near the length of its English counterpart
 - **Contract Spanish prepositions when composing strings.** "de" + "el distrito" is "del distrito"; a string table that concatenates parts needs the rule written into the function
+
+## 2026-11-07 (night) — Campaign copy, dated follow-ups
+
+`campaign/CAMPAIGN.md`: Google responsive search ads in English and Spanish (15 and eight headlines, four and three descriptions, every length checked by script), sitelinks to #record, #call, #faq and /es/, starter keywords, an eight-slide Instagram carousel with caption and per-slide alt text, an email, and three opt-in texts under 160 characters with STOP language. Every figure is one the page sources. Kept out of the published site.
+
+The things that cannot be done tonight are dated in TODO.md instead: the Atlantic quote, the caucus vote date, the post-caucus rewrite, the next AIPAC PAC filing and the Jan. 4 lookup check.
+
+### Mistakes → Rules
+
+- **A file left on the Desktop is not a deliverable that stays delivered.** The Lighthouse folder written an hour earlier was gone when the Spanish reports went to join it; it was rebuilt from the scratchpad runs. Keep the sources until the user has the result, and check the target exists before writing into it
+- **Ads naming a sitting member of Congress are election ads to Google and Meta.** Put the verification requirement at the top of the copy, before anyone pastes a headline into an unverified account
