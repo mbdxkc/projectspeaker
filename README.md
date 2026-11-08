@@ -18,7 +18,7 @@ https://projectspeaker.org
 ├── rotor.js          # Rotating hero headline (source; the page loads rotor.min.js)
 ├── rep.js            # "Find my representative" (source; the page loads rep.min.js)
 ├── totop.js          # Back-to-top arrow (source; the page loads totop.min.js)
-├── band.js           # Marching band, its march and the Sound/Motion toggles (source; band.min.js)
+├── band.js           # The parade (band, crowd, banners) and the Play/Pause button (source; band.min.js)
 ├── reps.json         # Every House seat and its member, built hourly by tools/reps.py
 ├── og.png            # Share card, rendered from tools/og.html
 ├── 404.html          # Not-found page (root-absolute paths, inline styles)
@@ -40,7 +40,7 @@ https://projectspeaker.org
 - **The signature count updates itself.** `.github/workflows/petition.yml` runs `tools/petition.py` and `tools/reps.py` every hour. The count line between `<!-- petition:start -->` and `<!-- petition:end -->` is rewritten only when the count changes, and the goal follows change.org. Never edit the count by hand.
 - **The speaker vote, explained:** six sourced answers to what people search before the vote (when, how many votes, can members break ranks), mirrored in FAQPage structured data.
 - **Spanish edition** at `/es/`, linked under the kicker on both pages, with hreflang alternates. The count, the rotor and the rep lookup all run in Spanish there.
-- **Marching band:** an SVG band, drumline and all, parades behind the header text once per visit, 3-20 seconds in, different every load (stragglers, missteps, sometimes a very serious trombonist), with an original synthesized march when Sound is on. Sound and Motion toggles sit at the right of the header; Motion off also stops the rotating headlines.
+- **Marching band:** an SVG band, drumline and all, parades behind the header text once per visit, 3-20 seconds in, different every load (stragglers, missteps, sometimes a very serious trombonist). It is silent; the synthesized march and drumline are switched off in the code. A Play/Pause button sits right of "Sign the petition"; Pause also holds the rotating headlines.
 - **Look:** House navy, Capitol gold and Democratic blue under the header carried over from Kansas Deserves Better.
 
 ## Build

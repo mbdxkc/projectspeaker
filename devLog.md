@@ -204,3 +204,7 @@ The close render turned up a bug as old as the band: sparkles and music notes ha
 - **When a bug is found in new code, search the old code for the same shape.** One regex over the file found the two older helpers with the same fault
 - **Hold a pole beside the body, not across it.** Arms drawn from both shoulders to a pole at the centre line cross the face; one hand up at the side reads as carrying and keeps the face clear
 - **Leave room for the motion, not just the shape.** A banner placed at the top of the viewBox was clipped at the top of its own ripple
+
+## 2026-11-07 (late) — Silent parade
+
+Valdez: "lose all the sound." `CONFIG.drums` joins `horns` and `chant` as false, so `startMusic()` returns before an AudioContext exists and no audio is created, scheduled or unlocked. The synth, score and first-tap unlock stay in `band.js` behind those flags. Verified in Firefox: Play runs the parade and no AudioContext is constructed.

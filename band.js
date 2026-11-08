@@ -6,7 +6,7 @@
   @desc       The parade behind the header text (marching band and a crowd
               of protesters), its march, and the header Play/Pause button.
   @author     mediaBrilliance digitalxtudio
-  @version    3.5.0
+  @version    3.6.0
   @updated    2026-11-07
   @a11y       The parade is decorative (aria-hidden, no pointer events,
               behind the header text at reduced opacity). Play/Pause is a
@@ -14,8 +14,9 @@
               language. Pause stops the parade and sound, holds the headline
               rotation (rotor.js reads the same class) and is remembered;
               reduced motion on the device counts as paused. The march is
-              drums only for now (CONFIG.drums; horns and chant off); it plays
-              only once the browser allows sound, after the first tap or key.
+              silent: all sound is off (CONFIG.drums, horns and chant are
+              false; the code stays so any of it can return). When on, it
+              plays only once the browser allows sound, after a tap or key.
   ============================================================================
 
   WHEN THE BAND MARCHES
@@ -105,7 +106,7 @@
     bpm: 96,           // the drums, and every step and stick, at a stroll
     volume: 0.2,
     serious: 0.4,      // chance the serious trombonist marches this load
-    drums: true,       // the drumline sound (Valdez, Nov. 7: "add the drums")
+    drums: false,      // the drumline; off (Valdez, Nov. 7: "lose all the sound"). true brings it back
     horns: false,      // the brass tune; off for now
     chant: false       // the democracy chant; off for now
   };
