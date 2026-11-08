@@ -299,14 +299,16 @@ body.speaker { background: #0d1b33; }
 }
 
 /*
-  Marching band (band.js). A strip across the header, above the header text
-  but under no pointer: it can never block a tap. The track slides from off
+  Marching band (band.js). A strip across the header, behind the header text
+  (the .wrap sits above it) at .5 opacity, under no pointer: it can never
+  block a tap or a word. The track slides from off
   the left edge to off the right in --band duration; every part inside moves
   only while .is-on, so an idle band costs nothing. transform-box: fill-box
   makes each origin the part's own box (a leg swings from its hip, a baton
   spins on its middle) at any header size.
 */
-.band { position: absolute; inset: 0; overflow: hidden; pointer-events: none; z-index: 2; visibility: hidden; }
+.site-header .wrap { position: relative; z-index: 2; }
+.band { position: absolute; inset: 0; overflow: hidden; pointer-events: none; z-index: 1; visibility: hidden; opacity: .5; }
 .band.is-on { visibility: visible; }
 .band-track { position: absolute; left: 0; bottom: 0; height: 100%; transform: translateX(-100%); }
 .band-track svg { display: block; height: 100%; width: auto; overflow: visible; }
@@ -326,6 +328,14 @@ body.speaker { background: #0d1b33; }
 .band.is-on .b-spark { transform-origin: center; animation: b-twinkle .9s ease-in-out infinite; }
 .band.is-on .b-puff { transform-origin: center; animation: b-puff 1.6s ease-out infinite; }
 .band.is-on .b-note { animation: b-note 1.2s ease-out infinite; }
+/* The odd ones: stragglers drift back and hurry up, trippers stumble once,
+   and the serious trombonist never bounces; only his slide moves, on the beat. */
+.band.is-on .b-stray { animation: b-stray 3.4s ease-in-out infinite; }
+.band.is-on .b-trip { transform-origin: 50% 100%; animation: b-trip .8s ease-in-out 1 both; }
+.band.is-on .b-steady .b-leg { animation-duration: .88s; }
+.band.is-on .b-slide { animation: b-slide .441s ease-in-out infinite alternate; }
+.band.is-on .b-cym { transform-origin: 50% 50%; animation: b-cym .88s ease-in-out infinite; }
+.band.is-on .b-cym2 { animation-name: b-cym2; }
 .band .b-puff, .band .b-note, .band .b-spark { opacity: 0; }
 @keyframes b-step { 50% { transform: translateY(-1.5px); } }
 @keyframes b-leg { 0%, 100% { transform: rotate(16deg); } 50% { transform: rotate(-16deg); } }
@@ -337,6 +347,11 @@ body.speaker { background: #0d1b33; }
 @keyframes b-twinkle { 0%, 100% { opacity: 0; transform: scale(.3); } 50% { opacity: 1; transform: scale(1.2); } }
 @keyframes b-puff { 0% { opacity: .8; transform: scale(.3); } 100% { opacity: 0; transform: translate(-6px, -10px) scale(1.9); } }
 @keyframes b-note { 0% { opacity: 1; transform: translate(0, 0); } 100% { opacity: 0; transform: translate(5px, -14px); } }
+@keyframes b-stray { 0%, 100% { transform: translateX(0); } 55% { transform: translateX(-16px); } 70% { transform: translateX(-16px) translateY(-1px); } }
+@keyframes b-trip { 0%, 100% { transform: none; } 25% { transform: rotate(14deg) translateY(2px); } 45% { transform: rotate(-9deg) translate(-2px, -3px); } 70% { transform: rotate(4deg); } }
+@keyframes b-slide { from { transform: translateX(0); } to { transform: translateX(7px); } }
+@keyframes b-cym { 0%, 80%, 100% { transform: translateX(0); } 90% { transform: translateX(5px) scaleY(1.15); } }
+@keyframes b-cym2 { 0%, 80%, 100% { transform: translateX(0); } 90% { transform: translateX(-5px) scaleY(1.15); } }
 
 /* Motion off, from the header toggle (band.js sets the class): no band, no
    fades, no smooth scroll. rotor.js reads the same class and holds line 1. */

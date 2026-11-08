@@ -133,3 +133,19 @@ Checks: the art rendered at four times size in a test-only tall header; the marc
 - **A breakpoint chosen for one header layout is wrong for the next.** The 430 px switch to "Sign" was measured without toggles; with them the full label overflowed from 430 to 539. When a header gains an element, re-derive every header breakpoint
 - **Sound that cannot be heard is a claim until it is rendered.** OfflineAudioContext turns a Web Audio score into a buffer whose length, level and peak can be checked headlessly
 - **A browser test that toggles a remembered setting inherits the last run's state.** The desktop frame showed no band because the previous step had saved Sound on and the click turned it off. Clear storage at the start of each test that touches a persisted toggle
+
+## 2026-11-07 (night) — Band, second pass: behind the text, drumline, horns
+
+Valdez's notes on the first band: behind the text at lower opacity, rows farther apart, stragglers and missteps, an occasional very serious trombonist, and music that sounds like a marching band, with far more drums and drummers. Then, after hearing a preview: keep the drums, lose the accordion sound in the melody.
+
+- The band now sits under the header text at .5 opacity, its lineup rebuilt on every load with a drumline (three snares, tenors, three graded bass drums, cymbals) and solo drummers among the horns, wide spacing, random stragglers, trips and out-of-step marchers, and a 40% chance of the trombonist
+- Crossing time follows the distance, ~70 px/s, rounded to whole bars so music and band end together
+- The march was rewritten in G minor at 136 bpm around a full drumline cadence. The brass was rebuilt twice: stacked detuned saws read as an organ, then as an accordion; one clean voice per player with a pitch scoop, an attack-flare filter, light saturation and a bell peak reads as horns
+- A WAV preview was rendered with OfflineAudioContext and left on the Desktop so the sound could be judged without waiting for a parade
+
+### Mistakes → Rules
+
+- **Detuned unison saws are the accordion.** The beating between voices a few cents apart is the reed sound. A section of horns is several clean single voices with timing spread, not one voice thickened by detune
+- **Brass is defined by how the tone moves, not by the waveform.** Brightness that follows the breath (filter opening on the attack, closing on release) and a pitch scoop into the note are what a listener hears as blown; a fixed filter on any waveform sounds like a keyboard
+- **Give the person a file they can hear.** A sound change described in words cannot be judged; a WAV on the Desktop turned "make it horns" into one listen
+- **Cutting voices cuts level.** Going from two oscillators to one per player dropped the horns under the drums; rebalance after any change to voice count
