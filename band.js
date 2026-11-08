@@ -7,14 +7,15 @@
               march, and the two header toggles that control them: Sound and
               Motion.
   @author     mediaBrilliance digitalxtudio
-  @version    2.1.0
+  @version    2.2.0
   @updated    2026-11-07
   @a11y       The band is decorative (aria-hidden, no pointer events, behind
               the header text at reduced opacity). Both toggles are real
               buttons with aria-pressed and a label in the page's language.
               Motion off stops the parade, the headline rotation (rotor.js
-              reads the same class) and smooth scrolling. Sound never starts
-              on its own: the visitor turns it on.
+              reads the same class) and smooth scrolling. Sound is on by
+              default and plays only once the browser allows it, after the
+              visitor's first tap or key press; the header toggle stops it.
   ============================================================================
 
   WHEN THE BAND MARCHES
@@ -40,7 +41,7 @@
   #pref-sound and #pref-motion in the header. Their state lives on <html> as
   classes (sound-on, motion-off, motion-on) and in localStorage, so a choice
   holds on the next visit; if storage is blocked, the defaults apply:
-  Sound off, Motion on, or Motion off when the device asks for reduced motion.
+  Sound on, Motion on, or Motion off when the device asks for reduced motion.
   "motion-on" records an explicit choice to override that device setting.
 
   THE MUSIC
@@ -56,8 +57,10 @@
   line in sixteenths with accents, ghosts and rolls, four tuned tenors, five
   split bass drums playing a melody of their own, and cymbal crashes and
   taps, all panned across the stereo field. No audio file is downloaded.
-  Browsers allow sound only after a tap or key press, which pressing the
-  Sound button is.
+  Browsers allow sound only after a tap, click or key press on the page. If
+  the band steps out before one, the march waits and starts at the first
+  one, at the bar the band has reached. On iPhone the page asks to play as
+  media (navigator.audioSession), so the silent switch does not mute it.
 */
 (function () {
   'use strict';
@@ -84,7 +87,7 @@
 
   var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   var motion = load('ps-motion') ? load('ps-motion') === 'on' : !reduce;
-  var sound = load('ps-sound') === 'on';
+  var sound = load('ps-sound') !== 'off';   // on unless the visitor turned it off
 
   /** Mirrors the state onto <html> and the buttons. */
   function apply() {
@@ -312,16 +315,56 @@
     };
   }
 
+  /**
+   * Plays the march `bars` long from `offset` seconds in. Browsers keep
+   * audio silent until the visitor has tapped, clicked or pressed a key on
+   * the page, so when the band steps out before that, the context stays
+   * suspended and nothing is scheduled; the first tap or key press then
+   * starts the march at the bar the band has reached (armUnlock). Scheduling
+   * into a suspended context instead would start the tune from bar 1 under a
+   * band already halfway across.
+   */
   function startMusic(bars, offset) {
     if (!sound || playing) return;
     if (!ctx) {
       var AC = window.AudioContext || window.webkitAudioContext;
       if (!AC) return;
+      // iPhone and iPad: play as media, so the ring/silent switch does not
+      // mute Web Audio (Safari 17+; elsewhere the property does not exist).
+      try { if (navigator.audioSession) navigator.audioSession.type = 'playback'; } catch (e) { /* older Safari */ }
       ctx = new AC();
     }
-    ctx.resume();
+    if (ctx.state !== 'running') {
+      ctx.resume().then(function () {
+        if (ctx.state === 'running') startMusic(bars, elapsed(offset));
+      }, function () { /* still locked; armUnlock waits for a gesture */ });
+      armUnlock();
+      return;
+    }
     playing = march(bars, offset || 0);
-    setTimeout(stopMusic, (bars * BAR - (offset || 0)) * 1000 + 2500);
+    clearTimeout(stopTimer);
+    stopTimer = setTimeout(stopMusic, (bars * BAR - (offset || 0)) * 1000 + 2500);
+  }
+  var stopTimer = 0, armed = false;
+
+  /** Seconds into the parade now, or the given offset when the band is not out. */
+  function elapsed(fallback) {
+    return band.classList.contains('is-on') ? (Date.now() - startedAt) / 1000 : (fallback || 0);
+  }
+
+  /** Waits for the visitor's first tap, click or key press, then joins the band. */
+  function armUnlock() {
+    if (armed) return;
+    armed = true;
+    function go() {
+      ['pointerdown', 'keydown', 'touchend'].forEach(function (t) { window.removeEventListener(t, go, true); });
+      armed = false;
+      if (!ctx || !sound) return;
+      ctx.resume().then(function () {
+        if (band.classList.contains('is-on')) startMusic(bars, elapsed(0));
+      });
+    }
+    ['pointerdown', 'keydown', 'touchend'].forEach(function (t) { window.addEventListener(t, go, true); });
   }
   function stopMusic() {
     if (playing) { playing.stop(); playing = null; }

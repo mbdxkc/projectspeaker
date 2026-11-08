@@ -149,3 +149,14 @@ Valdez's notes on the first band: behind the text at lower opacity, rows farther
 - **Brass is defined by how the tone moves, not by the waveform.** Brightness that follows the breath (filter opening on the attack, closing on release) and a pitch scoop into the note are what a listener hears as blown; a fixed filter on any waveform sounds like a keyboard
 - **Give the person a file they can hear.** A sound change described in words cannot be judged; a WAV on the Desktop turned "make it horns" into one listen
 - **Cutting voices cuts level.** Going from two oscillators to one per player dropped the horns under the drums; rebalance after any change to voice count
+
+## 2026-11-07 (night) — "The music does not play"
+
+It did play, but only for someone who pressed Sound: the toggle defaulted off, and a remembered "on" never survived the autoplay rule, because a parade that starts on its own runs before any tap, the audio context stays suspended, and nothing ever resumed it. The icon said on and the page was silent. Now Sound defaults on, the march waits for the visitor's first tap, click or key press and then joins at the bar the band has reached, and iPhones are asked to treat it as media so the silent switch does not mute it. Verified in Firefox by tapping the audio graph at the destination: silent and suspended before a gesture, a real signal within a second and a half after one, silent again after the toggle.
+
+### Mistakes → Rules
+
+- **A test that only exercises the button cannot find an autoplay bug.** Every earlier check pressed Sound, which is itself the gesture that unlocks audio. Test the path where the sound is meant to start without that press, and measure the signal at the destination, not the scheduling
+- **"No audio" as a requested switch means audio is the default.** Reading a request for an off switch as a request for an on switch inverted the feature and made it look broken
+- **Never schedule music into a suspended AudioContext and hope.** It plays from its own clock when it resumes, out of sync with whatever it was meant to accompany; schedule at unlock time from the current position
+- **Clear persisted state before each check of a persisted toggle, in every step.** The Spanish-page reading of "no AudioContext" was the English step's saved Sound on, turned off by the test's own click: the same trap already written down an hour earlier
