@@ -6,7 +6,7 @@
   @desc       The parade behind the header text (marching band and a crowd
               of protesters), its march, and the header Play/Pause button.
   @author     mediaBrilliance digitalxtudio
-  @version    3.4.0
+  @version    3.5.0
   @updated    2026-11-07
   @a11y       The parade is decorative (aria-hidden, no pointer events,
               behind the header text at reduced opacity). Play/Pause is a
@@ -40,6 +40,13 @@
   what each person is doing. The serious
   trombonist (about two loads in five) has sunglasses, a level gaze, no
   bounce and a slide that never misses.
+
+  THE BANNERS
+  Cheerleaders lead the parade: three carry a long banner reading "TELL ME
+  WHAT DEMOCRACY LOOKS LIKE" overhead, and tumblers cartwheel, back-flip and
+  toe-touch ahead of it. Ordinary citizens bring up the rear with "THIS IS
+  WHAT DEMOCRACY LOOKS LIKE!" Both banners ripple: each is drawn once and
+  shown through fourteen slices that bob a beat apart (banner()).
 
   THE CROWD
   Hundreds of pro-democracy protesters with signs, flags, raised fists and
@@ -478,8 +485,9 @@
   var GAP = 58;          // units between rows of the band; wide on purpose
 
   function spark(x, y, d) {
-    return '<path class="b-spark" style="animation-delay:' + d.toFixed(2) + 's" transform="translate(' + x + ' ' + y + ')" ' +
-      'd="M0-2.6L.6-.6 2.6 0 .6.6 0 2.6-.6.6-2.6 0-.6-.6z" fill="#fff"/>';
+    // Position on the wrapper, twinkle on the star: see pompom().
+    return '<g transform="translate(' + x + ' ' + y + ')"><path class="b-spark" style="animation-delay:' + d.toFixed(2) + 's" ' +
+      'd="M0-2.6L.6-.6 2.6 0 .6.6 0 2.6-.6.6-2.6 0-.6-.6z" fill="#fff"/></g>';
   }
   function legs(pants) {
     return ['b-la', 'b-lb'].map(function (c, i) {
@@ -507,9 +515,9 @@
     return '<path d="M' + x1 + ' ' + y1 + 'L' + x2 + ' ' + y2 + '" stroke="' + color + '" stroke-width="3.4" stroke-linecap="round"/>';
   }
   function note(x, y, d) {
-    return '<g class="b-note" style="animation-delay:' + d.toFixed(2) + 's" transform="translate(' + x + ' ' + y + ')">' +
+    return '<g transform="translate(' + x + ' ' + y + ')"><g class="b-note" style="animation-delay:' + d.toFixed(2) + 's">' +
       '<path d="M0 0v-6l4-1.2v6" stroke="' + GOLD + '" stroke-width="1.2" fill="none"/>' +
-      '<ellipse cx="-1" cy="0" rx="1.6" ry="1.2" fill="' + GOLD + '"/><ellipse cx="3" cy="-1.2" rx="1.6" ry="1.2" fill="' + GOLD + '"/></g>';
+      '<ellipse cx="-1" cy="0" rx="1.6" ry="1.2" fill="' + GOLD + '"/><ellipse cx="3" cy="-1.2" rx="1.6" ry="1.2" fill="' + GOLD + '"/></g></g>';
   }
   function sticks(x, y) {
     return '<path class="b-stick" d="M' + x + ' ' + y + 'l4 5" stroke="' + WOOD + '" stroke-width="1.4" stroke-linecap="round"/>' +
@@ -691,6 +699,87 @@
     return out;
   }
 
+  /* ------------------------------------------------------------ banners */
+
+  var BANNER_H = 13;
+
+  /**
+   * A long banner reading `text`, `len` units wide, its top at y -9, that
+   * ripples along its length (top at y -7, clear of the header edge at the
+   * top of a ripple). The cloth and lettering are drawn once in
+   * <defs>; narrow slices each show their own part of it through a nested
+   * <svg> window and bob a beat after the slice before, so the wave travels
+   * down the banner while the words stay whole.
+   */
+  function banner(id, text, len, cloth, ink) {
+    var N = 14, w = len / N, out = '<defs><g id="' + id + '">' +
+      '<rect x="0" y="0" width="' + len + '" height="' + BANNER_H + '" rx="1.5" fill="' + cloth + '" stroke="' + GOLD + '" stroke-width="1"/>' +
+      '<text x="' + (len / 2) + '" y="9.4" text-anchor="middle" textLength="' + (len - 22) + '" lengthAdjust="spacingAndGlyphs" ' +
+      'font-family="Oswald, Arial Narrow, sans-serif" font-weight="700" font-size="8.4" fill="' + ink + '">' + text + '</text>' +
+      '<path d="M5 6.5l.8 1.6 1.8.2-1.3 1.2.4 1.8-1.7-.9-1.6.9.4-1.8-1.4-1.2 1.8-.2zM' + (len - 6) + ' 6.5l.8 1.6 1.8.2-1.3 1.2.4 1.8-1.7-.9-1.6.9.4-1.8-1.4-1.2 1.8-.2z" fill="' + RED + '" transform="translate(0 -3)"/>' +
+      '</g></defs>';
+    for (var k = 0; k < N; k++) {
+      out += '<g class="b-ripple" style="animation-delay:-' + (k * 0.11).toFixed(2) + 's">' +
+        '<svg x="' + (k * w).toFixed(2) + '" y="-7" width="' + (w + 0.6).toFixed(2) + '" height="' + BANNER_H + '" ' +
+        'viewBox="' + (k * w).toFixed(2) + ' 0 ' + (w + 0.6).toFixed(2) + ' ' + BANNER_H + '" overflow="hidden"><use href="#' + id + '"/></svg></g>';
+    }
+    return out;
+  }
+
+  /** A pom-pom: a burst of strands around a ball, shaking on its own clock. */
+  function pompom(x, y, c) {
+    // Position outside, motion inside: a CSS animation's transform replaces
+    // the element's own transform attribute, so one group cannot do both.
+    return '<g transform="translate(' + x + ' ' + y + ')"><g class="b-pom" style="' + clock(.24, .4) + '">' +
+      '<circle r="3.2" fill="' + c + '"/><circle cx="-2.4" cy="-1.6" r="1.4" fill="#fff" opacity=".6"/>' +
+      '<path d="M0-4.6V4.6M-4.6 0H4.6M-3.3-3.3l6.6 6.6M3.3-3.3l-6.6 6.6" stroke="' + c + '" stroke-width="1.1"/></g></g>';
+  }
+
+  /**
+   * A cheerleader in a 36-unit slot, facing right: white top with a gold
+   * chevron, blue pleated skirt, ponytail. Poses: carry (both hands up on a
+   * banner pole), cart (arms and legs spread, cartwheeling), flip (tucked,
+   * back handspring), jump (toe-touch, pom-poms high).
+   */
+  function cheerleader(pose) {
+    var s = any(SKIN), hair = any(HAIR), pom = Math.random() < 0.5 ? GOLD : BLUE;
+    var limb = 'stroke="' + s + '" stroke-width="3" stroke-linecap="round" fill="none"';
+    var legsStraight = '<path d="M15 44v13M21 44v13" ' + limb + '/><path d="M12.5 57.5h5M18.5 57.5h5" stroke="#fff" stroke-width="2.6" stroke-linecap="round"/>';
+    var legsSpread = '<path d="M15 44l-6 13M21 44l6 13" ' + limb + '/>';
+    var body = '<path d="M10 40h17l2.5 6h-22z" fill="' + BLUE + '"/><path d="M13 40l-1 6M18.5 40v6M24 40l1 6" stroke="#163c96" stroke-width=".8"/>' +
+      '<rect x="11.5" y="24" width="14" height="17" rx="3" fill="' + IVORY + '"/><path d="M12 28l6.5 5 6.5-5" stroke="' + GOLD + '" stroke-width="1.8" fill="none"/>' +
+      '<circle cx="18.5" cy="18.5" r="5" fill="' + s + '"/><path d="M13.6 17.5a5 5 0 0 1 9.8 0c-3-1.6-6.6-1.6-9.8 0z" fill="' + hair + '"/>' +
+      '<path d="M22.8 15c4 0 5 4 3.4 8" stroke="' + hair + '" stroke-width="2.6" stroke-linecap="round" fill="none"/>' +
+      '<circle cx="23.2" cy="14.8" r="1.2" fill="' + RED + '"/>';
+    switch (pose) {
+      case 'carry':
+        // The pole stands off the shoulder, held up in one hand, so the arm never crosses the face;
+        // the other hand keeps a pom-pom at the hip.
+        return legsStraight + body + '<path d="M27.5 6V38" stroke="#8a6a2b" stroke-width="1.4"/>' +
+          '<path d="M24.5 26l2.8-11" ' + limb + '/><path d="M12.5 27l-3 9" ' + limb + '/>' + pompom(9, 37, pom);
+      case 'jump':
+        return '<g class="b-hop" style="' + clock(1.1, 1.8) + '">' + legsStraight + body + '<path d="M12.5 26l-5-12M24.5 26l5-12" ' + limb + '/>' +
+          pompom(7, 12, pom) + pompom(30, 12, pom) + '</g>';
+      case 'cart':
+        return '<g class="b-cart" style="' + clock(1.4, 2.2) + '">' + legsSpread + body + '<path d="M12.5 26l-7-9M24.5 26l7-9" ' + limb + '/>' +
+          pompom(5, 16, pom) + pompom(32, 16, pom) + '</g>';
+      case 'flip':
+        return '<g class="b-flip" style="' + clock(1.6, 2.4) + '">' + legsStraight + body + '<path d="M12.5 26l-4-10M24.5 26l4-10" ' + limb + '/>' +
+          pompom(8, 15, pom) + pompom(29, 15, pom) + '</g>';
+    }
+    return '';
+  }
+
+  /** An ordinary citizen holding a banner pole up with both hands (protester proportions). */
+  function citizen() {
+    var skin = any(SKIN), shirt = any(SHIRTS), hair = any(HAIR);
+    var limb = 'stroke="' + skin + '" stroke-width="2.6" stroke-linecap="round" fill="none"';
+    return '<rect x="9" y="46" width="3.4" height="13" rx="1.2" fill="#2b2f3a"/><rect x="13.2" y="46" width="3.4" height="13" rx="1.2" fill="#2b2f3a"/>' +
+      '<rect x="7" y="30" width="11" height="17" rx="3" fill="' + shirt + '"/><circle cx="12.5" cy="25" r="4.3" fill="' + skin + '"/>' +
+      '<path d="M8.2 24.5a4.3 4.3 0 0 1 8.6-1.5c-2-1-5-1.2-8.6 1.5z" fill="' + hair + '"/>' +
+      '<path d="M19.5 6V44" stroke="#8a6a2b" stroke-width="1.3"/><path d="M16.5 33l2.8-17" ' + limb + '/><path d="M9 33l-1.4 8" ' + limb + '/>';
+  }
+
   /**
    * The whole scene, back to front, the way it is drawn (the parade moves
    * right, so the front is the largest x): the trail of protesters, the
@@ -751,7 +840,30 @@
     // The one with the megaphone leads the call, near the front of the trail.
     var mega = '<g transform="translate(' + (TRAIL - 34) + ' 14) scale(.82)">' +
       pace(20, '<g class="b-walk" style="' + clock(.46, .56) + '">' + protester('mega') + '</g>') + '</g>';
-    return { svg: back + smoke + parts.join('') + front + mega, width: end };
+    // Leading: cheerleaders. Three carry "Tell me what democracy looks like"
+    // overhead; tumblers cartwheel, flip and jump ahead of it.
+    var FRONT_LEN = 200, lead = '<g transform="translate(' + (end + 24).toFixed(1) + ' 0)">' +
+      banner('ban-tell', 'TELL ME WHAT DEMOCRACY LOOKS LIKE', FRONT_LEN, IVORY, NAVY);
+    [6 - 27.5, FRONT_LEN / 2 - 27.5, FRONT_LEN - 6 - 27.5].forEach(function (cx) {   // poles at x 27.5 in the figure
+      lead += '<g transform="translate(' + cx.toFixed(1) + ' 0)">' + pace(4, '<g class="b-bob">' + cheerleader('carry') + '</g>', 0.05) + '</g>';
+    });
+    ['jump', 'cart', 'flip', 'cart', 'jump'].forEach(function (pose, k) {
+      lead += '<g transform="translate(' + (FRONT_LEN + 22 + k * rand(30, 40)).toFixed(1) + ' 0)">' + pace(10, cheerleader(pose), 0.1) + '</g>';
+    });
+    lead += '</g>';
+    var leadEnd = end + 24 + FRONT_LEN + 22 + 5 * 40 + 20;
+    // Bringing up the rear: ordinary citizens holding "This is what
+    // democracy looks like!" behind the last of the stragglers.
+    var REAR_LEN = 220, rear = banner('ban-this', 'THIS IS WHAT DEMOCRACY LOOKS LIKE!', REAR_LEN, '#1f4fbf', '#ffffff');
+    [6 - 19.5, REAR_LEN / 3 - 19.5, 2 * REAR_LEN / 3 - 19.5, REAR_LEN - 6 - 19.5].forEach(function (cx) {   // poles at x 19.5
+      rear += '<g transform="translate(' + cx.toFixed(1) + ' 0)">' + pace(5, '<g class="b-walk" style="' + clock(.6, .8) + '">' + citizen() + '</g>', 0.08) + '</g>';
+    });
+    var SHIFT = REAR_LEN + 50;   // the rest of the parade starts after the rear banner
+    return {
+      svg: '<g transform="translate(24 0)">' + rear + '</g>' +
+        '<g transform="translate(' + SHIFT + ' 0)">' + back + smoke + parts.join('') + front + mega + lead + '</g>',
+      width: SHIFT + leadEnd
+    };
   }
 
   var band = document.createElement('div');

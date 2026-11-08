@@ -191,3 +191,16 @@ Checked in Firefox: 183 people with 164 distinct behavior periods and 31 tempos,
 - **Ask when one word can mean two opposite things.** "Lose the sign" next to "raising a sign" could have deleted the protest signs; one question found it meant the song
 - **Randomize timing per element, not per group, when the request is "not in sync".** Cluster animation kept the crowd cheap and made it move in blocks; per-figure clocks cost more and give the picture asked for. Measure the frame rate after switching
 - **A trained group and a crowd need different randomness.** The same drift and tempo spread on both made the band look like part of the crowd; separate parameters keep the band a band
+
+## 2026-11-07 (late) — Cheerleaders and citizens with banners
+
+Valdez asked for the parade to be led by gymnastic cheerleaders carrying a long waving banner, "Tell me what democracy looks like," and closed by ordinary citizens with "This is what democracy looks like!" Three cheerleaders now carry the first banner with five tumblers ahead of it (cartwheels, back flips, toe-touch jumps, pom-poms, each on its own clock); four citizens carry the second behind the last stragglers. Each banner ripples: the cloth and lettering are defined once and shown through fourteen windowed slices that bob in sequence, so the wave travels while the text stays whole.
+
+The close render turned up a bug as old as the band: sparkles and music notes had a `transform` attribute and an animated class on the same element, so the animation replaced the position and every sparkle and note had been drawn at its figure's top-left corner, floating in the sky. The new pom-poms had the same fault. All three now position on a wrapper and animate inside it, and a search finds no element with both left.
+
+### Mistakes → Rules
+
+- **A CSS transform animation replaces an SVG element's transform attribute.** Put position and motion on different elements. The symptom is decoration floating at the top-left of each figure, which reads as intentional at small sizes: it survived several reviews before a large render made it obvious
+- **When a bug is found in new code, search the old code for the same shape.** One regex over the file found the two older helpers with the same fault
+- **Hold a pole beside the body, not across it.** Arms drawn from both shoulders to a pole at the centre line cross the face; one hand up at the side reads as carrying and keeps the face clear
+- **Leave room for the motion, not just the shape.** A banner placed at the top of the viewBox was clipped at the top of its own ripple

@@ -354,6 +354,12 @@ body.speaker { background: #0d1b33; }
 .band.is-on .b-shake { transform-origin: 50% 50%; animation: b-shake .18s ease-in-out infinite alternate; }
 .band.is-on .b-toot { transform-origin: 0 100%; animation: b-toot 3s ease-in-out infinite; }
 .band.is-on .b-shout { animation: b-twinkle .44s ease-in-out infinite; }
+/* Banners ripple slice by slice; cheerleaders tumble on their own clocks. */
+.band.is-on .b-ripple { animation: b-ripple 1.25s ease-in-out infinite; }
+.band.is-on .b-pom { transform-origin: center; animation: b-pom .3s ease-in-out infinite alternate; }
+.band.is-on .b-hop { animation: b-hop 1.4s ease-in-out infinite; }
+.band.is-on .b-cart { transform-origin: 50% 50%; animation: b-cart 1.8s linear infinite; }
+.band.is-on .b-flip { transform-origin: 50% 60%; animation: b-flip 2s ease-in-out infinite; }
 .band .b-puff, .band .b-note, .band .b-spark { opacity: 0; }
 @keyframes b-step { 50% { transform: translateY(-1.5px); } }
 @keyframes b-leg { 0%, 100% { transform: rotate(16deg); } 50% { transform: rotate(-16deg); } }
@@ -369,6 +375,11 @@ body.speaker { background: #0d1b33; }
 @keyframes b-trip { 0%, 100% { transform: none; } 25% { transform: rotate(14deg) translateY(2px); } 45% { transform: rotate(-9deg) translate(-2px, -3px); } 70% { transform: rotate(4deg); } }
 @keyframes b-oops { 0%, 100% { transform: none; } 20%, 60% { transform: scaleX(-1); } 75% { transform: scaleX(-1) translateY(-1px); } }
 @keyframes b-fumble { 0%, 100% { transform: none; } 25% { transform: translate(2px, -14px) rotate(40deg); } 45% { transform: translate(6px, 16px) rotate(160deg); } 60% { transform: translate(6px, 30px) rotate(200deg); } 80% { transform: translate(2px, 6px) rotate(60deg); } }
+@keyframes b-ripple { 0%, 100% { transform: translateY(-1.6px); } 50% { transform: translateY(1.6px); } }
+@keyframes b-pom { from { transform: scale(.85) rotate(-10deg); } to { transform: scale(1.15) rotate(10deg); } }
+@keyframes b-hop { 0%, 55%, 100% { transform: translateY(0); } 70% { transform: translateY(-11px); } 85% { transform: translateY(0); } }
+@keyframes b-cart { 0%, 30% { transform: rotate(0); } 70%, 100% { transform: rotate(360deg); } }
+@keyframes b-flip { 0%, 40% { transform: translateY(0) rotate(0); } 70% { transform: translateY(-12px) rotate(-200deg); } 85%, 100% { transform: translateY(0) rotate(-360deg); } }
 @keyframes b-pace { from { transform: translateX(0); } to { transform: translateX(var(--drift, 0px)); } }
 @keyframes b-raise { 0%, 35%, 100% { transform: translateY(7px) rotate(-6deg); } 45%, 80% { transform: translateY(0) rotate(4deg); } }
 @keyframes b-fist { 0%, 50%, 100% { transform: translateY(9px); } 58%, 70%, 82% { transform: translateY(0); } 64%, 76% { transform: translateY(4px); } }
