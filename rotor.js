@@ -8,7 +8,7 @@
               (#rotor-ref) change together, so a headline is never on screen
               with another headline's caption or source.
   @author     mediaBrilliance digitalxtudio
-  @version    1.1.0
+  @version    1.2.0
   @updated    2026-11-07
   @a11y       Pause button (WCAG 2.2.2), hover and focus hold the current line,
               reduced motion never rotates, screen readers always read line 1
@@ -28,9 +28,10 @@
 
   WHEN IT STOPS
   It holds while the pointer is over the headline or caption, while the
-  record link has keyboard focus, while the tab is in the background and
-  while the Pause button is pressed. Under prefers-reduced-motion it never
-  starts, and the page keeps "Earmarked.".
+  record link has keyboard focus, while the tab is in the background, while
+  the Pause button is pressed and while Motion is off in the header (or the
+  device asks for reduced motion and the visitor has not turned Motion on).
+  Then the page keeps the line on screen, "Earmarked." at first.
 
   LANGUAGE
   The words the script writes come from data attributes in the markup, so the
@@ -136,8 +137,15 @@
   });
   (document.fonts ? document.fonts.ready : Promise.resolve()).then(fit);
 
-  // Sizing applies to everyone; rotation stops here for reduced motion.
-  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  // Sizing applies to everyone. Rotation follows the header's Motion toggle
+  // (band.js): class motion-off on <html> holds the current line. With no
+  // toggle choice, the device's reduced-motion setting does the same, unless
+  // the visitor turned Motion on (class motion-on).
+  var root = document.documentElement;
+  var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  function still() {
+    return root.classList.contains('motion-off') || (reduce && !root.classList.contains('motion-on'));
+  }
 
   /* ------------------------------------------------------------- rotation */
 
@@ -183,7 +191,7 @@
   // Each tick shows the next line from the bag. When the bag is empty the
   // cycle is over: "Earmarked." (line 0) comes back and the bag refills.
   function tick() {
-    if (paused || held || document.hidden) return;
+    if (paused || held || document.hidden || still()) return;
     if (bag.length) { show(bag.pop()); return; }
     show(0);
     refill();

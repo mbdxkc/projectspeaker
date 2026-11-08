@@ -120,3 +120,16 @@ A 48 px navy circle with a gold arrow fades in at the bottom right once the hero
 ### Mistakes → Rules
 
 - **Fade with opacity, hide with visibility, and delay the visibility change until the fade ends.** Opacity alone leaves an invisible link in the tab order and under the thumb; `display: none` cannot fade. `visibility 0s linear .25s` on the way out, immediate on the way in
+
+## 2026-11-07 (night) — Marching band, Sound and Motion toggles
+
+Valdez asked for an SVG marching band crossing the header with music, batons, folding chairs, sparkle and smoke, starting at a random 3-20 s, plus separate sound and motion switches at the right of the header. `band.js` draws ten marchers and the effects as one SVG, sends it across in 16 s once per load, and plays an original synthesized march; the toggles are aria-pressed buttons remembered per visitor. Motion off also holds the headline rotation, and the device's reduced-motion setting is the default.
+
+Checks: the art rendered at four times size in a test-only tall header; the march rendered offline (16.1 s of sound, peak 0.42); Firefox at ten widths from 320 to 768 on both pages after the header was retuned; toggles, persistence across reload and the rotor holding under Motion off; Lighthouse 100 in all four categories, mobile and desktop, three runs, with the band in place.
+
+### Mistakes → Rules
+
+- **Two 40 px buttons broke a header that had 46 px of slack.** The mark, toggles and full nav label needed 505 px; at 320 the first build overflowed by 74 px (84 in Spanish). Measure every width the header steps through, in both languages, before calling a header addition done; "Firma" is the binding case at 320
+- **A breakpoint chosen for one header layout is wrong for the next.** The 430 px switch to "Sign" was measured without toggles; with them the full label overflowed from 430 to 539. When a header gains an element, re-derive every header breakpoint
+- **Sound that cannot be heard is a claim until it is rendered.** OfflineAudioContext turns a Web Audio score into a buffer whose length, level and peak can be checked headlessly
+- **A browser test that toggles a remembered setting inherits the last run's state.** The desktop frame showed no band because the previous step had saved Sound on and the click turned it off. Clear storage at the start of each test that touches a persisted toggle

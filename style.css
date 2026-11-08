@@ -10,7 +10,7 @@
               kansasdeservesbetter.com on Nov. 7, 2026; the results-table rules
               that page needs were left behind.
   @author     mediaBrilliance digitalxtudio
-  @version    1.3.0
+  @version    1.4.0
   @updated    2026-11-07
   ============================================================================
 */
@@ -229,11 +229,11 @@ body.speaker { background: #0d1b33; }
   color: var(--muted); font: inherit; letter-spacing: inherit; text-transform: inherit; cursor: pointer; }
 .rotor-pause:hover { color: var(--text); border-color: var(--muted); }
 
-/* Header on narrow phones: "America Deserves a Speaker" plus "Sign the petition"
-   needs about 400px plus margins, so below 430px the nav link shows only
-   "Sign". " the petition" is hidden visually, not removed,
-   so the link is still announced (and voice-controllable) as "Sign the petition". */
-@media (max-width: 429px) {
+/* Header below 540px: the mark, the two toggles and "Sign the petition" need
+   about 505px with margins, so the nav link shows only "Sign" (or "Firma").
+   " the petition" is hidden visually, not removed, so the link is still
+   announced (and voice-controllable) as "Sign the petition". */
+@media (max-width: 539px) {
   .speaker .nav-long { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
 }
 
@@ -265,6 +265,85 @@ body.speaker { background: #0d1b33; }
 
 /* The context line under the rotor that never changes */
 .speaker .lede-fixed { font-size: 1.05rem; color: var(--muted); margin-top: 0; }
+
+/*
+  Sound and motion toggles (#pref-sound, #pref-motion; band.js). Two icon
+  buttons at the right of the header, before "Sign". aria-pressed="true"
+  shows the "on" icon in gold; "false" shows the struck-through one, muted.
+*/
+.prefs { display: flex; gap: .125rem; margin-left: auto; }
+.pref { width: 40px; height: 40px; display: grid; place-items: center; padding: 0; border: 0; border-radius: 50%;
+  background: none; color: var(--muted); cursor: pointer; }
+.pref svg { width: 20px; height: 20px; }
+.pref:hover { color: var(--text); background: rgba(255, 255, 255, .06); }
+.pref[aria-pressed="true"] { color: var(--accent); }
+.pref[aria-pressed="true"] .i-off, .pref[aria-pressed="false"] .i-on { display: none; }
+.speaker .pref[hidden] { display: none !important; }
+/* Phones: the mark, two toggles and "Sign" need about 394 px at full size
+   (404 with the Spanish "Firma"), so below 430 px the gaps close, the
+   buttons narrow to 34 px (still over WCAG's 24 px minimum target) and the
+   mark steps down; below 375 px it steps down again. Measured in Firefox at
+   320 to 540 on both pages; the Spanish "Firma" at 320 is the tightest fit. */
+@media (max-width: 429px) {
+  .site-header .wrap { gap: .5rem; }
+  .prefs { gap: 0; }
+  .pref { width: 34px; }
+  .mark { font-size: .92rem; letter-spacing: .01em; }
+}
+@media (max-width: 374px) {
+  .mark { font-size: .8rem; letter-spacing: 0; }
+}
+@media (max-width: 339px) {
+  .mark { font-size: .76rem; }
+  .pref { width: 32px; }
+}
+
+/*
+  Marching band (band.js). A strip across the header, above the header text
+  but under no pointer: it can never block a tap. The track slides from off
+  the left edge to off the right in --band duration; every part inside moves
+  only while .is-on, so an idle band costs nothing. transform-box: fill-box
+  makes each origin the part's own box (a leg swings from its hip, a baton
+  spins on its middle) at any header size.
+*/
+.band { position: absolute; inset: 0; overflow: hidden; pointer-events: none; z-index: 2; visibility: hidden; }
+.band.is-on { visibility: visible; }
+.band-track { position: absolute; left: 0; bottom: 0; height: 100%; transform: translateX(-100%); }
+.band-track svg { display: block; height: 100%; width: auto; overflow: visible; }
+.band.is-on .band-track { animation: band-cross 16s linear forwards; }
+@keyframes band-cross { from { transform: translateX(-100%); } to { transform: translateX(100vw); } }
+.band [class^="b-"], .band [class*=" b-"] { transform-box: fill-box; }
+.band.is-on .b-bob { animation: b-step .5s ease-in-out infinite; }
+.band.is-on .b-leg { transform-origin: 50% 0; animation: b-leg 1s ease-in-out infinite; }
+.band.is-on .b-lb { animation-delay: -.5s; }
+.band.is-on .b-baton { transform-origin: center; animation: b-spin .6s linear infinite; }
+.band.is-on .b-plume { transform-origin: 50% 100%; animation: b-sway 1s ease-in-out infinite; }
+.band.is-on .b-chair { transform-origin: center; animation: b-chair 1s ease-in-out infinite; }
+.band.is-on .b-stick { transform-origin: 0 0; animation: b-hit .25s ease-in-out infinite alternate; }
+.band.is-on .b-stick2 { animation-delay: -.125s; }
+.band.is-on .b-mallet { transform-origin: 100% 0; animation: b-hit .5s ease-in-out infinite alternate; }
+.band.is-on .b-flag { transform-origin: 0 50%; animation: b-wave .8s ease-in-out infinite alternate; }
+.band.is-on .b-spark { transform-origin: center; animation: b-twinkle .9s ease-in-out infinite; }
+.band.is-on .b-puff { transform-origin: center; animation: b-puff 1.6s ease-out infinite; }
+.band.is-on .b-note { animation: b-note 1.2s ease-out infinite; }
+.band .b-puff, .band .b-note, .band .b-spark { opacity: 0; }
+@keyframes b-step { 50% { transform: translateY(-1.5px); } }
+@keyframes b-leg { 0%, 100% { transform: rotate(16deg); } 50% { transform: rotate(-16deg); } }
+@keyframes b-spin { to { transform: rotate(360deg); } }
+@keyframes b-sway { 0%, 100% { transform: rotate(-8deg); } 50% { transform: rotate(8deg); } }
+@keyframes b-chair { 0%, 100% { transform: rotate(-22deg) translateY(0); } 50% { transform: rotate(22deg) translateY(-2px); } }
+@keyframes b-hit { from { transform: rotate(-18deg); } to { transform: rotate(10deg); } }
+@keyframes b-wave { from { transform: skewY(-5deg) scaleX(.94); } to { transform: skewY(5deg) scaleX(1); } }
+@keyframes b-twinkle { 0%, 100% { opacity: 0; transform: scale(.3); } 50% { opacity: 1; transform: scale(1.2); } }
+@keyframes b-puff { 0% { opacity: .8; transform: scale(.3); } 100% { opacity: 0; transform: translate(-6px, -10px) scale(1.9); } }
+@keyframes b-note { 0% { opacity: 1; transform: translate(0, 0); } 100% { opacity: 0; transform: translate(5px, -14px); } }
+
+/* Motion off, from the header toggle (band.js sets the class): no band, no
+   fades, no smooth scroll. rotor.js reads the same class and holds line 1. */
+.motion-off .band { display: none; }
+html.motion-off { scroll-behavior: auto; }
+.motion-off .rotor > .rotor-line, .motion-off .rotor-cap > .rotor-line,
+.motion-off .rotor-ref a, .motion-off .to-top, .motion-off .to-top.is-on { transition: none; transform: none; }
 
 /*
   Back to top (#to-top, driven by totop.js). A 48px navy circle with a gold
