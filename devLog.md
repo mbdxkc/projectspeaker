@@ -1,5 +1,17 @@
 # projectspeaker devLog
 
+## 2026-11-09 — Record item 10, "Bend the knee"
+
+The 2021 Atlantic quote went on the record on both pages after a read of the original. Edward-Isaac Dovere, "The Next Face of the Democratic Party," Aug. 10, 2021: "There will never be a moment where I bend the knee to hard-left democratic socialism." The Week's attribution held word for word. The note carries his explanation from the same paragraph: the distinction between progressive Democrats and hard-left democratic socialists is theirs, not his, and he calls himself "a Black progressive Democrat concerned with addressing racial and social and economic injustice with the fierce urgency of now." Spanish translated in the page's voice; the link goes to the English original.
+
+The ledger now holds 10 items, so the odd-count rule that spans the last cell no longer fires. Tested in Firefox at 390 and 1280 on both pages: no horizontal scroll, item 10 numbered and in the grid. Modified dates in the head, JSON-LD and sitemap moved to Nov. 9.
+
+### Mistakes → Rules
+
+- **A paywall that hides the text from a reader may still ship it to the browser.** The Atlantic's rendered page stopped at 3,136 characters, and the full article sat in the page's embedded JSON. Search the page source, not only `innerText`, before calling a paywalled quote unreadable
+- **A 403 to fetchers is not a 403 to a browser.** Two days of "unverified" came down to a headless Firefox load that took a minute. When a source blocks fetchers, try a real browser before parking the claim
+- **A zero-byte `.git/index.lock` with no git process behind it is stale.** One left from Nov. 8 blocked the pull. Check `pgrep git` and the file's date, then remove it
+
 ## 2026-11-07 — Split off kansasdeservesbetter.com/speaker/
 
 America Deserves a Speaker began the same morning as `/speaker/` on kansasdeservesbetter.com; its full build history (the record research, the rotor, the representative lookup, the share card, the audit) is in that repo's devLog.md. This repo is the standalone copy, with the page at the root and every address on projectspeaker.org: canonical, og:url, og:image, JSON-LD, sitemap and robots.

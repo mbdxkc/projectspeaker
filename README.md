@@ -34,7 +34,7 @@ https://projectspeaker.org
 
 ## The page
 
-- **The record:** nine items, each with its source and his own explanation. Money comes from FEC filings, votes from clerk.house.gov, quotes from the outlet that published them.
+- **The record:** 10 items, each with its source and his own explanation. Money comes from FEC filings, votes from clerk.house.gov, quotes from the outlet that published them.
 - **The hero rotates.** Ten headlines, each with a caption and a link to the record item behind it, change together every 6 seconds. "Earmarked." opens every cycle and holds 10 seconds on first load; the rest follow in random order. A Pause button, hover and keyboard focus stop it, and it stays still under reduced motion. To add or change a headline, edit the matching line in both the headline list and the caption list in `index.html`; the two lists must stay in the same order.
 - **Call your representative:** "Find my representative" asks for the visitor's location once, gets the congressional district from the U.S. Census Bureau's geocoder and looks the seat up in `reps.json`. The button becomes "Call Rep. Name," dialing the member's Washington office, with what to say. The Capitol switchboard and house.gov's address lookup are always on the page.
 - **The signature count updates itself.** `.github/workflows/petition.yml` runs `tools/petition.py` and `tools/reps.py` every hour. The count line between `<!-- petition:start -->` and `<!-- petition:end -->` is rewritten only when the count changes, and the goal follows change.org. Never edit the count by hand.
