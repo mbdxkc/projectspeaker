@@ -1,5 +1,17 @@
 # projectspeaker devLog
 
+## 2026-11-14 — Call-section events, Instagram carousel
+
+The call section now reports to GA4 the way the petition links do. The same click listener in the Google tag block, on both pages, sends `rep_find_click` (location `rep-find`) for "Find my representative" and `call_click` for any `tel:` link: location `rep-result` for the call button the lookup writes into `#rep-out`, `switchboard` for the Capitol number. Neither is a key event; `call_click` is the one to mark if calls should count as conversions. Comparing finds against calls needs `location` registered as an event-scoped custom dimension, the step `petition_click` already waits on.
+
+Tested on throwaway copies of both pages served locally, with GA's hosts mapped to nowhere and `gtag` replaced by a recorder after load: one event per click, in order, `rep_find_click`/`rep-find`, `call_click`/`switchboard`, `call_click`/`rep-result` (a `tel:` link appended to `#rep-out` stands in for a lookup result), `petition_click`/`header`. Run in headless Chrome rather than Firefox, which the vault rule prefers; the listener uses only `closest` and an id check. `tools/build.sh --check` passed with no rebuild needed, since the listener is inline in the head.
+
+Also: a four-slide carousel for Valdez's personal Instagram (contact your rep before Nov. 18, find my rep, what to say, sign the petition) in `campaign/ig-2026-11-13/`, with its build script, caption and alt text. The cover keeps the ABC News and Bloomberg Government attribution for Nov. 18, because the caucus still has not announced a date. The signature figure is the live count at 3:54 p.m. Nov. 13, rounded down to 1.17 million.
+
+### Mistakes → Rules
+
+- **A fallback label in an event parameter is a claim about every element the selector will ever match.** `c.id || 'switchboard'` is true today because the switchboard is the only id-less `tel:` link outside `#rep-out`. A phone number added to the FAQ or footer would report as the switchboard. Give each new `tel:` link an id, or widen the fallback before adding one
+
 ## 2026-11-09 — Record item 10, "Bend the knee"
 
 The 2021 Atlantic quote went on the record on both pages after a read of the original. Edward-Isaac Dovere, "The Next Face of the Democratic Party," Aug. 10, 2021: "There will never be a moment where I bend the knee to hard-left democratic socialism." The Week's attribution held word for word. The note carries his explanation from the same paragraph: the distinction between progressive Democrats and hard-left democratic socialists is theirs, not his, and he calls himself "a Black progressive Democrat concerned with addressing racial and social and economic injustice with the fierce urgency of now." Spanish translated in the page's voice; the link goes to the English original.

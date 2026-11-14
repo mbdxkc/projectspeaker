@@ -18,6 +18,14 @@
     document.addEventListener('click', function (e) {
       var a = e.target.closest && e.target.closest('a[href*="change.org/p/"]');
       if (a) gtag('event', 'petition_click', { location: a.getAttribute('data-cta') || 'other' });
+      // The call section: rep_find_click for "Find my representative", and
+      // call_click for any phone link, with "location" rep-result for the
+      // call button the lookup adds inside #rep-out and switchboard for the
+      // Capitol number. Not key events.
+      var c = e.target.closest && e.target.closest('#rep-find, a[href^="tel:"]');
+      if (c) gtag('event', c.id === 'rep-find' ? 'rep_find_click' : 'call_click', {
+        location: c.closest('#rep-out') ? 'rep-result' : (c.id || 'switchboard')
+      });
     });
   </script>
   <!--
